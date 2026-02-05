@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tilt Buddy — Mental Reset Assistant for VALORANT</title>
-  <meta name="description" content="Tilt Buddy is a lightweight in-game overlay for Valorant. Short reset prompts after stressful moments — so tilt doesn’t take over the next round." />
+  <meta name="description" content="Tilt Buddy is a lightweight in-game overlay for Valorant. Short reset prompts after deaths and stressful moments — so tilt doesn’t take over the next round." />
   <meta name="theme-color" content="#0b0d12" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 
@@ -13,15 +13,18 @@
       --valo:#ff4654;
       --bg0:#05060a;
       --bg1:#07080b;
-      --panel:rgba(12,14,18,.62);
-      --panel2:rgba(12,14,18,.44);
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.68);
+      --panel:rgba(12,14,18,.58);
+      --panel2:rgba(12,14,18,.42);
+      --text:rgba(255,255,255,.93);
+      --muted:rgba(255,255,255,.70);
+      --muted2:rgba(255,255,255,.58);
       --line:rgba(255,255,255,.10);
       --line2:rgba(255,255,255,.06);
-      --max:1100px;
+      --max:1280px;
       --r:18px;
-      --shadow: 0 24px 70px rgba(0,0,0,.55);
+      --r2:24px;
+      --shadow: 0 26px 80px rgba(0,0,0,.55);
+      --shadow2: 0 18px 50px rgba(0,0,0,.45);
     }
 
     *{box-sizing:border-box}
@@ -32,24 +35,38 @@
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text);
       background:
-        radial-gradient(1000px 600px at 10% 0%, rgba(255,70,84,.18), transparent 62%),
-        radial-gradient(900px 520px at 90% 10%, rgba(255,255,255,.06), transparent 60%),
+        radial-gradient(1000px 650px at 12% -10%, rgba(255,70,84,.20), transparent 62%),
+        radial-gradient(900px 560px at 92% -10%, rgba(255,255,255,.06), transparent 60%),
+        radial-gradient(850px 520px at 50% 120%, rgba(255,70,84,.10), transparent 65%),
         linear-gradient(180deg, var(--bg0), var(--bg1));
       overflow-x:hidden;
     }
 
-    a{color:inherit;text-decoration:none}
-    .container{max-width:var(--max);margin:0 auto;padding:0 18px}
+    /* subtle moving glow */
+    .bgGlow{
+      position:fixed; inset:-30vh -30vw auto -30vw;
+      height:60vh;
+      background: radial-gradient(circle at 30% 30%, rgba(255,70,84,.16), transparent 55%),
+                  radial-gradient(circle at 70% 40%, rgba(120,160,255,.08), transparent 60%);
+      filter: blur(40px);
+      opacity:.55;
+      pointer-events:none;
+      animation: drift 10s ease-in-out infinite alternate;
+      z-index:-1;
+    }
+    @keyframes drift{
+      from{transform: translate3d(-2%,0,0) scale(1)}
+      to{transform: translate3d(2%,2%,0) scale(1.02)}
+    }
 
-    /* Header */
-    .header{
-      padding:28px 0 10px;
-    }
-    .brand{
-      display:flex;align-items:center;gap:12px;
-    }
+    a{color:inherit;text-decoration:none}
+    .container{max-width:var(--max);margin:0 auto;padding:0 22px}
+
+    /* Top brand (no navigation) */
+    .header{padding:26px 0 14px}
+    .brand{display:flex;align-items:center;gap:12px}
     .logo{
-      width:42px;height:42px;border-radius:14px;overflow:hidden;
+      width:44px;height:44px;border-radius:14px;overflow:hidden;
       border:1px solid rgba(255,255,255,.12);
       box-shadow: 0 0 28px rgba(255,70,84,.18);
       background:rgba(0,0,0,.25);
@@ -61,26 +78,37 @@
     .brandTag{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.66)}
     .brandTag b{color:var(--valo)}
 
-    /* Main layout */
-    .shell{
-      margin: 10px auto 70px;
-      border-radius: 26px;
+    /* Shell */
+    main.shell{
+      margin: 10px auto 60px;
+      border-radius: 28px;
       border:1px solid rgba(255,255,255,.10);
       background:
-        radial-gradient(900px 500px at 18% 0%, rgba(255,70,84,.12), transparent 65%),
-        linear-gradient(180deg, rgba(14,16,20,.62), rgba(10,12,16,.44));
+        radial-gradient(900px 520px at 18% 0%, rgba(255,70,84,.12), transparent 65%),
+        linear-gradient(180deg, rgba(14,16,20,.64), rgba(10,12,16,.44));
       box-shadow: var(--shadow);
       overflow:hidden;
+      position:relative;
+    }
+    /* inner sheen */
+    main.shell:before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(1200px 380px at 50% 0%, rgba(255,255,255,.06), transparent 60%);
+      pointer-events:none;
+      opacity:.6;
     }
 
-    .hero{
-      padding: 26px;
-      display:grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 22px;
-      align-items:center;
+    /* Section spacing */
+    .pad{padding:28px}
+    .divider{
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+      opacity:.8;
     }
 
+    /* Typography */
     .kicker{
       display:inline-flex;align-items:center;gap:10px;
       font-size:12px;text-transform:uppercase;letter-spacing:1px;
@@ -93,15 +121,21 @@
       box-shadow:0 0 0 4px rgba(255,70,84,.12);
       flex:0 0 auto;
     }
-
     h1{
       margin:0;
-      font-size: clamp(36px, 4.6vw, 58px);
+      font-size: clamp(38px, 4.6vw, 64px);
       line-height:1.02;
-      letter-spacing:-.9px;
+      letter-spacing:-1px;
     }
-    p{margin:12px 0 0;color:var(--muted);line-height:1.75;font-size:14.5px;max-width:72ch}
+    h2{
+      margin:0;
+      font-size: clamp(22px, 2.2vw, 30px);
+      letter-spacing:-.4px;
+    }
+    p{margin:12px 0 0;color:var(--muted);line-height:1.75;font-size:14.8px;max-width:75ch}
+    .sub{color:var(--muted2);font-size:13px;line-height:1.7;margin-top:10px}
 
+    /* Buttons */
     .ctaRow{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
     .btn{
       display:inline-flex;align-items:center;justify-content:center;gap:10px;
@@ -112,12 +146,17 @@
       background:rgba(255,255,255,.06);
       color:rgba(255,255,255,.90);
       box-shadow:0 10px 22px rgba(0,0,0,.35);
-      transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+      transition: transform 140ms ease, background 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
       white-space:nowrap;
     }
-    .btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16)}
+    .btn:hover{
+      transform:translateY(-1px);
+      background:rgba(255,255,255,.08);
+      border-color:rgba(255,255,255,.16);
+      box-shadow: 0 16px 34px rgba(0,0,0,.45);
+    }
     .btn.primary{
-      border-color: rgba(255,70,84,.38);
+      border-color: rgba(255,70,84,.40);
       background: linear-gradient(180deg, rgba(255,70,84,.30), rgba(255,255,255,.03));
       box-shadow: 0 14px 34px rgba(0,0,0,.45), 0 0 34px rgba(255,70,84,.16);
     }
@@ -128,62 +167,111 @@
       padding:8px 12px;border-radius:999px;
       border:1px solid rgba(255,255,255,.10);
       background:rgba(255,255,255,.05);
-      color:rgba(255,255,255,.70);
+      color:rgba(255,255,255,.72);
       font-size:12px;
+      transition: transform 140ms ease, background 140ms ease;
     }
+    .pill:hover{transform:translateY(-1px);background:rgba(255,255,255,.07)}
     .pill .dot{width:6px;height:6px;box-shadow:0 0 0 3px rgba(255,70,84,.10)}
 
-    /* Screenshot block */
+    /* Hero grid */
+    .hero{
+      display:grid;
+      grid-template-columns: 1.12fr .88fr;
+      gap: 24px;
+      align-items:center;
+      position:relative;
+    }
+
+    /* Clickable screenshot */
     .shotWrap{
-      border-radius: 22px;
+      border-radius: 24px;
       border:1px solid rgba(255,255,255,.10);
       background:
-        radial-gradient(600px 320px at 50% 0%, rgba(255,70,84,.10), transparent 62%),
+        radial-gradient(700px 360px at 50% 0%, rgba(255,70,84,.12), transparent 62%),
         rgba(0,0,0,.22);
       padding: 14px;
-      box-shadow: 0 16px 50px rgba(0,0,0,.55);
+      box-shadow: var(--shadow2);
+    }
+    .shotBtn{
+      display:block;
+      border:none;
+      padding:0;
+      background:transparent;
+      width:100%;
+      cursor: zoom-in;
     }
     .shot{
       border-radius: 14px;
       overflow:hidden;
       border:1px solid rgba(255,255,255,.08);
       background:#000;
+      position:relative;
     }
     .shot img{display:block;width:100%;height:auto}
+    .shot:after{
+      content:"Click to enlarge";
+      position:absolute;
+      left:12px; bottom:12px;
+      font-size:12px;
+      color:rgba(255,255,255,.80);
+      background:rgba(0,0,0,.40);
+      border:1px solid rgba(255,255,255,.12);
+      padding:7px 10px;
+      border-radius:999px;
+      backdrop-filter: blur(8px);
+      opacity:0;
+      transform: translateY(4px);
+      transition: opacity 160ms ease, transform 160ms ease;
+      pointer-events:none;
+    }
+    .shotBtn:hover .shot:after{opacity:1;transform:translateY(0)}
 
-    /* Sections */
-    .sections{padding: 0 26px 26px}
-    .grid{
+    /* Content blocks */
+    .grid3{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 14px;
-      margin-top: 14px;
+      margin-top: 16px;
     }
     .card{
-      border-radius: var(--r);
+      border-radius: var(--r2);
       border:1px solid rgba(255,255,255,.10);
       background: rgba(12,14,18,.50);
       padding: 16px;
+      transition: transform 150ms ease, background 150ms ease, border-color 150ms ease;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      background: rgba(12,14,18,.58);
+      border-color: rgba(255,255,255,.14);
     }
     .card b{
       display:block;
       font-size:12px;text-transform:uppercase;letter-spacing:.9px;
       margin-bottom:6px;
     }
-    .card span{display:block;color:var(--muted);font-size:13px;line-height:1.6}
+    .card span{display:block;color:var(--muted);font-size:13.2px;line-height:1.6}
 
-    .how{
+    .twoCol{
       margin-top: 16px;
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
+
     .step{
-      border-radius: var(--r);
+      border-radius: var(--r2);
       border:1px solid rgba(255,255,255,.10);
       background: rgba(12,14,18,.50);
       padding: 16px;
       display:flex;gap:12px;align-items:flex-start;
+      transition: transform 150ms ease, background 150ms ease, border-color 150ms ease;
+    }
+    .step:hover{
+      transform: translateY(-2px);
+      background: rgba(12,14,18,.58);
+      border-color: rgba(255,255,255,.14);
     }
     .num{
       width:30px;height:30px;border-radius:10px;
@@ -194,9 +282,42 @@
       flex:0 0 auto;
     }
 
+    /* Lists */
+    .list{
+      margin-top: 10px;
+      display:grid;
+      gap:10px;
+    }
+    .li{
+      display:flex;gap:10px;align-items:flex-start;
+      color:var(--muted);
+      line-height:1.65;
+      font-size:14px;
+    }
+    .tick{
+      width:18px;height:18px;border-radius:6px;
+      border:1px solid rgba(255,70,84,.28);
+      background: rgba(255,70,84,.10);
+      box-shadow: 0 0 0 4px rgba(255,70,84,.06);
+      flex:0 0 auto;
+      margin-top:2px;
+      position:relative;
+    }
+    .tick:after{
+      content:"";
+      position:absolute;
+      left:5px; top:4px;
+      width:6px; height:9px;
+      border-right:2px solid rgba(255,255,255,.86);
+      border-bottom:2px solid rgba(255,255,255,.86);
+      transform: rotate(35deg);
+      opacity:.9;
+    }
+
+    /* Support */
     .support{
-      margin-top: 16px;
-      border-radius: 20px;
+      margin-top: 18px;
+      border-radius: 26px;
       border:1px solid rgba(255,255,255,.10);
       background: linear-gradient(180deg, rgba(12,14,18,.62), rgba(10,12,16,.46));
       padding: 18px;
@@ -204,8 +325,9 @@
       gap: 14px;flex-wrap:wrap;
     }
 
+    /* Footer */
     footer{
-      padding: 18px 0 40px;
+      padding: 10px 0 42px;
       color: rgba(255,255,255,.58);
       font-size: 12px;
     }
@@ -213,16 +335,89 @@
     .footRow a{color:rgba(255,255,255,.76)}
     .footRow a:hover{color:rgba(255,255,255,.92)}
 
+    /* Lightbox */
+    .lightbox{
+      position:fixed; inset:0;
+      display:none;
+      align-items:center; justify-content:center;
+      padding: 18px;
+      background: rgba(0,0,0,.70);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index:9999;
+    }
+    .lightbox.open{display:flex}
+    .lightboxPanel{
+      max-width:min(1200px, 96vw);
+      max-height:92vh;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(12,14,18,.50);
+      box-shadow: 0 30px 90px rgba(0,0,0,.65);
+      overflow:hidden;
+      position:relative;
+    }
+    .lightboxImg{
+      display:block;
+      width:100%;
+      height:auto;
+      max-height:92vh;
+      object-fit:contain;
+      background:#000;
+    }
+    .lbTop{
+      position:absolute;
+      inset:10px 10px auto 10px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      pointer-events:none;
+    }
+    .lbBadge{
+      pointer-events:none;
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.40);
+      color:rgba(255,255,255,.82);
+      font-size:12px;
+      backdrop-filter: blur(8px);
+    }
+    .lbClose{
+      pointer-events:auto;
+      cursor:pointer;
+      display:inline-flex;align-items:center;justify-content:center;
+      width:38px;height:38px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.45);
+      color:rgba(255,255,255,.85);
+      backdrop-filter: blur(8px);
+      transition: transform 120ms ease, background 120ms ease;
+    }
+    .lbClose:hover{transform:translateY(-1px);background: rgba(0,0,0,.55)}
+    .lbX{
+      width:14px;height:14px;position:relative;
+    }
+    .lbX:before,.lbX:after{
+      content:""; position:absolute; left:6px; top:0;
+      width:2px; height:14px; background: rgba(255,255,255,.85);
+      border-radius:2px;
+    }
+    .lbX:before{transform:rotate(45deg)}
+    .lbX:after{transform:rotate(-45deg)}
+
     @media (max-width: 980px){
       .hero{grid-template-columns:1fr}
-      .grid{grid-template-columns:1fr}
-      .how{grid-template-columns:1fr}
-      .hero,.sections{padding:18px}
+      .grid3{grid-template-columns:1fr}
+      .twoCol{grid-template-columns:1fr}
+      .pad{padding:18px}
     }
   </style>
 </head>
 
 <body>
+  <div class="bgGlow" aria-hidden="true"></div>
+
   <div class="header">
     <div class="container">
       <div class="brand">
@@ -239,13 +434,14 @@
     <main class="shell">
 
       <!-- HERO -->
-      <div class="hero">
+      <section class="pad hero">
         <div>
           <div class="kicker"><span class="dot"></span> Serious tool for competitive play</div>
           <h1>Reset your focus.<br/>Win the next round.</h1>
           <p>
-            Tilt Buddy runs quietly while you play. After a death or a stressful moment, it shows a short on-screen reset prompt.
-            These micro-resets are designed to interrupt tilt, slow your tempo, and bring your attention back to the present moment.
+            Tilt Buddy runs quietly in the background while you play.
+            When the game detects a death, it shows a small on-screen overlay with a short, practical reset prompt —
+            designed to interrupt emotional reactions, slow your tempo, and help you regain focus before tilt builds.
           </p>
 
           <div class="ctaRow">
@@ -258,50 +454,71 @@
             </a>
           </div>
 
-          <div class="pills">
+          <div class="pills" aria-label="Key points">
             <span class="pill"><span class="dot"></span> Micro-prompts</span>
             <span class="pill"><span class="dot"></span> Low distraction</span>
             <span class="pill"><span class="dot"></span> No coaching</span>
+            <span class="pill"><span class="dot"></span> No stat tracking</span>
           </div>
 
-          <p style="margin-top:12px;">
-            Tilt Buddy does <b>not</b> analyze your performance, criticize mistakes, or tell you how to play.
-            It’s a quick mental reset at the exact moment tilt usually starts — right after a death.
+          <p class="sub">
+            The messages are not gameplay advice. They’re simple physical + mental reset actions
+            (breathing, posture, eye focus, brief pauses) that calm your nervous system and bring attention back to the present moment.
           </p>
         </div>
 
         <div class="shotWrap">
-          <div class="shot">
-            <img src="app.png" alt="Tilt Buddy preview">
-          </div>
+          <button class="shotBtn" id="openLightbox" aria-haspopup="dialog" aria-controls="lightbox" title="Click to enlarge">
+            <div class="shot">
+              <img src="app.png" alt="Tilt Buddy overlay preview (click to enlarge)">
+            </div>
+          </button>
         </div>
-      </div>
+      </section>
 
-      <div class="sections">
-        <!-- WHAT IT DOES -->
-        <div class="grid">
+      <div class="divider" aria-hidden="true"></div>
+
+      <!-- WHAT IT DOES (clear boxes) -->
+      <section class="pad">
+        <h2>What Tilt Buddy does</h2>
+        <p>
+          A lightweight, non-intrusive interruption at the exact moment tilt usually begins — right after a death —
+          helping prevent emotional spirals before they affect your gameplay.
+        </p>
+
+        <div class="grid3">
           <div class="card">
-            <b>Detects key moments</b>
-            <span>Triggers when tilt usually begins — after deaths and stressful spikes.</span>
+            <b>Detects deaths</b>
+            <span>Triggers during gameplay when you die — the moment tilt often starts.</span>
           </div>
           <div class="card">
-            <b>Short, practical resets</b>
-            <span>Breathing, posture, eye focus, quick pauses — simple cues that calm your nervous system.</span>
+            <b>Shows a reset prompt</b>
+            <span>A short, subtle cue to break the tilt loop and re-center quickly.</span>
           </div>
           <div class="card">
             <b>Stays out of the way</b>
-            <span>Lightweight and non-intrusive. Appears fast, disappears fast.</span>
+            <span>Appears fast, disappears fast — so you stay focused on the game.</span>
           </div>
         </div>
+      </section>
 
-        <!-- HOW IT WORKS (short + clear) -->
-        <div class="how" style="margin-top:14px;">
+      <div class="divider" aria-hidden="true"></div>
+
+      <!-- HOW IT WORKS (more space + storytelling) -->
+      <section class="pad">
+        <h2>How it works</h2>
+        <p>
+          Tilt usually starts as a physical + emotional reaction — not a thinking problem.
+          By briefly resetting breathing, posture, focus, or tempo, Tilt Buddy helps bring your body and attention back into a stable state.
+        </p>
+
+        <div class="twoCol">
           <div class="step">
             <div class="num">1</div>
             <div>
-              <b style="display:block;text-transform:uppercase;letter-spacing:.9px;font-size:12px;margin-bottom:6px;">Runs in the background</b>
-              <span style="color:var(--muted);font-size:13px;line-height:1.6;">
-                You play normally. Tilt Buddy stays quiet until it’s needed.
+              <b style="display:block;text-transform:uppercase;letter-spacing:.9px;font-size:12px;margin-bottom:6px;">Runs quietly</b>
+              <span style="color:var(--muted);font-size:13.2px;line-height:1.6;">
+                You play normally. Tilt Buddy stays silent until it’s needed.
               </span>
             </div>
           </div>
@@ -309,9 +526,9 @@
           <div class="step">
             <div class="num">2</div>
             <div>
-              <b style="display:block;text-transform:uppercase;letter-spacing:.9px;font-size:12px;margin-bottom:6px;">Death → reset prompt</b>
-              <span style="color:var(--muted);font-size:13px;line-height:1.6;">
-                A short cue pops up to break the tilt loop and re-center.
+              <b style="display:block;text-transform:uppercase;letter-spacing:.9px;font-size:12px;margin-bottom:6px;">Death → prompt</b>
+              <span style="color:var(--muted);font-size:13.2px;line-height:1.6;">
+                A short on-screen reset prompt appears to interrupt emotional overreactions.
               </span>
             </div>
           </div>
@@ -320,8 +537,8 @@
             <div class="num">3</div>
             <div>
               <b style="display:block;text-transform:uppercase;letter-spacing:.9px;font-size:12px;margin-bottom:6px;">No coaching</b>
-              <span style="color:var(--muted);font-size:13px;line-height:1.6;">
-                No tips, no judgement, no analysis — just a mental reset.
+              <span style="color:var(--muted);font-size:13.2px;line-height:1.6;">
+                No gameplay advice, no judgement — just a mental reset.
               </span>
             </div>
           </div>
@@ -330,30 +547,92 @@
             <div class="num">✓</div>
             <div>
               <b style="display:block;text-transform:uppercase;letter-spacing:.9px;font-size:12px;margin-bottom:6px;">Back to the round</b>
-              <span style="color:var(--muted);font-size:13px;line-height:1.6;">
-                The overlay fades quickly so you can stay focused on the game.
+              <span style="color:var(--muted);font-size:13.2px;line-height:1.6;">
+                The overlay fades quickly so you can stay fully focused.
               </span>
             </div>
           </div>
         </div>
+      </section>
 
-        <!-- SUPPORT -->
-        <div class="support" style="margin-top:14px;">
-          <div>
-            <div style="font-weight:900;letter-spacing:-.2px;">Support / Contact</div>
-            <div style="color:var(--muted);font-size:13px;margin-top:6px;">
-              Bugs, feedback, suggestions — join the Discord and post in support.
+      <div class="divider" aria-hidden="true"></div>
+
+      <!-- DOES / DOES NOT (clear separation) -->
+      <section class="pad">
+        <div class="twoCol">
+          <div class="card" style="padding:18px;">
+            <h2 style="margin:0 0 6px;">What it does</h2>
+            <div class="list">
+              <div class="li"><span class="tick"></span><span>Detects deaths during gameplay</span></div>
+              <div class="li"><span class="tick"></span><span>Shows a short, subtle reset prompt after a death</span></div>
+              <div class="li"><span class="tick"></span><span>Helps interrupt tilt and emotional overreactions</span></div>
+              <div class="li"><span class="tick"></span><span>Supports calm, focused play under pressure</span></div>
             </div>
           </div>
-          <a class="btn primary" href="https://discord.gg/xXrMAWqKeA" target="_blank" rel="noopener">
-            <span class="dot"></span> Join Discord
-          </a>
+
+          <div class="card" style="padding:18px;">
+            <h2 style="margin:0 0 6px;">What it does NOT do</h2>
+            <div class="list">
+              <div class="li"><span class="tick" style="border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.06);box-shadow:0 0 0 4px rgba(255,255,255,.04)"></span><span>No coaching or gameplay advice</span></div>
+              <div class="li"><span class="tick" style="border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.06);box-shadow:0 0 0 4px rgba(255,255,255,.04)"></span><span>No mistake analysis or feedback</span></div>
+              <div class="li"><span class="tick" style="border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.06);box-shadow:0 0 0 4px rgba(255,255,255,.04)"></span><span>No stat tracking or performance judging</span></div>
+              <div class="li"><span class="tick" style="border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.06);box-shadow:0 0 0 4px rgba(255,255,255,.04)"></span><span>No long messages or distractions</span></div>
+            </div>
+          </div>
         </div>
 
-        <div style="margin-top:14px;opacity:.75;font-size:12px;">
-          Tip: If you want to guarantee DMs, enable <b>“Allow direct messages from server members”</b> in your Discord Privacy settings.
+        <p class="sub" style="margin-top:14px;">
+          Tilt Buddy doesn’t analyze your performance, criticize mistakes, or tell you how to play.
+          It doesn’t track stats, judge decisions, or give strategic advice.
+        </p>
+      </section>
+
+      <div class="divider" aria-hidden="true"></div>
+
+      <!-- WHO IT'S FOR -->
+      <section class="pad">
+        <h2>Who Tilt Buddy is for</h2>
+        <p>
+          Designed for competitive players who want to stay in control during intense moments —
+          especially in FPS where reactions, focus, and composure matter.
+        </p>
+        <div class="grid3">
+          <div class="card">
+            <b>Players who tilt</b>
+            <span>If emotions spike after deaths, Tilt Buddy helps you reset before it snowballs.</span>
+          </div>
+          <div class="card">
+            <b>Players who grind ranked</b>
+            <span>Best for long sessions where small mental slips compound over time.</span>
+          </div>
+          <div class="card">
+            <b>Players who want control</b>
+            <span>Prevents tilt — without telling you how to play better.</span>
+          </div>
         </div>
-      </div>
+      </section>
+
+      <div class="divider" aria-hidden="true"></div>
+
+      <!-- SUPPORT -->
+      <section class="pad">
+        <div class="support">
+          <div>
+            <h2 style="margin:0;">Support / Contact</h2>
+            <div class="sub" style="margin-top:6px;">
+              Bugs, feedback, suggestions — join the Discord and post in support.
+            </div>
+            <div class="sub" style="margin-top:8px;">
+              Tip: if you want to guarantee DMs, enable <b>“Allow direct messages from server members”</b> in your Discord Privacy settings.
+            </div>
+          </div>
+          <div class="ctaRow" style="margin:0;">
+            <a class="btn primary" href="https://discord.gg/xXrMAWqKeA" target="_blank" rel="noopener">
+              <span class="dot"></span> Join Discord
+            </a>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer>
@@ -366,8 +645,51 @@
     </footer>
   </div>
 
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Preview image">
+    <div class="lightboxPanel" role="document">
+      <div class="lbTop">
+        <div class="lbBadge"><span class="dot"></span> Tilt Buddy Preview</div>
+        <button class="lbClose" id="closeLightbox" aria-label="Close preview">
+          <span class="lbX" aria-hidden="true"></span>
+        </button>
+      </div>
+      <img class="lightboxImg" src="app.png" alt="Tilt Buddy preview enlarged">
+    </div>
+  </div>
+
   <script>
+    // year
     document.getElementById('y').textContent = new Date().getFullYear();
+
+    // lightbox
+    const lb = document.getElementById('lightbox');
+    const openBtn = document.getElementById('openLightbox');
+    const closeBtn = document.getElementById('closeLightbox');
+
+    function openLightbox(){
+      lb.classList.add('open');
+      closeBtn.focus();
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(){
+      lb.classList.remove('open');
+      document.body.style.overflow = '';
+      openBtn.focus();
+    }
+
+    openBtn.addEventListener('click', openLightbox);
+    closeBtn.addEventListener('click', closeLightbox);
+
+    // click outside image closes
+    lb.addEventListener('click', (e) => {
+      if (e.target === lb) closeLightbox();
+    });
+
+    // ESC closes
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lb.classList.contains('open')) closeLightbox();
+    });
   </script>
 </body>
 </html>
