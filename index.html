@@ -4,27 +4,32 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tilt Buddy — Mental Reset Assistant for VALORANT</title>
-  <meta name="description" content="Tilt Buddy is a lightweight in-game overlay for Valorant. Short reset prompts after deaths and stressful moments — so tilt doesn’t take over the next round." />
+  <meta name="description" content="Tilt Buddy is a lightweight in-game overlay for Valorant. Short reset prompts after deaths — to prevent tilt and keep you locked in." />
   <meta name="theme-color" content="#0b0d12" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png" />
+  <link rel="apple-touch-icon" href="./app.png" />
 
   <style>
     :root{
       --valo:#ff4654;
       --bg0:#05060a;
       --bg1:#07080b;
-      --panel:rgba(12,14,18,.58);
-      --panel2:rgba(12,14,18,.42);
-      --text:rgba(255,255,255,.93);
-      --muted:rgba(255,255,255,.70);
+      --text:rgba(255,255,255,.94);
+      --muted:rgba(255,255,255,.72);
       --muted2:rgba(255,255,255,.58);
       --line:rgba(255,255,255,.10);
       --line2:rgba(255,255,255,.06);
-      --max:1280px;
-      --r:18px;
-      --r2:24px;
-      --shadow: 0 26px 80px rgba(0,0,0,.55);
-      --shadow2: 0 18px 50px rgba(0,0,0,.45);
+
+      /* a bit wider */
+      --max: 1440px;
+
+      --r: 18px;
+      --r2: 26px;
+
+      --shadow: 0 28px 90px rgba(0,0,0,.58);
+      --shadow2: 0 18px 55px rgba(0,0,0,.48);
     }
 
     *{box-sizing:border-box}
@@ -35,84 +40,120 @@
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text);
       background:
-        radial-gradient(1000px 650px at 12% -10%, rgba(255,70,84,.20), transparent 62%),
-        radial-gradient(900px 560px at 92% -10%, rgba(255,255,255,.06), transparent 60%),
-        radial-gradient(850px 520px at 50% 120%, rgba(255,70,84,.10), transparent 65%),
+        radial-gradient(1200px 700px at 12% -10%, rgba(255,70,84,.22), transparent 62%),
+        radial-gradient(900px 560px at 88% -10%, rgba(120,160,255,.10), transparent 58%),
+        radial-gradient(900px 560px at 50% 120%, rgba(255,70,84,.12), transparent 65%),
         linear-gradient(180deg, var(--bg0), var(--bg1));
       overflow-x:hidden;
     }
 
-    /* subtle moving glow */
+    /* subtle animated glow (keeps it engaging but still site-like) */
     .bgGlow{
-      position:fixed; inset:-30vh -30vw auto -30vw;
-      height:60vh;
-      background: radial-gradient(circle at 30% 30%, rgba(255,70,84,.16), transparent 55%),
-                  radial-gradient(circle at 70% 40%, rgba(120,160,255,.08), transparent 60%);
-      filter: blur(40px);
+      position:fixed;
+      inset:-35vh -35vw auto -35vw;
+      height:70vh;
+      background:
+        radial-gradient(circle at 30% 35%, rgba(255,70,84,.18), transparent 55%),
+        radial-gradient(circle at 75% 35%, rgba(120,160,255,.10), transparent 60%),
+        radial-gradient(circle at 50% 65%, rgba(255,255,255,.05), transparent 62%);
+      filter: blur(48px);
       opacity:.55;
       pointer-events:none;
-      animation: drift 10s ease-in-out infinite alternate;
-      z-index:-1;
+      animation: drift 11s ease-in-out infinite alternate;
+      z-index:-2;
     }
     @keyframes drift{
       from{transform: translate3d(-2%,0,0) scale(1)}
-      to{transform: translate3d(2%,2%,0) scale(1.02)}
+      to{transform: translate3d(2%,2%,0) scale(1.03)}
+    }
+
+    /* subtle noise overlay for “website” feel */
+    .noise{
+      position:fixed; inset:0;
+      pointer-events:none;
+      opacity:.07;
+      z-index:-1;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E");
+      background-size:220px 220px;
+      mix-blend-mode: overlay;
     }
 
     a{color:inherit;text-decoration:none}
-    .container{max-width:var(--max);margin:0 auto;padding:0 22px}
+    .container{max-width:var(--max);margin:0 auto;padding:0 26px}
 
-    /* Top brand (no navigation) */
-    .header{padding:26px 0 14px}
-    .brand{display:flex;align-items:center;gap:12px}
+    /* Brand header (bigger impact) */
+    header{
+      padding: 28px 0 18px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:14px;
+    }
     .logo{
-      width:44px;height:44px;border-radius:14px;overflow:hidden;
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow: 0 0 28px rgba(255,70,84,.18);
+      width:56px; height:56px; border-radius:18px; overflow:hidden;
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: 0 0 38px rgba(255,70,84,.18);
       background:rgba(0,0,0,.25);
       flex:0 0 auto;
+      position:relative;
+    }
+    .logo:after{
+      content:"";
+      position:absolute; inset:-1px;
+      border-radius:18px;
+      background: radial-gradient(120px 120px at 30% 20%, rgba(255,255,255,.14), transparent 55%);
+      pointer-events:none;
     }
     .logo img{width:100%;height:100%;object-fit:cover}
-    .brandText{line-height:1.1}
-    .brandName{font-weight:900;letter-spacing:2px;text-transform:uppercase;font-size:14px}
-    .brandTag{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.66)}
+    .brandText{line-height:1.05}
+    .brandName{
+      font-weight:950;
+      letter-spacing:3px;
+      text-transform:uppercase;
+      font-size:16px;
+    }
+    .brandTag{
+      margin-top:6px;
+      font-size:12px;
+      letter-spacing:1.1px;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.70);
+    }
     .brandTag b{color:var(--valo)}
 
-    /* Shell */
+    /* Main shell: feels like a site section, not an “app window” */
     main.shell{
-      margin: 10px auto 60px;
-      border-radius: 28px;
+      margin: 10px auto 44px;
+      border-radius: 34px;
       border:1px solid rgba(255,255,255,.10);
       background:
-        radial-gradient(900px 520px at 18% 0%, rgba(255,70,84,.12), transparent 65%),
-        linear-gradient(180deg, rgba(14,16,20,.64), rgba(10,12,16,.44));
+        radial-gradient(1100px 540px at 18% 0%, rgba(255,70,84,.14), transparent 65%),
+        radial-gradient(900px 520px at 85% 0%, rgba(120,160,255,.10), transparent 65%),
+        linear-gradient(180deg, rgba(14,16,20,.62), rgba(10,12,16,.38));
       box-shadow: var(--shadow);
       overflow:hidden;
       position:relative;
     }
-    /* inner sheen */
     main.shell:before{
       content:"";
       position:absolute; inset:0;
       background:
-        radial-gradient(1200px 380px at 50% 0%, rgba(255,255,255,.06), transparent 60%);
+        radial-gradient(1200px 380px at 50% 0%, rgba(255,255,255,.06), transparent 60%),
+        linear-gradient(90deg, rgba(255,255,255,.02), transparent 30%, transparent 70%, rgba(255,255,255,.02));
       pointer-events:none;
-      opacity:.6;
+      opacity:.8;
     }
-
-    /* Section spacing */
-    .pad{padding:28px}
+    .pad{padding:34px}
     .divider{
       height:1px;
       background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
-      opacity:.8;
+      opacity:.85;
     }
 
     /* Typography */
     .kicker{
       display:inline-flex;align-items:center;gap:10px;
       font-size:12px;text-transform:uppercase;letter-spacing:1px;
-      color:rgba(255,255,255,.72);
+      color:rgba(255,255,255,.74);
       margin-bottom:14px;
     }
     .dot{
@@ -121,30 +162,39 @@
       box-shadow:0 0 0 4px rgba(255,70,84,.12);
       flex:0 0 auto;
     }
+
+    /* main title is brand, not huge slogan */
     h1{
       margin:0;
-      font-size: clamp(38px, 4.6vw, 64px);
-      line-height:1.02;
-      letter-spacing:-1px;
+      font-size: clamp(34px, 3.6vw, 54px);
+      line-height:1.05;
+      letter-spacing:-.6px;
     }
-    h2{
-      margin:0;
-      font-size: clamp(22px, 2.2vw, 30px);
-      letter-spacing:-.4px;
+    p{
+      margin:12px 0 0;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:15px;
+      max-width: 78ch;
     }
-    p{margin:12px 0 0;color:var(--muted);line-height:1.75;font-size:14.8px;max-width:75ch}
-    .sub{color:var(--muted2);font-size:13px;line-height:1.7;margin-top:10px}
+    .subline{
+      margin-top:10px;
+      color:rgba(255,255,255,.80);
+      font-size:14px;
+      line-height:1.6;
+      max-width: 72ch;
+    }
 
     /* Buttons */
     .ctaRow{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
     .btn{
       display:inline-flex;align-items:center;justify-content:center;gap:10px;
       border-radius:999px;
-      padding:11px 16px;
+      padding:12px 16px;
       font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:.7px;
       border:1px solid rgba(255,255,255,.12);
       background:rgba(255,255,255,.06);
-      color:rgba(255,255,255,.90);
+      color:rgba(255,255,255,.92);
       box-shadow:0 10px 22px rgba(0,0,0,.35);
       transition: transform 140ms ease, background 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
       white-space:nowrap;
@@ -156,41 +206,28 @@
       box-shadow: 0 16px 34px rgba(0,0,0,.45);
     }
     .btn.primary{
-      border-color: rgba(255,70,84,.40);
+      border-color: rgba(255,70,84,.42);
       background: linear-gradient(180deg, rgba(255,70,84,.30), rgba(255,255,255,.03));
       box-shadow: 0 14px 34px rgba(0,0,0,.45), 0 0 34px rgba(255,70,84,.16);
     }
 
-    .pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
-    .pill{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 12px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.05);
-      color:rgba(255,255,255,.72);
-      font-size:12px;
-      transition: transform 140ms ease, background 140ms ease;
-    }
-    .pill:hover{transform:translateY(-1px);background:rgba(255,255,255,.07)}
-    .pill .dot{width:6px;height:6px;box-shadow:0 0 0 3px rgba(255,70,84,.10)}
-
-    /* Hero grid */
+    /* Hero layout: more airy */
     .hero{
       display:grid;
-      grid-template-columns: 1.12fr .88fr;
-      gap: 24px;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 28px;
       align-items:center;
       position:relative;
     }
 
-    /* Clickable screenshot */
+    /* Screenshot */
     .shotWrap{
-      border-radius: 24px;
+      border-radius: 28px;
       border:1px solid rgba(255,255,255,.10);
       background:
-        radial-gradient(700px 360px at 50% 0%, rgba(255,70,84,.12), transparent 62%),
+        radial-gradient(800px 380px at 50% 0%, rgba(255,70,84,.14), transparent 62%),
         rgba(0,0,0,.22);
-      padding: 14px;
+      padding: 16px;
       box-shadow: var(--shadow2);
     }
     .shotBtn{
@@ -202,11 +239,12 @@
       cursor: zoom-in;
     }
     .shot{
-      border-radius: 14px;
+      border-radius: 16px;
       overflow:hidden;
-      border:1px solid rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.10);
       background:#000;
       position:relative;
+      transform: translateZ(0);
     }
     .shot img{display:block;width:100%;height:auto}
     .shot:after{
@@ -214,7 +252,7 @@
       position:absolute;
       left:12px; bottom:12px;
       font-size:12px;
-      color:rgba(255,255,255,.80);
+      color:rgba(255,255,255,.84);
       background:rgba(0,0,0,.40);
       border:1px solid rgba(255,255,255,.12);
       padding:7px 10px;
@@ -226,24 +264,54 @@
       pointer-events:none;
     }
     .shotBtn:hover .shot:after{opacity:1;transform:translateY(0)}
+    .shotBtn:hover .shot{
+      box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 18px 60px rgba(0,0,0,.40);
+    }
 
-    /* Content blocks */
+    /* Sections */
+    .sectionTitle{
+      margin:0;
+      font-size: 18px;
+      letter-spacing:.2px;
+      color:rgba(255,255,255,.92);
+    }
+    .sectionBlock{
+      padding: 26px 34px;
+    }
+    .textBlock{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .textBlock p{margin:0}
+
+    /* Who it's for boxes only */
     .grid3{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 14px;
-      margin-top: 16px;
+      margin-top: 14px;
     }
     .card{
       border-radius: var(--r2);
       border:1px solid rgba(255,255,255,.10);
-      background: rgba(12,14,18,.50);
-      padding: 16px;
+      background: rgba(12,14,18,.46);
+      padding: 16px 16px 15px;
       transition: transform 150ms ease, background 150ms ease, border-color 150ms ease;
+      position:relative;
+      overflow:hidden;
+    }
+    .card:before{
+      content:"";
+      position:absolute; inset:-1px;
+      background: radial-gradient(260px 120px at 18% 0%, rgba(255,70,84,.14), transparent 60%);
+      opacity:.9;
+      pointer-events:none;
     }
     .card:hover{
       transform: translateY(-2px);
-      background: rgba(12,14,18,.58);
+      background: rgba(12,14,18,.56);
       border-color: rgba(255,255,255,.14);
     }
     .card b{
@@ -251,83 +319,33 @@
       font-size:12px;text-transform:uppercase;letter-spacing:.9px;
       margin-bottom:6px;
     }
-    .card span{display:block;color:var(--muted);font-size:13.2px;line-height:1.6}
+    .card span{display:block;color:var(--muted);font-size:13.3px;line-height:1.6}
 
-    .twoCol{
-      margin-top: 16px;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .step{
-      border-radius: var(--r2);
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(12,14,18,.50);
-      padding: 16px;
-      display:flex;gap:12px;align-items:flex-start;
-      transition: transform 150ms ease, background 150ms ease, border-color 150ms ease;
-    }
-    .step:hover{
-      transform: translateY(-2px);
-      background: rgba(12,14,18,.58);
-      border-color: rgba(255,255,255,.14);
-    }
-    .num{
-      width:30px;height:30px;border-radius:10px;
-      border:1px solid rgba(255,70,84,.35);
-      background: rgba(255,70,84,.12);
-      display:flex;align-items:center;justify-content:center;
-      font-weight:900;color:rgba(255,255,255,.9);
-      flex:0 0 auto;
-    }
-
-    /* Lists */
-    .list{
-      margin-top: 10px;
-      display:grid;
-      gap:10px;
-    }
-    .li{
-      display:flex;gap:10px;align-items:flex-start;
-      color:var(--muted);
-      line-height:1.65;
-      font-size:14px;
-    }
-    .tick{
-      width:18px;height:18px;border-radius:6px;
-      border:1px solid rgba(255,70,84,.28);
-      background: rgba(255,70,84,.10);
-      box-shadow: 0 0 0 4px rgba(255,70,84,.06);
-      flex:0 0 auto;
-      margin-top:2px;
-      position:relative;
-    }
-    .tick:after{
-      content:"";
-      position:absolute;
-      left:5px; top:4px;
-      width:6px; height:9px;
-      border-right:2px solid rgba(255,255,255,.86);
-      border-bottom:2px solid rgba(255,255,255,.86);
-      transform: rotate(35deg);
-      opacity:.9;
-    }
-
-    /* Support */
-    .support{
+    /* Bottom CTA bar */
+    .bottomCtas{
       margin-top: 18px;
       border-radius: 26px;
       border:1px solid rgba(255,255,255,.10);
-      background: linear-gradient(180deg, rgba(12,14,18,.62), rgba(10,12,16,.46));
-      padding: 18px;
-      display:flex;align-items:center;justify-content:space-between;
-      gap: 14px;flex-wrap:wrap;
+      background: linear-gradient(180deg, rgba(12,14,18,.58), rgba(10,12,16,.44));
+      padding: 16px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+    }
+    .bottomLeft, .bottomRight{
+      display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+    }
+    .hint{
+      color:rgba(255,255,255,.56);
+      font-size:12px;
+      line-height:1.5;
     }
 
     /* Footer */
     footer{
-      padding: 10px 0 42px;
+      padding: 10px 0 44px;
       color: rgba(255,255,255,.58);
       font-size: 12px;
     }
@@ -348,7 +366,7 @@
     }
     .lightbox.open{display:flex}
     .lightboxPanel{
-      max-width:min(1200px, 96vw);
+      max-width:min(1280px, 96vw);
       max-height:92vh;
       border-radius: 18px;
       border:1px solid rgba(255,255,255,.12);
@@ -371,10 +389,8 @@
       display:flex;
       justify-content:space-between;
       gap:10px;
-      pointer-events:none;
     }
     .lbBadge{
-      pointer-events:none;
       display:inline-flex;align-items:center;gap:8px;
       padding:8px 10px;border-radius:999px;
       border:1px solid rgba(255,255,255,.12);
@@ -382,9 +398,9 @@
       color:rgba(255,255,255,.82);
       font-size:12px;
       backdrop-filter: blur(8px);
+      pointer-events:none;
     }
     .lbClose{
-      pointer-events:auto;
       cursor:pointer;
       display:inline-flex;align-items:center;justify-content:center;
       width:38px;height:38px;border-radius:12px;
@@ -395,9 +411,7 @@
       transition: transform 120ms ease, background 120ms ease;
     }
     .lbClose:hover{transform:translateY(-1px);background: rgba(0,0,0,.55)}
-    .lbX{
-      width:14px;height:14px;position:relative;
-    }
+    .lbX{width:14px;height:14px;position:relative}
     .lbX:before,.lbX:after{
       content:""; position:absolute; left:6px; top:0;
       width:2px; height:14px; background: rgba(255,255,255,.85);
@@ -408,69 +422,65 @@
 
     @media (max-width: 980px){
       .hero{grid-template-columns:1fr}
+      .pad{padding:20px}
+      .sectionBlock{padding:20px}
       .grid3{grid-template-columns:1fr}
-      .twoCol{grid-template-columns:1fr}
-      .pad{padding:18px}
     }
   </style>
 </head>
 
 <body>
   <div class="bgGlow" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
 
-  <div class="header">
+  <header>
     <div class="container">
       <div class="brand">
-        <div class="logo"><img src="logo.png" alt="Tilt Buddy"></div>
+        <div class="logo"><img src="./logo.png" alt="Tilt Buddy" /></div>
         <div class="brandText">
           <div class="brandName">TILT BUDDY</div>
           <div class="brandTag">MENTAL RESET ASSISTANT FOR <b>VALORANT</b></div>
         </div>
       </div>
     </div>
-  </div>
+  </header>
 
   <div class="container">
     <main class="shell">
-
       <!-- HERO -->
       <section class="pad hero">
         <div>
           <div class="kicker"><span class="dot"></span> Serious tool for competitive play</div>
-          <h1>Reset your focus.<br/>Win the next round.</h1>
+
+          <!-- Brand-first, not slogan-first -->
+          <h1>Tilt Buddy</h1>
+          <div class="subline">
+            A lightweight mental reset overlay to prevent tilt and keep you locked in.
+          </div>
+
           <p>
-            Tilt Buddy runs quietly in the background while you play.
-            When the game detects a death, it shows a small on-screen overlay with a short, practical reset prompt —
-            designed to interrupt emotional reactions, slow your tempo, and help you regain focus before tilt builds.
+            Tilt Buddy runs quietly in the background while you play. When the game detects a death, it shows a short,
+            practical reset prompt designed to interrupt emotional reactions, slow your tempo, and help you regain focus
+            before tilt starts to build.
           </p>
 
           <div class="ctaRow">
+            <!-- TODO: replace with your real Overwolf listing/download -->
             <a class="btn primary" href="OVERWOLF_DOWNLOAD_URL_HERE" target="_blank" rel="noopener">
               <span class="dot"></span> Download for Overwolf
             </a>
+
             <a class="btn" href="https://discord.gg/xXrMAWqKeA" target="_blank" rel="noopener">
               <span class="dot" style="background:rgba(255,255,255,.35);box-shadow:0 0 0 4px rgba(255,255,255,.08)"></span>
               Join Discord
             </a>
           </div>
-
-          <div class="pills" aria-label="Key points">
-            <span class="pill"><span class="dot"></span> Micro-prompts</span>
-            <span class="pill"><span class="dot"></span> Low distraction</span>
-            <span class="pill"><span class="dot"></span> No coaching</span>
-            <span class="pill"><span class="dot"></span> No stat tracking</span>
-          </div>
-
-          <p class="sub">
-            The messages are not gameplay advice. They’re simple physical + mental reset actions
-            (breathing, posture, eye focus, brief pauses) that calm your nervous system and bring attention back to the present moment.
-          </p>
         </div>
 
         <div class="shotWrap">
           <button class="shotBtn" id="openLightbox" aria-haspopup="dialog" aria-controls="lightbox" title="Click to enlarge">
             <div class="shot">
-              <img src="app.png" alt="Tilt Buddy overlay preview (click to enlarge)">
+              <img src="./app.png" alt="Tilt Buddy overlay preview (click to enlarge)" />
             </div>
           </button>
         </div>
@@ -478,157 +488,72 @@
 
       <div class="divider" aria-hidden="true"></div>
 
-      <!-- WHAT IT DOES (clear boxes) -->
-      <section class="pad">
-        <h2>What Tilt Buddy does</h2>
-        <p>
-          A lightweight, non-intrusive interruption at the exact moment tilt usually begins — right after a death —
-          helping prevent emotional spirals before they affect your gameplay.
-        </p>
+      <!-- WHAT IT DOES (TEXT, NOT BOX GRID) -->
+      <section class="sectionBlock">
+        <div class="sectionTitle">What Tilt Buddy does</div>
+        <div class="textBlock">
+          <p>
+            When tilt hits, it usually starts as a physical + emotional reaction (not a “thinking” problem).
+            Tilt Buddy gives you a quick, subtle reset at the exact moment tilt usually begins — right after a death —
+            so you can stay composed and keep playing clean.
+          </p>
+          <p>
+            It detects deaths during gameplay, shows a short reset prompt, and disappears fast so it never pulls you out of the round.
+            The prompts are simple actions (breathing, posture, eye focus, brief pauses) that help calm your nervous system and
+            bring attention back to the present moment.
+          </p>
+          <p>
+            Tilt Buddy does not coach, analyze mistakes, track stats, or judge decisions. No gameplay advice — just a mental reset.
+          </p>
+        </div>
+      </section>
 
+      <div class="divider" aria-hidden="true"></div>
+
+      <!-- HOW IT WORKS (TEXT, NOT BOXES) -->
+      <section class="sectionBlock">
+        <div class="sectionTitle">How it works</div>
+        <div class="textBlock">
+          <p><b>1)</b> Tilt Buddy runs quietly in the background while you play.</p>
+          <p><b>2)</b> When you die, it shows a short on-screen reset prompt to interrupt emotional overreactions and re-center.</p>
+          <p><b>3)</b> The overlay is lightweight and non-intrusive — it fades quickly so you stay locked in.</p>
+        </div>
+      </section>
+
+      <div class="divider" aria-hidden="true"></div>
+
+      <!-- WHO IT'S FOR (BOXES ONLY) -->
+      <section class="sectionBlock">
+        <div class="sectionTitle">Who Tilt Buddy is for</div>
         <div class="grid3">
           <div class="card">
-            <b>Detects deaths</b>
-            <span>Triggers during gameplay when you die — the moment tilt often starts.</span>
+            <b>Players who tilt after deaths</b>
+            <span>Stop the spiral early — reset before frustration snowballs.</span>
           </div>
           <div class="card">
-            <b>Shows a reset prompt</b>
-            <span>A short, subtle cue to break the tilt loop and re-center quickly.</span>
+            <b>Ranked grinders</b>
+            <span>Long sessions are where small mental slips compound. Keep control.</span>
           </div>
           <div class="card">
-            <b>Stays out of the way</b>
-            <span>Appears fast, disappears fast — so you stay focused on the game.</span>
-          </div>
-        </div>
-      </section>
-
-      <div class="divider" aria-hidden="true"></div>
-
-      <!-- HOW IT WORKS (more space + storytelling) -->
-      <section class="pad">
-        <h2>How it works</h2>
-        <p>
-          Tilt usually starts as a physical + emotional reaction — not a thinking problem.
-          By briefly resetting breathing, posture, focus, or tempo, Tilt Buddy helps bring your body and attention back into a stable state.
-        </p>
-
-        <div class="twoCol">
-          <div class="step">
-            <div class="num">1</div>
-            <div>
-              <b style="display:block;text-transform:uppercase;letter-spacing:.9px;font-size:12px;margin-bottom:6px;">Runs quietly</b>
-              <span style="color:var(--muted);font-size:13.2px;line-height:1.6;">
-                You play normally. Tilt Buddy stays silent until it’s needed.
-              </span>
-            </div>
-          </div>
-
-          <div class="step">
-            <div class="num">2</div>
-            <div>
-              <b style="display:block;text-transform:uppercase;letter-spacing:.9px;font-size:12px;margin-bottom:6px;">Death → prompt</b>
-              <span style="color:var(--muted);font-size:13.2px;line-height:1.6;">
-                A short on-screen reset prompt appears to interrupt emotional overreactions.
-              </span>
-            </div>
-          </div>
-
-          <div class="step">
-            <div class="num">3</div>
-            <div>
-              <b style="display:block;text-transform:uppercase;letter-spacing:.9px;font-size:12px;margin-bottom:6px;">No coaching</b>
-              <span style="color:var(--muted);font-size:13.2px;line-height:1.6;">
-                No gameplay advice, no judgement — just a mental reset.
-              </span>
-            </div>
-          </div>
-
-          <div class="step">
-            <div class="num">✓</div>
-            <div>
-              <b style="display:block;text-transform:uppercase;letter-spacing:.9px;font-size:12px;margin-bottom:6px;">Back to the round</b>
-              <span style="color:var(--muted);font-size:13.2px;line-height:1.6;">
-                The overlay fades quickly so you can stay fully focused.
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div class="divider" aria-hidden="true"></div>
-
-      <!-- DOES / DOES NOT (clear separation) -->
-      <section class="pad">
-        <div class="twoCol">
-          <div class="card" style="padding:18px;">
-            <h2 style="margin:0 0 6px;">What it does</h2>
-            <div class="list">
-              <div class="li"><span class="tick"></span><span>Detects deaths during gameplay</span></div>
-              <div class="li"><span class="tick"></span><span>Shows a short, subtle reset prompt after a death</span></div>
-              <div class="li"><span class="tick"></span><span>Helps interrupt tilt and emotional overreactions</span></div>
-              <div class="li"><span class="tick"></span><span>Supports calm, focused play under pressure</span></div>
-            </div>
-          </div>
-
-          <div class="card" style="padding:18px;">
-            <h2 style="margin:0 0 6px;">What it does NOT do</h2>
-            <div class="list">
-              <div class="li"><span class="tick" style="border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.06);box-shadow:0 0 0 4px rgba(255,255,255,.04)"></span><span>No coaching or gameplay advice</span></div>
-              <div class="li"><span class="tick" style="border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.06);box-shadow:0 0 0 4px rgba(255,255,255,.04)"></span><span>No mistake analysis or feedback</span></div>
-              <div class="li"><span class="tick" style="border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.06);box-shadow:0 0 0 4px rgba(255,255,255,.04)"></span><span>No stat tracking or performance judging</span></div>
-              <div class="li"><span class="tick" style="border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.06);box-shadow:0 0 0 4px rgba(255,255,255,.04)"></span><span>No long messages or distractions</span></div>
-            </div>
+            <b>Competitive players under pressure</b>
+            <span>Focus + composure matter. Tilt Buddy helps you stay stable, not “play better.”</span>
           </div>
         </div>
 
-        <p class="sub" style="margin-top:14px;">
-          Tilt Buddy doesn’t analyze your performance, criticize mistakes, or tell you how to play.
-          It doesn’t track stats, judge decisions, or give strategic advice.
-        </p>
-      </section>
-
-      <div class="divider" aria-hidden="true"></div>
-
-      <!-- WHO IT'S FOR -->
-      <section class="pad">
-        <h2>Who Tilt Buddy is for</h2>
-        <p>
-          Designed for competitive players who want to stay in control during intense moments —
-          especially in FPS where reactions, focus, and composure matter.
-        </p>
-        <div class="grid3">
-          <div class="card">
-            <b>Players who tilt</b>
-            <span>If emotions spike after deaths, Tilt Buddy helps you reset before it snowballs.</span>
+        <!-- Bottom CTA: left download, right discord -->
+        <div class="bottomCtas">
+          <div class="bottomLeft">
+            <a class="btn primary" href="OVERWOLF_DOWNLOAD_URL_HERE" target="_blank" rel="noopener">
+              <span class="dot"></span> Download
+            </a>
+            <div class="hint">Overwolf overlay — instant micro-resets after deaths.</div>
           </div>
-          <div class="card">
-            <b>Players who grind ranked</b>
-            <span>Best for long sessions where small mental slips compound over time.</span>
-          </div>
-          <div class="card">
-            <b>Players who want control</b>
-            <span>Prevents tilt — without telling you how to play better.</span>
-          </div>
-        </div>
-      </section>
 
-      <div class="divider" aria-hidden="true"></div>
-
-      <!-- SUPPORT -->
-      <section class="pad">
-        <div class="support">
-          <div>
-            <h2 style="margin:0;">Support / Contact</h2>
-            <div class="sub" style="margin-top:6px;">
-              Bugs, feedback, suggestions — join the Discord and post in support.
-            </div>
-            <div class="sub" style="margin-top:8px;">
-              Tip: if you want to guarantee DMs, enable <b>“Allow direct messages from server members”</b> in your Discord Privacy settings.
-            </div>
-          </div>
-          <div class="ctaRow" style="margin:0;">
-            <a class="btn primary" href="https://discord.gg/xXrMAWqKeA" target="_blank" rel="noopener">
-              <span class="dot"></span> Join Discord
+          <div class="bottomRight">
+            <div class="hint">Support / Contact</div>
+            <a class="btn" href="https://discord.gg/xXrMAWqKeA" target="_blank" rel="noopener">
+              <span class="dot" style="background:rgba(255,255,255,.35);box-shadow:0 0 0 4px rgba(255,255,255,.08)"></span>
+              Join Discord
             </a>
           </div>
         </div>
@@ -654,7 +579,7 @@
           <span class="lbX" aria-hidden="true"></span>
         </button>
       </div>
-      <img class="lightboxImg" src="app.png" alt="Tilt Buddy preview enlarged">
+      <img class="lightboxImg" src="./app.png" alt="Tilt Buddy preview enlarged" />
     </div>
   </div>
 
@@ -681,7 +606,7 @@
     openBtn.addEventListener('click', openLightbox);
     closeBtn.addEventListener('click', closeLightbox);
 
-    // click outside image closes
+    // click outside closes
     lb.addEventListener('click', (e) => {
       if (e.target === lb) closeLightbox();
     });
