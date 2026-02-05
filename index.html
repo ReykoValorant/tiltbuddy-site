@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TiltBuddy — Overwolf Gaming Companion</title>
+  <meta name="description" content="TiltBuddy is a lightweight Overwolf app that helps competitive gamers reset focus after tilt." />
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --card:#0f1621;
+      --text:#e7eefc;
+      --muted:#9bb0cc;
+      --line:rgba(231,238,252,.12);
+      --btn:#e7eefc;
+      --btnText:#0b0f14;
+      --shadow:0 18px 60px rgba(0,0,0,.55);
+      --radius:20px;
+      --max:980px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(900px 500px at 15% 10%, rgba(120,160,255,.22), transparent 60%),
+        radial-gradient(900px 500px at 85% 25%, rgba(255,170,120,.18), transparent 55%),
+        linear-gradient(180deg, #070a0f, var(--bg));
+      color:var(--text);
+      min-height:100vh;
+    }
+    a{color:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:28px 18px 56px}
+    header{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:10px 0 24px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:700; letter-spacing:.2px;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:999px;
+      background:linear-gradient(135deg, rgba(120,160,255,1), rgba(255,170,120,1));
+      box-shadow:0 0 0 6px rgba(120,160,255,.12);
+    }
+    .nav{display:flex; gap:14px; color:var(--muted); font-size:14px}
+    .nav a{opacity:.9; text-decoration:none}
+    .nav a:hover{opacity:1; text-decoration:underline}
+    .hero{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:34px 22px;
+      overflow:hidden;
+      position:relative;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-60px -80px auto auto;
+      width:320px; height:320px; border-radius:999px;
+      background:radial-gradient(circle at 30% 30%, rgba(120,160,255,.30), transparent 60%);
+      filter:blur(4px);
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:22px;
+      align-items:center;
+    }
+    h1{
+      margin:0 0 10px;
+      font-size: clamp(30px, 4.2vw, 48px);
+      line-height:1.05;
+      letter-spacing:-.6px;
+    }
+    .sub{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.6;
+      max-width:60ch;
+    }
+    .ctaRow{display:flex; gap:12px; flex-wrap:wrap; align-items:center}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:12px 16px;
+      border-radius:14px;
+      border:1px solid rgba(231,238,252,.18);
+      text-decoration:none;
+      font-weight:700;
+      font-size:14px;
+    }
+    .btn.primary{
+      background:var(--btn);
+      color:var(--btnText);
+      border-color:transparent;
+    }
+    .btn.primary:hover{filter:brightness(.96)}
+    .btn.ghost{color:var(--text); background:rgba(255,255,255,.02)}
+    .btn.ghost:hover{background:rgba(255,255,255,.04)}
+    .chips{
+      display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;
+    }
+    .chip{
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      color:var(--muted);
+      font-size:12px;
+      background:rgba(255,255,255,.02);
+    }
+    .panel{
+      border:1px solid var(--line);
+      background:rgba(15,22,33,.7);
+      border-radius:18px;
+      padding:16px;
+    }
+    .kpi{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+    }
+    .kpiItem{
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+    }
+    .kpiItem b{display:block; font-size:14px; margin-bottom:4px}
+    .kpiItem span{color:var(--muted); font-size:13px; line-height:1.4}
+    section.features{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+    }
+    .card{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+      border-radius:18px;
+      padding:14px;
+    }
+    .card b{display:block; margin-bottom:6px}
+    .card p{margin:0; color:var(--muted); font-size:13px; line-height:1.5}
+    footer{
+      margin-top:22px;
+      color:var(--muted);
+      font-size:12px;
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      padding:6px 2px;
+    }
+    @media (max-width: 860px){
+      .grid{grid-template-columns:1fr}
+      section.features{grid-template-columns:1fr}
+      .nav{display:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand"><span class="dot"></span> TiltBuddy</div>
+      <nav class="nav">
+        <a href="#features">Features</a>
+        <a href="#download">Download</a>
+      </nav>
+    </header>
+
+    <main class="hero">
+      <div class="grid">
+        <div>
+          <h1>Reset your focus. <br/>Win the next round.</h1>
+          <p class="sub">
+            TiltBuddy is a lightweight Overwolf companion for competitive gamers.
+            Quick micro-resets, clean prompts, zero fluff.
+          </p>
+
+          <div class="ctaRow" id="download">
+            <!-- TODO: Replace this with your real download link -->
+            <a class="btn primary" href="https://example.com/download" target="_blank" rel="noopener">Download</a>
+            <!-- Optional: your Overwolf store page or Discord -->
+            <a class="btn ghost" href="https://overwolf.com/" target="_blank" rel="noopener">View on Overwolf</a>
+          </div>
+
+          <div class="chips">
+            <span class="chip">Overwolf overlay</span>
+            <span class="chip">Focus reset</span>
+            <span class="chip">Minimal UI</span>
+            <span class="chip">Competitive FPS</span>
+          </div>
+        </div>
+
+        <aside class="panel">
+          <div class="kpi">
+            <div class="kpiItem">
+              <b>1-click reset</b>
+              <span>Fast prompt to break tilt loops and re-center.</span>
+            </div>
+            <div class="kpiItem">
+              <b>Cinematic, slow UI</b>
+              <span>Gentle animations that don’t distract mid-game.</span>
+            </div>
+            <div class="kpiItem">
+              <b>Built for grind</b>
+              <span>Designed for long sessions — hydration, posture, breathing.</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <section class="features" id="features" aria-label="Features">
+      <div class="card">
+        <b>Micro-prompts</b>
+        <p>Short cues that actually help in the moment — no long paragraphs.</p>
+      </div>
+      <div class="card">
+        <b>Low distraction</b>
+        <p>Clean layout and minimal motion so you stay locked in.</p>
+      </div>
+      <div class="card">
+        <b>Easy updates</b>
+        <p>Swap text, buttons, and links by editing a single HTML file.</p>
+      </div>
+    </section>
+
+    <footer>
+      <span>© <span id="y"></span> TiltBuddy</span>
+      <span><a href="mailto:hello@tiltbuddy.com">hello@tiltbuddy.com</a></span>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
