@@ -4,11 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tilt Buddy — Mental Reset Assistant for VALORANT</title>
-  <meta name="description" content="Tilt Buddy is a lightweight in-game overlay for Valorant that shows short reset prompts after stressful moments—so tilt doesn’t take over the next round." />
+  <meta name="description" content="Tilt Buddy is a lightweight in-game overlay for Valorant. Short reset prompts after stressful moments — so tilt doesn’t take over the next round." />
   <meta name="theme-color" content="#0b0d12" />
   <style>
     :root{
-      /* same palette/effects as launcher UI */
       --valo: #ff4654;
       --ink:  #111823;
 
@@ -24,13 +23,7 @@
       --text: rgba(255,255,255,0.92);
       --muted: rgba(255,255,255,0.68);
 
-      --accent1: rgba(255, 70, 84, 0.98);
-      --accent2: rgba(255, 70, 84, 0.55);
-      --accent3: rgba(17, 24, 35, 0.65);
-
       --ok:   rgba(70, 230, 150, 0.92);
-      --warn: rgba(255, 190, 80, 0.92);
-      --bad:  rgba(255, 80, 80, 0.92);
 
       --glow:  rgba(255, 70, 84, 0.18);
       --glow2: rgba(255, 70, 84, 0.10);
@@ -56,7 +49,6 @@
     a{ color:inherit; text-decoration:none; }
     a:hover{ text-decoration:underline; }
 
-    /* ===== Topbar (same vibe as launcher) ===== */
     .topbar{
       position:sticky;
       top:0;
@@ -150,59 +142,10 @@
       opacity: 0.75;
     }
 
-    .nav{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      font-weight: 900;
-      letter-spacing: .4px;
-      text-transform: uppercase;
-      font-size: 12px;
-      color: rgba(255,255,255,0.75);
-      user-select:none;
-    }
-    .nav a{ text-decoration:none; opacity:.92; }
-    .nav a:hover{ opacity:1; text-decoration:underline; }
-    .navSep{
-      width:1px; height:18px;
-      background: rgba(255,255,255,0.10);
-      border-radius:999px;
-      opacity:.8;
-    }
-
-    .pill{
-      display:flex;
-      align-items:center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.06);
-      box-shadow:
-        0 12px 28px rgba(0,0,0,0.35),
-        0 0 0 1px rgba(255,255,255,0.05) inset;
-      font-weight: 900;
-      font-size: 12px;
-      letter-spacing: 0.6px;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-    .pillDot{
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.35);
-      box-shadow: 0 0 0 3px rgba(255,255,255,0.05);
-    }
-    .pill.ok{ border-color: rgba(70,230,150,0.22); background: rgba(70,230,150,0.08); }
-    .pill.ok .pillDot{ background: var(--ok); }
-    .pill.check{ border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); }
-
-    /* ===== Page layout ===== */
     .wrap{
       max-width: var(--max);
       margin: 0 auto;
-      padding: 18px 16px 72px;
+      padding: 18px 16px 56px;
     }
 
     .card{
@@ -223,44 +166,9 @@
 
     .hero{
       display:grid;
-      grid-template-columns: 1.1fr .9fr;
+      grid-template-columns: 1.15fr .85fr;
       gap: 14px;
       align-items:stretch;
-    }
-
-    .heroLeft{
-      display:flex;
-      flex-direction:column;
-      gap: 12px;
-      min-width:0;
-    }
-
-    .kicker{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      margin-top: 4px;
-    }
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.04);
-      color: rgba(255,255,255,0.74);
-      font-weight: 900;
-      letter-spacing:.4px;
-      text-transform: uppercase;
-      font-size: 11px;
-      user-select:none;
-    }
-    .chip .dot{
-      width:6px; height:6px; border-radius:999px;
-      background: rgba(255,70,84,0.80);
-      box-shadow: 0 0 0 4px rgba(255,70,84,0.12);
     }
 
     h1{
@@ -271,7 +179,7 @@
       text-shadow: 0 18px 44px rgba(0,0,0,0.55);
     }
     .lead{
-      margin:0;
+      margin:10px 0 0;
       color: var(--muted);
       line-height: 1.65;
       font-size: 14px;
@@ -282,7 +190,7 @@
       display:flex;
       gap: 10px;
       flex-wrap:wrap;
-      margin-top: 2px;
+      margin-top: 14px;
     }
 
     .btn{
@@ -320,14 +228,6 @@
       box-shadow: 0 0 0 4px rgba(255,70,84,0.12);
     }
 
-    /* Right side preview */
-    .heroRight{
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-      min-height: 0;
-    }
-
     .preview{
       position:relative;
       border-radius: 20px;
@@ -335,11 +235,10 @@
       background: rgba(10,12,16,0.55);
       box-shadow: 0 14px 34px rgba(0,0,0,0.45);
       overflow:hidden;
-      min-height: 280px;
+      min-height: 270px;
       transform: translateZ(0);
     }
     .preview::after{
-      /* hover sheen loop (same effect as launcher .row) */
       content:"";
       position:absolute;
       inset:-2px;
@@ -385,7 +284,6 @@
       font-size: 12px;
     }
 
-    /* Feature grid */
     .grid{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
@@ -402,7 +300,7 @@
       box-shadow: 0 14px 34px rgba(0,0,0,0.45);
       overflow:hidden;
       transform: translateZ(0);
-      min-height: 92px;
+      min-height: 88px;
     }
     .row::after{
       content:"";
@@ -417,10 +315,6 @@
       filter: blur(0.4px);
       pointer-events:none;
       mix-blend-mode: screen;
-    }
-    .row:hover{
-      border-color: rgba(255,255,255,0.12);
-      background: rgba(12,14,18,0.62);
     }
     .row:hover::after{
       opacity: 0.95;
@@ -441,99 +335,6 @@
       line-height: 1.5;
     }
 
-    /* Sections */
-    .section{
-      margin-top: 14px;
-      border-radius: 24px;
-      border: 1px solid var(--strokeA);
-      background:
-        radial-gradient(900px 420px at 18% 0%, rgba(255,70,84,0.08), transparent 60%),
-        linear-gradient(180deg, rgba(12,14,18,0.65), rgba(14,16,20,0.52));
-      box-shadow:
-        0 18px 44px rgba(0,0,0,0.55),
-        0 0 0 1px rgba(255,255,255,0.04) inset;
-      padding: 16px;
-      overflow:hidden;
-    }
-
-    .sectionHeader{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom: 10px;
-    }
-    .sectionTitle{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-weight: 1000;
-      color: rgba(255,255,255,0.78);
-    }
-    .sectionTitle .miniDot{
-      width: 6px; height: 6px; border-radius:999px;
-      background: rgba(255,70,84,0.80);
-      box-shadow: 0 0 0 4px rgba(255,70,84,0.12);
-    }
-
-    .twoCol{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-    }
-
-    .bullet{
-      border-radius: 18px;
-      border: 1px solid var(--strokeB);
-      background: rgba(10,12,16,0.55);
-      box-shadow: 0 14px 34px rgba(0,0,0,0.45);
-      padding: 12px 14px;
-      position:relative;
-      overflow:hidden;
-    }
-    .bullet::after{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      opacity: 0;
-      background:
-        radial-gradient(240px 90px at 10% 0%, rgba(255,255,255,0.11), transparent 60%),
-        radial-gradient(220px 90px at 90% 20%, rgba(255,255,255,0.07), transparent 60%),
-        linear-gradient(90deg, transparent 0%, rgba(255,70,84,0.12) 35%, transparent 70%);
-      transform: translateX(-55%);
-      filter: blur(0.4px);
-      pointer-events:none;
-      mix-blend-mode: screen;
-    }
-    .bullet:hover::after{
-      opacity: 0.95;
-      animation: sheenLoop 1.35s ease-in-out infinite;
-    }
-    .bullet b{
-      display:block;
-      font-weight: 1000;
-      letter-spacing: .6px;
-      text-transform: uppercase;
-      font-size: 12px;
-      margin-bottom: 4px;
-    }
-    .bullet span{
-      color: rgba(255,255,255,0.68);
-      font-size: 12.5px;
-      line-height: 1.5;
-      display:block;
-    }
-
-    /* Footer */
     footer{
       margin-top: 16px;
       display:flex;
@@ -544,14 +345,12 @@
       font-size: 12px;
       padding: 6px 2px;
     }
-    footer a{ color: rgba(255,255,255,0.75); }
+    footer a{ color: rgba(255,255,255,0.78); }
     footer a:hover{ color: rgba(255,255,255,0.92); }
 
     @media (max-width: 980px){
       .hero{ grid-template-columns: 1fr; }
       .grid{ grid-template-columns: 1fr; }
-      .twoCol{ grid-template-columns: 1fr; }
-      .nav{ display:none; }
       .preview{ min-height: 220px; }
     }
   </style>
@@ -561,7 +360,6 @@
   <div class="topbar">
     <div class="brand">
       <div class="icon">
-        <!-- Put your icon in repo root as logo.png -->
         <img src="logo.png" alt="Tilt Buddy logo">
       </div>
       <div class="titles">
@@ -569,64 +367,33 @@
         <div class="tag">MENTAL RESET ASSISTANT FOR <b>VALORANT</b></div>
       </div>
     </div>
-
-    <div class="nav">
-      <a href="#features">Features</a>
-      <a href="#how">How it works</a>
-      <a href="#download">Download</a>
-      <span class="navSep"></span>
-      <span class="pill check"><span class="pillDot"></span><span>v0.2.1</span></span>
-    </div>
-
-    <div class="pill check"><span class="pillDot"></span><span>v0.2.1</span></div>
   </div>
 
   <div class="wrap">
     <div class="card">
       <div class="hero">
-        <div class="heroLeft">
-          <div class="kicker">
-            <span class="chip"><span class="dot"></span> Valorant-only</span>
-            <span class="chip"><span class="dot"></span> Competitive tool</span>
-            <span class="chip"><span class="dot"></span> Lightweight overlay</span>
-          </div>
-
+        <div>
           <h1>Stay calm.<br>Stay in control.</h1>
-
           <p class="lead">
             Tilt Buddy is a lightweight in-game overlay built specifically for <b>Valorant</b>.
-            After deaths or stressful moments, it shows short, practical reset prompts designed to slow things down,
-            interrupt tilt, and bring your focus back to the present round.
+            After deaths or stressful moments, it shows short reset prompts to interrupt tilt and bring focus back to the next round.
           </p>
 
-          <div class="ctaRow" id="download">
+          <div class="ctaRow">
             <!-- TODO: replace with your real Overwolf store / download link -->
             <a class="btn primary" href="https://example.com/download" target="_blank" rel="noopener">
               <span class="btnDot"></span> Download for Overwolf
             </a>
-            <a class="btn" href="#how">
-              <span class="btnDot" style="background:rgba(255,255,255,0.35); box-shadow:0 0 0 3px rgba(255,255,255,0.05)"></span>
-              How it works
-            </a>
           </div>
         </div>
 
-        <div class="heroRight">
-          <div class="preview" aria-label="App preview">
-            <!-- Optional screenshot -->
-            <img src="app.png" alt="Tilt Buddy preview" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="previewFallback" style="display:none;">
-              Drop app.png to show preview
-            </div>
-          </div>
-
-          <div class="pill ok" style="width:fit-content;">
-            <span class="pillDot"></span><span>Clean prompts • no coaching</span>
-          </div>
+        <div class="preview" aria-label="App preview">
+          <img src="app.png" alt="Tilt Buddy preview" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="previewFallback" style="display:none;">Drop app.png to show preview</div>
         </div>
       </div>
 
-      <div class="grid" id="features">
+      <div class="grid">
         <div class="row">
           <div class="t">Micro-prompts</div>
           <div class="s">Short cues that help in the moment — no long paragraphs.</div>
@@ -636,89 +403,18 @@
           <div class="s">Subtle overlay designed to stay out of your way mid-round.</div>
         </div>
         <div class="row">
-          <div class="t">Built for pressure</div>
-          <div class="s">Supports consistent decision-making when emotions spike.</div>
-        </div>
-      </div>
-
-      <div class="section" id="how">
-        <div class="sectionHeader">
-          <div class="sectionTitle"><span class="miniDot"></span> What it does</div>
-          <span class="pill check"><span class="pillDot"></span><span>No analysis</span></span>
-        </div>
-
-        <div class="twoCol">
-          <div class="list">
-            <div class="bullet">
-              <b>Mental reset — nothing more</b>
-              <span>No coaching, no stats, no judgment. Just a quick reset when tilt hits.</span>
-            </div>
-            <div class="bullet">
-              <b>Interrupts tilt loops</b>
-              <span>Helps slow down the emotional reaction after a bad moment.</span>
-            </div>
-            <div class="bullet">
-              <b>Present-round focus</b>
-              <span>Brings attention back to what matters: the next decision.</span>
-            </div>
-          </div>
-
-          <div class="list">
-            <div class="bullet">
-              <b>Designed for Valorant</b>
-              <span>Fast rounds, high pressure — one bad death shouldn’t decide the game.</span>
-            </div>
-            <div class="bullet">
-              <b>Lightweight overlay</b>
-              <span>Minimal UI, minimal friction, built to run alongside competitive play.</span>
-            </div>
-            <div class="bullet">
-              <b>Discord later</b>
-              <span>Community & feedback hub coming later — for now, just the tool.</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="sectionHeader">
-          <div class="sectionTitle"><span class="miniDot"></span> Download</div>
-          <span class="pill ok"><span class="pillDot"></span><span>SSL • secure</span></span>
-        </div>
-
-        <div class="twoCol">
-          <div class="bullet">
-            <b>Get Tilt Buddy</b>
-            <span>Install via Overwolf. Run it once, enable the overlay, and you’re set.</span>
-            <div style="margin-top:10px;">
-              <!-- TODO: replace with your real link -->
-              <a class="btn primary" href="https://example.com/download" target="_blank" rel="noopener">
-                <span class="btnDot"></span> Download for Overwolf
-              </a>
-            </div>
-          </div>
-
-          <div class="bullet">
-            <b>Support / Contact</b>
-            <span>If something feels off, email me and I’ll fix it fast.</span>
-            <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
-              <a class="btn" href="mailto:hello@tiltbuddy.com">
-                <span class="btnDot" style="background:rgba(255,255,255,0.35); box-shadow:0 0 0 3px rgba(255,255,255,0.05)"></span>
-                Email
-              </a>
-              <a class="btn" href="#features">
-                <span class="btnDot" style="background:rgba(255,255,255,0.35); box-shadow:0 0 0 3px rgba(255,255,255,0.05)"></span>
-                Back to top
-              </a>
-            </div>
-          </div>
+          <div class="t">No coaching</div>
+          <div class="s">No analysis, no judgment — just a mental reset.</div>
         </div>
       </div>
 
       <footer>
         <span>© <span id="y"></span> Tilt Buddy</span>
         <span>
-          <a href="mailto:hello@tiltbuddy.com">hello@tiltbuddy.com</a>
+          <!-- BEST: replace YOUR_DISCORD_USER_ID with your numeric ID -->
+          <a href="https://discord.com/users/YOUR_DISCORD_USER_ID" target="_blank" rel="noopener">
+            Discord: .reyko
+          </a>
         </span>
       </footer>
     </div>
