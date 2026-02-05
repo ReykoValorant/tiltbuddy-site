@@ -2,579 +2,725 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tilt Buddy — Mental Reset Assistant for VALORANT</title>
-  <meta name="description" content="Tilt Buddy is a lightweight in-game overlay for Valorant that helps you reset mentally after deaths or stressful moments." />
-  <meta name="theme-color" content="#0b0f14" />
-
+  <meta name="description" content="Tilt Buddy is a lightweight in-game overlay for Valorant that shows short reset prompts after stressful moments—so tilt doesn’t take over the next round." />
+  <meta name="theme-color" content="#0b0d12" />
   <style>
     :root{
-      --bg-0:#07090d;
-      --bg-1:#0b0f14;
-      --card: rgba(15, 18, 24, 0.72);
-      --card-2: rgba(10, 12, 16, 0.55);
-      --line: rgba(255,255,255,.08);
-      --line-2: rgba(255,255,255,.12);
+      /* same palette/effects as launcher UI */
+      --valo: #ff4654;
+      --ink:  #111823;
 
-      --text:#e9eefc;
-      --muted:#a9b4cc;
+      --bg0:#07080b;
+      --bg1:#0b0d12;
 
-      --red:#ff3b4a;
-      --red2:#ff5a6a;
-      --amber:#f3c34d;
-      --green:#35d07f;
+      --card: rgba(12,14,18,0.78);
+      --card2: rgba(14,16,20,0.62);
 
-      --shadow: 0 18px 70px rgba(0,0,0,.65);
-      --shadow2: 0 12px 40px rgba(0,0,0,.55);
-      --radius: 22px;
-      --radius-sm: 14px;
+      --strokeA: rgba(255,255,255,0.10);
+      --strokeB: rgba(255,255,255,0.06);
 
-      --max: 1080px;
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.68);
+
+      --accent1: rgba(255, 70, 84, 0.98);
+      --accent2: rgba(255, 70, 84, 0.55);
+      --accent3: rgba(17, 24, 35, 0.65);
+
+      --ok:   rgba(70, 230, 150, 0.92);
+      --warn: rgba(255, 190, 80, 0.92);
+      --bad:  rgba(255, 80, 80, 0.92);
+
+      --glow:  rgba(255, 70, 84, 0.18);
+      --glow2: rgba(255, 70, 84, 0.10);
+
+      --max: 1120px;
     }
 
     *{ box-sizing:border-box; }
-    html,body{ height:100%; }
+    html, body{ height:100%; }
+    html{ color-scheme: dark; scroll-behavior:smooth; }
     body{
       margin:0;
-      color:var(--text);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       background:
-        radial-gradient(1200px 700px at 20% 10%, rgba(255,59,74,.14), transparent 62%),
-        radial-gradient(900px 600px at 85% 30%, rgba(255,255,255,.06), transparent 55%),
-        linear-gradient(180deg, var(--bg-0), var(--bg-1));
+        radial-gradient(900px 520px at 15% 0%, rgba(255,70,84,0.16), transparent 60%),
+        radial-gradient(900px 520px at 85% 0%, rgba(17,24,35,0.28), transparent 62%),
+        radial-gradient(700px 400px at 60% 20%, rgba(255,255,255,0.04), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
       overflow-x:hidden;
     }
 
-    a{ color:inherit; }
-    .wrap{ max-width:var(--max); margin:0 auto; padding:26px 18px 70px; }
+    a{ color:inherit; text-decoration:none; }
+    a:hover{ text-decoration:underline; }
 
-    /* Top nav / header */
+    /* ===== Topbar (same vibe as launcher) ===== */
     .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      height: 70px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:14px;
-      margin-bottom:16px;
+      padding: 12px 16px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
+    .topbar::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(900px 180px at 10% 0%, rgba(255,70,84,0.20), transparent 62%),
+        radial-gradient(900px 200px at 88% 10%, rgba(17,24,35,0.45), transparent 62%),
+        linear-gradient(90deg, rgba(255,255,255,0.05), transparent 55%, rgba(255,255,255,0.02));
+      opacity: 0.95;
+      pointer-events:none;
+    }
+    .topbar::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:0;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(255,70,84,0.70), rgba(255,255,255,0.10), rgba(17,24,35,0.55));
+      opacity: 0.7;
+      pointer-events:none;
+    }
+    .topbar > *{ position:relative; z-index:1; }
+
     .brand{
       display:flex;
       align-items:center;
       gap:12px;
-      min-width: 220px;
+      min-width:0;
     }
-    .logo{
-      width:42px; height:42px;
-      border-radius:12px;
+    .icon{
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
       overflow:hidden;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.10);
-      box-shadow: 0 10px 30px rgba(0,0,0,.55);
-      flex:0 0 auto;
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.35);
+      box-shadow:
+        0 10px 22px rgba(0,0,0,0.55),
+        0 0 0 1px rgba(255,70,84,0.18) inset,
+        0 0 28px var(--glow),
+        0 0 18px var(--glow2);
+      flex: 0 0 auto;
+      transform: translateZ(0);
     }
-    .logo img{ width:100%; height:100%; display:block; object-fit:cover; }
-    .brandText{
-      display:flex; flex-direction:column; line-height:1.1;
+    .icon img{ width:100%; height:100%; object-fit:cover; transform: scale(1.06); display:block; }
+    .titles{ display:flex; flex-direction:column; gap:3px; min-width:0; }
+    .name{
+      font-weight: 1000;
+      letter-spacing: 2.2px;
+      text-transform: uppercase;
+      font-size: 16px;
+      line-height: 1.05;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-shadow: 0 12px 30px rgba(0,0,0,0.55);
     }
-    .brandText .name{
-      font-weight:800;
-      letter-spacing:.3px;
-      font-size:14px;
-      text-transform:uppercase;
-    }
-    .brandText .tag{
-      font-size:12px;
-      color:var(--muted);
-      font-weight:700;
-      letter-spacing:.4px;
-      text-transform:uppercase;
-    }
-    .brandText .tag b{
-      color: var(--red2);
-      font-weight:900;
-    }
-
-    .right{
-      display:flex; align-items:center; gap:10px;
-    }
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:9px 12px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      color: var(--muted);
-      font-size:12px;
-      font-weight:700;
-      box-shadow: var(--shadow2);
-      white-space:nowrap;
-    }
-    .pill .dot{
-      width:8px; height:8px; border-radius:999px;
-      background: rgba(255,255,255,.3);
-    }
-    .pill.red .dot{ background: var(--red); box-shadow: 0 0 0 6px rgba(255,59,74,.10); }
-    .pill.green .dot{ background: var(--green); box-shadow: 0 0 0 6px rgba(53,208,127,.10); }
-    .pill.amber .dot{ background: var(--amber); box-shadow: 0 0 0 6px rgba(243,195,77,.12); }
-
-    /* Main panel */
-    .panel{
-      border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,.10);
-      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
-      box-shadow: var(--shadow);
+    .tag{
+      font-size: 11.5px;
+      font-weight: 900;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.72);
+      white-space: nowrap;
       overflow:hidden;
+      text-overflow: ellipsis;
       position:relative;
+      padding-bottom:2px;
     }
-    .panel:before{
+    .tag b{ color: rgba(255,70,84,0.95); text-shadow: 0 0 20px rgba(255,70,84,0.20); }
+    .tag::after{
       content:"";
       position:absolute;
-      inset: -120px -160px auto auto;
-      width: 520px; height: 520px;
-      border-radius:999px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,59,74,.20), transparent 62%);
-      filter: blur(2px);
-      pointer-events:none;
-    }
-    .panelInner{
-      padding:22px;
-      position:relative;
-      z-index:1;
+      left:0;
+      bottom:-2px;
+      height: 2px;
+      width: 140px;
+      background: linear-gradient(90deg, rgba(255,70,84,0.75), rgba(255,255,255,0.08), rgba(17,24,35,0.55));
+      border-radius: 999px;
+      opacity: 0.75;
     }
 
-    /* Hero row */
+    .nav{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      font-weight: 900;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: rgba(255,255,255,0.75);
+      user-select:none;
+    }
+    .nav a{ text-decoration:none; opacity:.92; }
+    .nav a:hover{ opacity:1; text-decoration:underline; }
+    .navSep{
+      width:1px; height:18px;
+      background: rgba(255,255,255,0.10);
+      border-radius:999px;
+      opacity:.8;
+    }
+
+    .pill{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      box-shadow:
+        0 12px 28px rgba(0,0,0,0.35),
+        0 0 0 1px rgba(255,255,255,0.05) inset;
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .pillDot{
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.35);
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.05);
+    }
+    .pill.ok{ border-color: rgba(70,230,150,0.22); background: rgba(70,230,150,0.08); }
+    .pill.ok .pillDot{ background: var(--ok); }
+    .pill.check{ border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); }
+
+    /* ===== Page layout ===== */
+    .wrap{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 18px 16px 72px;
+    }
+
+    .card{
+      width:100%;
+      border-radius: 24px;
+      border: 1px solid var(--strokeA);
+      background:
+        radial-gradient(900px 420px at 18% 0%, rgba(255,70,84,0.10), transparent 60%),
+        radial-gradient(760px 420px at 86% 25%, rgba(17,24,35,0.22), transparent 60%),
+        linear-gradient(180deg, var(--card), var(--card2));
+      box-shadow:
+        0 22px 60px rgba(0,0,0,0.62),
+        0 0 0 1px rgba(255,255,255,0.04) inset,
+        0 0 28px var(--glow);
+      padding: 18px;
+      overflow:hidden;
+    }
+
     .hero{
       display:grid;
       grid-template-columns: 1.1fr .9fr;
-      gap:16px;
+      gap: 14px;
       align-items:stretch;
-      margin-top:12px;
     }
+
     .heroLeft{
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      background: var(--card);
-      box-shadow: var(--shadow2);
-      padding:18px;
-    }
-    .heroLeft h1{
-      margin:0 0 10px;
-      font-size: clamp(26px, 3.6vw, 42px);
-      letter-spacing:-.6px;
-      line-height:1.05;
-    }
-    .heroLeft p{
-      margin:0 0 14px;
-      color: var(--muted);
-      line-height:1.6;
-      font-size:14px;
-      max-width: 60ch;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+      min-width:0;
     }
 
-    .ctaRow{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
+    .kicker{
+      display:flex;
       gap:10px;
-      padding:12px 14px;
-      border-radius: 14px;
-      text-decoration:none;
-      font-weight:800;
-      font-size:13px;
-      letter-spacing:.2px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.03);
-      color: var(--text);
-      transition: transform .12s ease, filter .12s ease, background .12s ease;
-      user-select:none;
-    }
-    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.05); }
-    .btn.primary{
-      border-color: transparent;
-      background: linear-gradient(135deg, rgba(255,59,74,1), rgba(255,90,106,1));
-      color: #0b0f14;
-      box-shadow: 0 18px 50px rgba(255,59,74,.25);
-    }
-    .btn.primary:hover{ filter: brightness(.98); }
-    .btn .icon{
-      width:10px; height:10px; border-radius:999px;
-      background: rgba(0,0,0,.45);
-    }
-
-    .miniRow{
-      display:flex; gap:10px; flex-wrap:wrap;
-      margin-top:14px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top: 4px;
     }
     .chip{
       display:inline-flex;
       align-items:center;
       gap:8px;
-      padding:9px 11px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.02);
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.74);
+      font-weight: 900;
+      letter-spacing:.4px;
+      text-transform: uppercase;
+      font-size: 11px;
+      user-select:none;
+    }
+    .chip .dot{
+      width:6px; height:6px; border-radius:999px;
+      background: rgba(255,70,84,0.80);
+      box-shadow: 0 0 0 4px rgba(255,70,84,0.12);
+    }
+
+    h1{
+      margin:0;
+      font-size: clamp(28px, 4vw, 46px);
+      line-height: 1.05;
+      letter-spacing: -0.6px;
+      text-shadow: 0 18px 44px rgba(0,0,0,0.55);
+    }
+    .lead{
+      margin:0;
       color: var(--muted);
-      font-size:12px;
-      font-weight:700;
+      line-height: 1.65;
+      font-size: 14px;
+      max-width: 70ch;
     }
-    .chip .tiny{
-      width:8px; height:8px; border-radius:999px;
-      background: rgba(255,255,255,.25);
-    }
-    .chip.red .tiny{ background: var(--red); }
-    .chip.green .tiny{ background: var(--green); }
-    .chip.amber .tiny{ background: var(--amber); }
 
-    /* Right card (screenshot) */
-    .heroRight{
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      background: var(--card-2);
-      box-shadow: var(--shadow2);
-      padding:12px;
+    .ctaRow{
       display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .shot{
-      width:100%;
-      border-radius: 18px;
-      overflow:hidden;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.35);
-      aspect-ratio: 16/10;
-    }
-    .shot img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-    .shotCaption{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      padding: 2px 6px;
-      color: var(--muted);
-      font-size:12px;
-      font-weight:700;
+      gap: 10px;
+      flex-wrap:wrap;
+      margin-top: 2px;
     }
 
-    /* Sections styled like your app cards */
-    .sectionGrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:14px;
-      margin-top:14px;
-    }
-    .card{
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      background: var(--card);
-      box-shadow: var(--shadow2);
-      padding:16px;
-      position:relative;
-      overflow:hidden;
-    }
-    .card:before{
-      content:"";
-      position:absolute;
-      inset: -120px auto auto -140px;
-      width: 320px; height: 320px;
-      border-radius:999px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,59,74,.10), transparent 62%);
-      filter: blur(1px);
-      pointer-events:none;
-    }
-
-    .cardHeader{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:10px;
-      position:relative;
-      z-index:1;
-    }
-    .cardTitle{
-      display:flex; align-items:center; gap:10px;
-      font-weight:900;
-      letter-spacing:.5px;
-      font-size:12px;
-      text-transform:uppercase;
-    }
-    .marker{
-      width:9px; height:9px; border-radius:999px;
-      background: rgba(255,59,74,.65);
-      box-shadow: 0 0 0 6px rgba(255,59,74,.10);
-      flex:0 0 auto;
-    }
-    .rows{ display:flex; flex-direction:column; gap:10px; position:relative; z-index:1; }
-    .row{
-      border-radius: 16px;
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,0,.22);
-      padding:12px 12px;
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      align-items:center;
-    }
-    .row .leftCol{ display:flex; flex-direction:column; gap:3px; }
-    .row b{
-      font-size:13px;
-      letter-spacing:.2px;
-    }
-    .row small{
-      color: var(--muted);
-      font-size:12px;
-      line-height:1.35;
-    }
-
-    /* Toggle look */
-    .toggle{
-      width:56px; height:30px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.04);
-      position:relative;
-      flex:0 0 auto;
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.25);
-    }
-    .toggle.on{
-      background: rgba(255,59,74,.18);
-      border-color: rgba(255,59,74,.35);
-    }
-    .knob{
-      width:24px; height:24px;
-      border-radius:999px;
-      background: rgba(255,255,255,.80);
-      position:absolute;
-      top:50%;
-      transform: translateY(-50%);
-      left: 4px;
-      transition: left .18s ease;
-      box-shadow: 0 6px 16px rgba(0,0,0,.35);
-    }
-    .toggle.on .knob{ left: 28px; }
-
-    /* Dropdown look */
-    .select{
+    .btn{
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.92);
+      padding: 10px 14px;
+      font-weight: 950;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-size: 12px;
+      cursor:pointer;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.35);
+      text-decoration:none;
       display:inline-flex;
       align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:10px 12px;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      color: var(--text);
-      font-weight:800;
-      font-size:12px;
-      min-width: 150px;
-      flex:0 0 auto;
+      gap:10px;
+      user-select:none;
+      transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
     }
-    .chev{
-      width:8px; height:8px;
-      border-right:2px solid rgba(255,255,255,.55);
-      border-bottom:2px solid rgba(255,255,255,.55);
-      transform: rotate(45deg);
-      margin-top:-2px;
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,0.14); background: rgba(255,255,255,0.08); }
+    .btn.primary{
+      border-color: rgba(255,70,84,0.28);
+      background: radial-gradient(120px 60px at 20% 0%, rgba(255,255,255,0.10), transparent 60%),
+                  linear-gradient(180deg, rgba(255,70,84,0.22), rgba(255,255,255,0.03));
+      box-shadow:
+        0 10px 22px rgba(0,0,0,0.35),
+        0 0 0 1px rgba(255,70,84,0.14) inset,
+        0 0 34px rgba(255,70,84,0.18);
+    }
+    .btn .btnDot{
+      width:8px; height:8px; border-radius:999px;
+      background: rgba(255,70,84,0.95);
+      box-shadow: 0 0 0 4px rgba(255,70,84,0.12);
     }
 
-    /* Bottom CTA */
-    .bottomCta{
-      margin-top:14px;
-      border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,.10);
-      background: linear-gradient(135deg, rgba(255,59,74,.18), rgba(255,255,255,.03));
-      box-shadow: var(--shadow2);
-      padding:16px;
+    /* Right side preview */
+    .heroRight{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .preview{
+      position:relative;
+      border-radius: 20px;
+      border: 1px solid var(--strokeB);
+      background: rgba(10,12,16,0.55);
+      box-shadow: 0 14px 34px rgba(0,0,0,0.45);
+      overflow:hidden;
+      min-height: 280px;
+      transform: translateZ(0);
+    }
+    .preview::after{
+      /* hover sheen loop (same effect as launcher .row) */
+      content:"";
+      position:absolute;
+      inset:-2px;
+      opacity: 0;
+      background:
+        radial-gradient(240px 90px at 10% 0%, rgba(255,255,255,0.11), transparent 60%),
+        radial-gradient(220px 90px at 90% 20%, rgba(255,255,255,0.07), transparent 60%),
+        linear-gradient(90deg, transparent 0%, rgba(255,70,84,0.12) 35%, transparent 70%);
+      transform: translateX(-55%);
+      filter: blur(0.4px);
+      pointer-events:none;
+      mix-blend-mode: screen;
+    }
+    .preview:hover::after{
+      opacity: 0.95;
+      animation: sheenLoop 1.35s ease-in-out infinite;
+    }
+    @keyframes sheenLoop{
+      0%   { transform: translateX(-58%); }
+      50%  { transform: translateX(58%); }
+      100% { transform: translateX(-58%); }
+    }
+
+    .preview img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+      opacity:.96;
+    }
+    .previewFallback{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 16px;
+      text-align:center;
+      color: rgba(255,255,255,0.70);
+      font-weight: 900;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    /* Feature grid */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .row{
+      position:relative;
+      border-radius: 18px;
+      padding: 14px;
+      border: 1px solid var(--strokeB);
+      background: rgba(10,12,16,0.55);
+      box-shadow: 0 14px 34px rgba(0,0,0,0.45);
+      overflow:hidden;
+      transform: translateZ(0);
+      min-height: 92px;
+    }
+    .row::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      opacity: 0;
+      background:
+        radial-gradient(240px 90px at 10% 0%, rgba(255,255,255,0.11), transparent 60%),
+        radial-gradient(220px 90px at 90% 20%, rgba(255,255,255,0.07), transparent 60%),
+        linear-gradient(90deg, transparent 0%, rgba(255,70,84,0.12) 35%, transparent 70%);
+      transform: translateX(-55%);
+      filter: blur(0.4px);
+      pointer-events:none;
+      mix-blend-mode: screen;
+    }
+    .row:hover{
+      border-color: rgba(255,255,255,0.12);
+      background: rgba(12,14,18,0.62);
+    }
+    .row:hover::after{
+      opacity: 0.95;
+      animation: sheenLoop 1.35s ease-in-out infinite;
+    }
+
+    .t{
+      font-weight: 1000;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      font-size: 12.5px;
+      color: rgba(255,255,255,0.92);
+      margin-bottom: 6px;
+    }
+    .s{
+      font-size: 12.5px;
+      color: rgba(255,255,255,0.68);
+      line-height: 1.5;
+    }
+
+    /* Sections */
+    .section{
+      margin-top: 14px;
+      border-radius: 24px;
+      border: 1px solid var(--strokeA);
+      background:
+        radial-gradient(900px 420px at 18% 0%, rgba(255,70,84,0.08), transparent 60%),
+        linear-gradient(180deg, rgba(12,14,18,0.65), rgba(14,16,20,0.52));
+      box-shadow:
+        0 18px 44px rgba(0,0,0,0.55),
+        0 0 0 1px rgba(255,255,255,0.04) inset;
+      padding: 16px;
+      overflow:hidden;
+    }
+
+    .sectionHeader{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom: 10px;
     }
-    .bottomCta b{ font-size:14px; }
-    .bottomCta span{ color: var(--muted); font-size:12px; font-weight:700; }
+    .sectionTitle{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 1000;
+      color: rgba(255,255,255,0.78);
+    }
+    .sectionTitle .miniDot{
+      width: 6px; height: 6px; border-radius:999px;
+      background: rgba(255,70,84,0.80);
+      box-shadow: 0 0 0 4px rgba(255,70,84,0.12);
+    }
 
+    .twoCol{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+
+    .bullet{
+      border-radius: 18px;
+      border: 1px solid var(--strokeB);
+      background: rgba(10,12,16,0.55);
+      box-shadow: 0 14px 34px rgba(0,0,0,0.45);
+      padding: 12px 14px;
+      position:relative;
+      overflow:hidden;
+    }
+    .bullet::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      opacity: 0;
+      background:
+        radial-gradient(240px 90px at 10% 0%, rgba(255,255,255,0.11), transparent 60%),
+        radial-gradient(220px 90px at 90% 20%, rgba(255,255,255,0.07), transparent 60%),
+        linear-gradient(90deg, transparent 0%, rgba(255,70,84,0.12) 35%, transparent 70%);
+      transform: translateX(-55%);
+      filter: blur(0.4px);
+      pointer-events:none;
+      mix-blend-mode: screen;
+    }
+    .bullet:hover::after{
+      opacity: 0.95;
+      animation: sheenLoop 1.35s ease-in-out infinite;
+    }
+    .bullet b{
+      display:block;
+      font-weight: 1000;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+    .bullet span{
+      color: rgba(255,255,255,0.68);
+      font-size: 12.5px;
+      line-height: 1.5;
+      display:block;
+    }
+
+    /* Footer */
     footer{
-      margin-top:18px;
+      margin-top: 16px;
       display:flex;
       justify-content:space-between;
-      gap:12px;
+      gap: 10px;
       flex-wrap:wrap;
-      color: var(--muted);
-      font-size:12px;
+      color: rgba(255,255,255,0.62);
+      font-size: 12px;
       padding: 6px 2px;
     }
-    footer a{ text-decoration:none; opacity:.95; }
-    footer a:hover{ text-decoration:underline; opacity:1; }
+    footer a{ color: rgba(255,255,255,0.75); }
+    footer a:hover{ color: rgba(255,255,255,0.92); }
 
     @media (max-width: 980px){
       .hero{ grid-template-columns: 1fr; }
-      .sectionGrid{ grid-template-columns: 1fr; }
-      .brand{ min-width:auto; }
+      .grid{ grid-template-columns: 1fr; }
+      .twoCol{ grid-template-columns: 1fr; }
+      .nav{ display:none; }
+      .preview{ min-height: 220px; }
     }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="topbar">
-      <div class="brand">
-        <div class="logo">
-          <!-- Put your icon file in the repo as /logo.png -->
-          <img src="logo.png" alt="Tilt Buddy Logo">
-        </div>
-        <div class="brandText">
-          <div class="name">TILT BUDDY</div>
-          <div class="tag">MENTAL RESET ASSISTANT FOR <b>VALORANT</b></div>
-        </div>
+  <div class="topbar">
+    <div class="brand">
+      <div class="icon">
+        <!-- Put your icon in repo root as logo.png -->
+        <img src="logo.png" alt="Tilt Buddy logo">
       </div>
-
-      <div class="right">
-        <div class="pill red"><span class="dot"></span> v0.2.1</div>
+      <div class="titles">
+        <div class="name">TILT BUDDY</div>
+        <div class="tag">MENTAL RESET ASSISTANT FOR <b>VALORANT</b></div>
       </div>
     </div>
 
-    <div class="panel">
-      <div class="panelInner">
+    <div class="nav">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#download">Download</a>
+      <span class="navSep"></span>
+      <span class="pill check"><span class="pillDot"></span><span>v0.2.1</span></span>
+    </div>
 
-        <div class="hero">
-          <div class="heroLeft">
-            <h1>Stay calm.<br>Stay in control.</h1>
-            <p>
-              Tilt Buddy is a lightweight in-game overlay for <b>Valorant</b> that helps you reset mentally when pressure and frustration start to rise.
-              After deaths or stressful moments, it shows short, practical reset prompts designed to slow things down, interrupt tilt, and bring your focus back to the present round.
-            </p>
+    <div class="pill check"><span class="pillDot"></span><span>v0.2.1</span></div>
+  </div>
 
-            <div class="ctaRow">
-              <!-- TODO: replace with your real Overwolf / download link -->
-              <a class="btn primary" href="https://example.com/download" target="_blank" rel="noopener">
-                <span class="icon"></span> Download for Overwolf
-              </a>
-              <a class="btn" href="#how" rel="noopener">How it works</a>
-            </div>
-
-            <div class="miniRow">
-              <span class="chip red"><span class="tiny"></span> Competitive-first</span>
-              <span class="chip amber"><span class="tiny"></span> Short prompts</span>
-              <span class="chip green"><span class="tiny"></span> Minimal overlay</span>
-            </div>
+  <div class="wrap">
+    <div class="card">
+      <div class="hero">
+        <div class="heroLeft">
+          <div class="kicker">
+            <span class="chip"><span class="dot"></span> Valorant-only</span>
+            <span class="chip"><span class="dot"></span> Competitive tool</span>
+            <span class="chip"><span class="dot"></span> Lightweight overlay</span>
           </div>
 
-          <div class="heroRight" aria-label="App preview">
-            <div class="shot">
-              <!-- Put your screenshot in the repo as /app.png -->
-              <img src="app.png" alt="Tilt Buddy app screenshot">
-            </div>
-            <div class="shotCaption">
-              <span>In-game overlay + settings panel</span>
-              <span class="pill green" style="box-shadow:none;"><span class="dot"></span> Lightweight</span>
-            </div>
-          </div>
-        </div>
+          <h1>Stay calm.<br>Stay in control.</h1>
 
-        <div class="sectionGrid" id="how">
-          <div class="card">
-            <div class="cardHeader">
-              <div class="cardTitle"><span class="marker"></span> What it does</div>
-              <div class="pill amber"><span class="dot"></span> Reset prompts</div>
-            </div>
-            <div class="rows">
-              <div class="row">
-                <div class="leftCol">
-                  <b>Mental reset — nothing more</b>
-                  <small>No coaching, no analysis, no judgment. Just a fast reset when tilt hits.</small>
-                </div>
-              </div>
-              <div class="row">
-                <div class="leftCol">
-                  <b>Interrupts tilt loops</b>
-                  <small>After deaths or stressful moments, it nudges you back into control.</small>
-                </div>
-              </div>
-              <div class="row">
-                <div class="leftCol">
-                  <b>Built for Valorant pressure</b>
-                  <small>Fast rounds, high stakes — one bad moment shouldn’t ruin the next.</small>
-                </div>
-              </div>
-            </div>
-          </div>
+          <p class="lead">
+            Tilt Buddy is a lightweight in-game overlay built specifically for <b>Valorant</b>.
+            After deaths or stressful moments, it shows short, practical reset prompts designed to slow things down,
+            interrupt tilt, and bring your focus back to the present round.
+          </p>
 
-          <div class="card">
-            <div class="cardHeader">
-              <div class="cardTitle"><span class="marker"></span> Design principles</div>
-              <div class="pill"><span class="dot"></span> Minimal UI</div>
-            </div>
-
-            <div class="rows">
-              <div class="row">
-                <div class="leftCol">
-                  <b>Low distraction</b>
-                  <small>Subtle overlay that stays out of the way.</small>
-                </div>
-                <div class="toggle on" aria-hidden="true"><div class="knob"></div></div>
-              </div>
-
-              <div class="row">
-                <div class="leftCol">
-                  <b>Position</b>
-                  <small>Where prompts appear</small>
-                </div>
-                <div class="select" aria-hidden="true">
-                  Top right <span class="chev"></span>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="leftCol">
-                  <b>Intensity</b>
-                  <small>How often Tilt Buddy speaks</small>
-                </div>
-                <div class="select" aria-hidden="true">
-                  Normal <span class="chev"></span>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="leftCol">
-                  <b>Community</b>
-                  <small>Discord coming later</small>
-                </div>
-                <div class="toggle" aria-hidden="true"><div class="knob"></div></div>
-              </div>
-            </div>
+          <div class="ctaRow" id="download">
+            <!-- TODO: replace with your real Overwolf store / download link -->
+            <a class="btn primary" href="https://example.com/download" target="_blank" rel="noopener">
+              <span class="btnDot"></span> Download for Overwolf
+            </a>
+            <a class="btn" href="#how">
+              <span class="btnDot" style="background:rgba(255,255,255,0.35); box-shadow:0 0 0 3px rgba(255,255,255,0.05)"></span>
+              How it works
+            </a>
           </div>
         </div>
 
-        <div class="bottomCta">
-          <div>
-            <b>Play with a clear head.</b><br>
-            <span>Download Tilt Buddy for Valorant. Community & Discord coming later.</span>
+        <div class="heroRight">
+          <div class="preview" aria-label="App preview">
+            <!-- Optional screenshot -->
+            <img src="app.png" alt="Tilt Buddy preview" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="previewFallback" style="display:none;">
+              Drop app.png to show preview
+            </div>
           </div>
-          <!-- TODO: replace with your real Overwolf / download link -->
-          <a class="btn primary" href="https://example.com/download" target="_blank" rel="noopener">
-            <span class="icon"></span> Download for Overwolf
-          </a>
+
+          <div class="pill ok" style="width:fit-content;">
+            <span class="pillDot"></span><span>Clean prompts • no coaching</span>
+          </div>
         </div>
-
-        <footer>
-          <span>© <span id="y"></span> Tilt Buddy</span>
-          <span>
-            <a href="mailto:hello@tiltbuddy.com">hello@tiltbuddy.com</a>
-            &nbsp;•&nbsp;
-            <a href="https://tiltbuddy.com">tiltbuddy.com</a>
-          </span>
-        </footer>
-
       </div>
+
+      <div class="grid" id="features">
+        <div class="row">
+          <div class="t">Micro-prompts</div>
+          <div class="s">Short cues that help in the moment — no long paragraphs.</div>
+        </div>
+        <div class="row">
+          <div class="t">Low distraction</div>
+          <div class="s">Subtle overlay designed to stay out of your way mid-round.</div>
+        </div>
+        <div class="row">
+          <div class="t">Built for pressure</div>
+          <div class="s">Supports consistent decision-making when emotions spike.</div>
+        </div>
+      </div>
+
+      <div class="section" id="how">
+        <div class="sectionHeader">
+          <div class="sectionTitle"><span class="miniDot"></span> What it does</div>
+          <span class="pill check"><span class="pillDot"></span><span>No analysis</span></span>
+        </div>
+
+        <div class="twoCol">
+          <div class="list">
+            <div class="bullet">
+              <b>Mental reset — nothing more</b>
+              <span>No coaching, no stats, no judgment. Just a quick reset when tilt hits.</span>
+            </div>
+            <div class="bullet">
+              <b>Interrupts tilt loops</b>
+              <span>Helps slow down the emotional reaction after a bad moment.</span>
+            </div>
+            <div class="bullet">
+              <b>Present-round focus</b>
+              <span>Brings attention back to what matters: the next decision.</span>
+            </div>
+          </div>
+
+          <div class="list">
+            <div class="bullet">
+              <b>Designed for Valorant</b>
+              <span>Fast rounds, high pressure — one bad death shouldn’t decide the game.</span>
+            </div>
+            <div class="bullet">
+              <b>Lightweight overlay</b>
+              <span>Minimal UI, minimal friction, built to run alongside competitive play.</span>
+            </div>
+            <div class="bullet">
+              <b>Discord later</b>
+              <span>Community & feedback hub coming later — for now, just the tool.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sectionHeader">
+          <div class="sectionTitle"><span class="miniDot"></span> Download</div>
+          <span class="pill ok"><span class="pillDot"></span><span>SSL • secure</span></span>
+        </div>
+
+        <div class="twoCol">
+          <div class="bullet">
+            <b>Get Tilt Buddy</b>
+            <span>Install via Overwolf. Run it once, enable the overlay, and you’re set.</span>
+            <div style="margin-top:10px;">
+              <!-- TODO: replace with your real link -->
+              <a class="btn primary" href="https://example.com/download" target="_blank" rel="noopener">
+                <span class="btnDot"></span> Download for Overwolf
+              </a>
+            </div>
+          </div>
+
+          <div class="bullet">
+            <b>Support / Contact</b>
+            <span>If something feels off, email me and I’ll fix it fast.</span>
+            <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+              <a class="btn" href="mailto:hello@tiltbuddy.com">
+                <span class="btnDot" style="background:rgba(255,255,255,0.35); box-shadow:0 0 0 3px rgba(255,255,255,0.05)"></span>
+                Email
+              </a>
+              <a class="btn" href="#features">
+                <span class="btnDot" style="background:rgba(255,255,255,0.35); box-shadow:0 0 0 3px rgba(255,255,255,0.05)"></span>
+                Back to top
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <span>© <span id="y"></span> Tilt Buddy</span>
+        <span>
+          <a href="mailto:hello@tiltbuddy.com">hello@tiltbuddy.com</a>
+        </span>
+      </footer>
     </div>
   </div>
 
