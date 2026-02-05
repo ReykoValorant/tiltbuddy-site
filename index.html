@@ -2,234 +2,580 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TiltBuddy — Overwolf Gaming Companion</title>
-  <meta name="description" content="TiltBuddy is a lightweight Overwolf app that helps competitive gamers reset focus after tilt." />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tilt Buddy — Mental Reset Assistant for VALORANT</title>
+  <meta name="description" content="Tilt Buddy is a lightweight in-game overlay for Valorant that helps you reset mentally after deaths or stressful moments." />
+  <meta name="theme-color" content="#0b0f14" />
+
   <style>
     :root{
-      --bg:#0b0f14;
-      --card:#0f1621;
-      --text:#e7eefc;
-      --muted:#9bb0cc;
-      --line:rgba(231,238,252,.12);
-      --btn:#e7eefc;
-      --btnText:#0b0f14;
-      --shadow:0 18px 60px rgba(0,0,0,.55);
-      --radius:20px;
-      --max:980px;
+      --bg-0:#07090d;
+      --bg-1:#0b0f14;
+      --card: rgba(15, 18, 24, 0.72);
+      --card-2: rgba(10, 12, 16, 0.55);
+      --line: rgba(255,255,255,.08);
+      --line-2: rgba(255,255,255,.12);
+
+      --text:#e9eefc;
+      --muted:#a9b4cc;
+
+      --red:#ff3b4a;
+      --red2:#ff5a6a;
+      --amber:#f3c34d;
+      --green:#35d07f;
+
+      --shadow: 0 18px 70px rgba(0,0,0,.65);
+      --shadow2: 0 12px 40px rgba(0,0,0,.55);
+      --radius: 22px;
+      --radius-sm: 14px;
+
+      --max: 1080px;
     }
-    *{box-sizing:border-box}
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      background:
-        radial-gradient(900px 500px at 15% 10%, rgba(120,160,255,.22), transparent 60%),
-        radial-gradient(900px 500px at 85% 25%, rgba(255,170,120,.18), transparent 55%),
-        linear-gradient(180deg, #070a0f, var(--bg));
       color:var(--text);
-      min-height:100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(255,59,74,.14), transparent 62%),
+        radial-gradient(900px 600px at 85% 30%, rgba(255,255,255,.06), transparent 55%),
+        linear-gradient(180deg, var(--bg-0), var(--bg-1));
+      overflow-x:hidden;
     }
-    a{color:inherit}
-    .wrap{max-width:var(--max); margin:0 auto; padding:28px 18px 56px}
-    header{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:10px 0 24px;
+
+    a{ color:inherit; }
+    .wrap{ max-width:var(--max); margin:0 auto; padding:26px 18px 70px; }
+
+    /* Top nav / header */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:16px;
     }
     .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width: 220px;
+    }
+    .logo{
+      width:42px; height:42px;
+      border-radius:12px;
+      overflow:hidden;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: 0 10px 30px rgba(0,0,0,.55);
+      flex:0 0 auto;
+    }
+    .logo img{ width:100%; height:100%; display:block; object-fit:cover; }
+    .brandText{
+      display:flex; flex-direction:column; line-height:1.1;
+    }
+    .brandText .name{
+      font-weight:800;
+      letter-spacing:.3px;
+      font-size:14px;
+      text-transform:uppercase;
+    }
+    .brandText .tag{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+      letter-spacing:.4px;
+      text-transform:uppercase;
+    }
+    .brandText .tag b{
+      color: var(--red2);
+      font-weight:900;
+    }
+
+    .right{
       display:flex; align-items:center; gap:10px;
-      font-weight:700; letter-spacing:.2px;
     }
-    .dot{
-      width:10px; height:10px; border-radius:999px;
-      background:linear-gradient(135deg, rgba(120,160,255,1), rgba(255,170,120,1));
-      box-shadow:0 0 0 6px rgba(120,160,255,.12);
-    }
-    .nav{display:flex; gap:14px; color:var(--muted); font-size:14px}
-    .nav a{opacity:.9; text-decoration:none}
-    .nav a:hover{opacity:1; text-decoration:underline}
-    .hero{
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:9px 12px;
+      border-radius:999px;
       border:1px solid var(--line);
-      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:34px 22px;
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      font-size:12px;
+      font-weight:700;
+      box-shadow: var(--shadow2);
+      white-space:nowrap;
+    }
+    .pill .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: rgba(255,255,255,.3);
+    }
+    .pill.red .dot{ background: var(--red); box-shadow: 0 0 0 6px rgba(255,59,74,.10); }
+    .pill.green .dot{ background: var(--green); box-shadow: 0 0 0 6px rgba(53,208,127,.10); }
+    .pill.amber .dot{ background: var(--amber); box-shadow: 0 0 0 6px rgba(243,195,77,.12); }
+
+    /* Main panel */
+    .panel{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
       overflow:hidden;
       position:relative;
     }
-    .hero:before{
+    .panel:before{
       content:"";
-      position:absolute; inset:-60px -80px auto auto;
-      width:320px; height:320px; border-radius:999px;
-      background:radial-gradient(circle at 30% 30%, rgba(120,160,255,.30), transparent 60%);
-      filter:blur(4px);
+      position:absolute;
+      inset: -120px -160px auto auto;
+      width: 520px; height: 520px;
+      border-radius:999px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,59,74,.20), transparent 62%);
+      filter: blur(2px);
+      pointer-events:none;
     }
-    .grid{
+    .panelInner{
+      padding:22px;
+      position:relative;
+      z-index:1;
+    }
+
+    /* Hero row */
+    .hero{
       display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:22px;
-      align-items:center;
+      grid-template-columns: 1.1fr .9fr;
+      gap:16px;
+      align-items:stretch;
+      margin-top:12px;
     }
-    h1{
+    .heroLeft{
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--card);
+      box-shadow: var(--shadow2);
+      padding:18px;
+    }
+    .heroLeft h1{
       margin:0 0 10px;
-      font-size: clamp(30px, 4.2vw, 48px);
-      line-height:1.05;
+      font-size: clamp(26px, 3.6vw, 42px);
       letter-spacing:-.6px;
+      line-height:1.05;
     }
-    .sub{
-      margin:0 0 18px;
-      color:var(--muted);
-      font-size:16px;
+    .heroLeft p{
+      margin:0 0 14px;
+      color: var(--muted);
       line-height:1.6;
-      max-width:60ch;
-    }
-    .ctaRow{display:flex; gap:12px; flex-wrap:wrap; align-items:center}
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      padding:12px 16px;
-      border-radius:14px;
-      border:1px solid rgba(231,238,252,.18);
-      text-decoration:none;
-      font-weight:700;
       font-size:14px;
+      max-width: 60ch;
     }
+
+    .ctaRow{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:12px 14px;
+      border-radius: 14px;
+      text-decoration:none;
+      font-weight:800;
+      font-size:13px;
+      letter-spacing:.2px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      transition: transform .12s ease, filter .12s ease, background .12s ease;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.05); }
     .btn.primary{
-      background:var(--btn);
-      color:var(--btnText);
-      border-color:transparent;
+      border-color: transparent;
+      background: linear-gradient(135deg, rgba(255,59,74,1), rgba(255,90,106,1));
+      color: #0b0f14;
+      box-shadow: 0 18px 50px rgba(255,59,74,.25);
     }
-    .btn.primary:hover{filter:brightness(.96)}
-    .btn.ghost{color:var(--text); background:rgba(255,255,255,.02)}
-    .btn.ghost:hover{background:rgba(255,255,255,.04)}
-    .chips{
-      display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;
+    .btn.primary:hover{ filter: brightness(.98); }
+    .btn .icon{
+      width:10px; height:10px; border-radius:999px;
+      background: rgba(0,0,0,.45);
+    }
+
+    .miniRow{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:14px;
     }
     .chip{
-      padding:7px 10px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:9px 11px;
       border-radius:999px;
       border:1px solid var(--line);
-      color:var(--muted);
+      background: rgba(255,255,255,.02);
+      color: var(--muted);
       font-size:12px;
-      background:rgba(255,255,255,.02);
+      font-weight:700;
     }
-    .panel{
-      border:1px solid var(--line);
-      background:rgba(15,22,33,.7);
-      border-radius:18px;
-      padding:16px;
+    .chip .tiny{
+      width:8px; height:8px; border-radius:999px;
+      background: rgba(255,255,255,.25);
     }
-    .kpi{
-      display:grid;
-      grid-template-columns:1fr;
+    .chip.red .tiny{ background: var(--red); }
+    .chip.green .tiny{ background: var(--green); }
+    .chip.amber .tiny{ background: var(--amber); }
+
+    /* Right card (screenshot) */
+    .heroRight{
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--card-2);
+      box-shadow: var(--shadow2);
+      padding:12px;
+      display:flex;
+      flex-direction:column;
       gap:10px;
     }
-    .kpiItem{
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.02);
+    .shot{
+      width:100%;
+      border-radius: 18px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.35);
+      aspect-ratio: 16/10;
     }
-    .kpiItem b{display:block; font-size:14px; margin-bottom:4px}
-    .kpiItem span{color:var(--muted); font-size:13px; line-height:1.4}
-    section.features{
-      margin-top:18px;
+    .shot img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .shotCaption{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding: 2px 6px;
+      color: var(--muted);
+      font-size:12px;
+      font-weight:700;
+    }
+
+    /* Sections styled like your app cards */
+    .sectionGrid{
       display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:12px;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      margin-top:14px;
     }
     .card{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.02);
-      border-radius:18px;
-      padding:14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--card);
+      box-shadow: var(--shadow2);
+      padding:16px;
+      position:relative;
+      overflow:hidden;
     }
-    .card b{display:block; margin-bottom:6px}
-    .card p{margin:0; color:var(--muted); font-size:13px; line-height:1.5}
-    footer{
-      margin-top:22px;
-      color:var(--muted);
+    .card:before{
+      content:"";
+      position:absolute;
+      inset: -120px auto auto -140px;
+      width: 320px; height: 320px;
+      border-radius:999px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,59,74,.10), transparent 62%);
+      filter: blur(1px);
+      pointer-events:none;
+    }
+
+    .cardHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+      position:relative;
+      z-index:1;
+    }
+    .cardTitle{
+      display:flex; align-items:center; gap:10px;
+      font-weight:900;
+      letter-spacing:.5px;
       font-size:12px;
-      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
-      padding:6px 2px;
+      text-transform:uppercase;
     }
-    @media (max-width: 860px){
-      .grid{grid-template-columns:1fr}
-      section.features{grid-template-columns:1fr}
-      .nav{display:none}
+    .marker{
+      width:9px; height:9px; border-radius:999px;
+      background: rgba(255,59,74,.65);
+      box-shadow: 0 0 0 6px rgba(255,59,74,.10);
+      flex:0 0 auto;
+    }
+    .rows{ display:flex; flex-direction:column; gap:10px; position:relative; z-index:1; }
+    .row{
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.22);
+      padding:12px 12px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+    }
+    .row .leftCol{ display:flex; flex-direction:column; gap:3px; }
+    .row b{
+      font-size:13px;
+      letter-spacing:.2px;
+    }
+    .row small{
+      color: var(--muted);
+      font-size:12px;
+      line-height:1.35;
+    }
+
+    /* Toggle look */
+    .toggle{
+      width:56px; height:30px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      position:relative;
+      flex:0 0 auto;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.25);
+    }
+    .toggle.on{
+      background: rgba(255,59,74,.18);
+      border-color: rgba(255,59,74,.35);
+    }
+    .knob{
+      width:24px; height:24px;
+      border-radius:999px;
+      background: rgba(255,255,255,.80);
+      position:absolute;
+      top:50%;
+      transform: translateY(-50%);
+      left: 4px;
+      transition: left .18s ease;
+      box-shadow: 0 6px 16px rgba(0,0,0,.35);
+    }
+    .toggle.on .knob{ left: 28px; }
+
+    /* Dropdown look */
+    .select{
+      display:inline-flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      font-weight:800;
+      font-size:12px;
+      min-width: 150px;
+      flex:0 0 auto;
+    }
+    .chev{
+      width:8px; height:8px;
+      border-right:2px solid rgba(255,255,255,.55);
+      border-bottom:2px solid rgba(255,255,255,.55);
+      transform: rotate(45deg);
+      margin-top:-2px;
+    }
+
+    /* Bottom CTA */
+    .bottomCta{
+      margin-top:14px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(135deg, rgba(255,59,74,.18), rgba(255,255,255,.03));
+      box-shadow: var(--shadow2);
+      padding:16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .bottomCta b{ font-size:14px; }
+    .bottomCta span{ color: var(--muted); font-size:12px; font-weight:700; }
+
+    footer{
+      margin-top:18px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      color: var(--muted);
+      font-size:12px;
+      padding: 6px 2px;
+    }
+    footer a{ text-decoration:none; opacity:.95; }
+    footer a:hover{ text-decoration:underline; opacity:1; }
+
+    @media (max-width: 980px){
+      .hero{ grid-template-columns: 1fr; }
+      .sectionGrid{ grid-template-columns: 1fr; }
+      .brand{ min-width:auto; }
     }
   </style>
 </head>
+
 <body>
   <div class="wrap">
-    <header>
-      <div class="brand"><span class="dot"></span> TiltBuddy</div>
-      <nav class="nav">
-        <a href="#features">Features</a>
-        <a href="#download">Download</a>
-      </nav>
-    </header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">
+          <!-- Put your icon file in the repo as /logo.png -->
+          <img src="logo.png" alt="Tilt Buddy Logo">
+        </div>
+        <div class="brandText">
+          <div class="name">TILT BUDDY</div>
+          <div class="tag">MENTAL RESET ASSISTANT FOR <b>VALORANT</b></div>
+        </div>
+      </div>
 
-    <main class="hero">
-      <div class="grid">
-        <div>
-          <h1>Reset your focus. <br/>Win the next round.</h1>
-          <p class="sub">
-            TiltBuddy is a lightweight Overwolf companion for competitive gamers.
-            Quick micro-resets, clean prompts, zero fluff.
-          </p>
+      <div class="right">
+        <div class="pill red"><span class="dot"></span> v0.2.1</div>
+      </div>
+    </div>
 
-          <div class="ctaRow" id="download">
-            <!-- TODO: Replace this with your real download link -->
-            <a class="btn primary" href="https://example.com/download" target="_blank" rel="noopener">Download</a>
-            <!-- Optional: your Overwolf store page or Discord -->
-            <a class="btn ghost" href="https://overwolf.com/" target="_blank" rel="noopener">View on Overwolf</a>
+    <div class="panel">
+      <div class="panelInner">
+
+        <div class="hero">
+          <div class="heroLeft">
+            <h1>Stay calm.<br>Stay in control.</h1>
+            <p>
+              Tilt Buddy is a lightweight in-game overlay for <b>Valorant</b> that helps you reset mentally when pressure and frustration start to rise.
+              After deaths or stressful moments, it shows short, practical reset prompts designed to slow things down, interrupt tilt, and bring your focus back to the present round.
+            </p>
+
+            <div class="ctaRow">
+              <!-- TODO: replace with your real Overwolf / download link -->
+              <a class="btn primary" href="https://example.com/download" target="_blank" rel="noopener">
+                <span class="icon"></span> Download for Overwolf
+              </a>
+              <a class="btn" href="#how" rel="noopener">How it works</a>
+            </div>
+
+            <div class="miniRow">
+              <span class="chip red"><span class="tiny"></span> Competitive-first</span>
+              <span class="chip amber"><span class="tiny"></span> Short prompts</span>
+              <span class="chip green"><span class="tiny"></span> Minimal overlay</span>
+            </div>
           </div>
 
-          <div class="chips">
-            <span class="chip">Overwolf overlay</span>
-            <span class="chip">Focus reset</span>
-            <span class="chip">Minimal UI</span>
-            <span class="chip">Competitive FPS</span>
+          <div class="heroRight" aria-label="App preview">
+            <div class="shot">
+              <!-- Put your screenshot in the repo as /app.png -->
+              <img src="app.png" alt="Tilt Buddy app screenshot">
+            </div>
+            <div class="shotCaption">
+              <span>In-game overlay + settings panel</span>
+              <span class="pill green" style="box-shadow:none;"><span class="dot"></span> Lightweight</span>
+            </div>
           </div>
         </div>
 
-        <aside class="panel">
-          <div class="kpi">
-            <div class="kpiItem">
-              <b>1-click reset</b>
-              <span>Fast prompt to break tilt loops and re-center.</span>
+        <div class="sectionGrid" id="how">
+          <div class="card">
+            <div class="cardHeader">
+              <div class="cardTitle"><span class="marker"></span> What it does</div>
+              <div class="pill amber"><span class="dot"></span> Reset prompts</div>
             </div>
-            <div class="kpiItem">
-              <b>Cinematic, slow UI</b>
-              <span>Gentle animations that don’t distract mid-game.</span>
-            </div>
-            <div class="kpiItem">
-              <b>Built for grind</b>
-              <span>Designed for long sessions — hydration, posture, breathing.</span>
+            <div class="rows">
+              <div class="row">
+                <div class="leftCol">
+                  <b>Mental reset — nothing more</b>
+                  <small>No coaching, no analysis, no judgment. Just a fast reset when tilt hits.</small>
+                </div>
+              </div>
+              <div class="row">
+                <div class="leftCol">
+                  <b>Interrupts tilt loops</b>
+                  <small>After deaths or stressful moments, it nudges you back into control.</small>
+                </div>
+              </div>
+              <div class="row">
+                <div class="leftCol">
+                  <b>Built for Valorant pressure</b>
+                  <small>Fast rounds, high stakes — one bad moment shouldn’t ruin the next.</small>
+                </div>
+              </div>
             </div>
           </div>
-        </aside>
-      </div>
-    </main>
 
-    <section class="features" id="features" aria-label="Features">
-      <div class="card">
-        <b>Micro-prompts</b>
-        <p>Short cues that actually help in the moment — no long paragraphs.</p>
-      </div>
-      <div class="card">
-        <b>Low distraction</b>
-        <p>Clean layout and minimal motion so you stay locked in.</p>
-      </div>
-      <div class="card">
-        <b>Easy updates</b>
-        <p>Swap text, buttons, and links by editing a single HTML file.</p>
-      </div>
-    </section>
+          <div class="card">
+            <div class="cardHeader">
+              <div class="cardTitle"><span class="marker"></span> Design principles</div>
+              <div class="pill"><span class="dot"></span> Minimal UI</div>
+            </div>
 
-    <footer>
-      <span>© <span id="y"></span> TiltBuddy</span>
-      <span><a href="mailto:hello@tiltbuddy.com">hello@tiltbuddy.com</a></span>
-    </footer>
+            <div class="rows">
+              <div class="row">
+                <div class="leftCol">
+                  <b>Low distraction</b>
+                  <small>Subtle overlay that stays out of the way.</small>
+                </div>
+                <div class="toggle on" aria-hidden="true"><div class="knob"></div></div>
+              </div>
+
+              <div class="row">
+                <div class="leftCol">
+                  <b>Position</b>
+                  <small>Where prompts appear</small>
+                </div>
+                <div class="select" aria-hidden="true">
+                  Top right <span class="chev"></span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="leftCol">
+                  <b>Intensity</b>
+                  <small>How often Tilt Buddy speaks</small>
+                </div>
+                <div class="select" aria-hidden="true">
+                  Normal <span class="chev"></span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="leftCol">
+                  <b>Community</b>
+                  <small>Discord coming later</small>
+                </div>
+                <div class="toggle" aria-hidden="true"><div class="knob"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottomCta">
+          <div>
+            <b>Play with a clear head.</b><br>
+            <span>Download Tilt Buddy for Valorant. Community & Discord coming later.</span>
+          </div>
+          <!-- TODO: replace with your real Overwolf / download link -->
+          <a class="btn primary" href="https://example.com/download" target="_blank" rel="noopener">
+            <span class="icon"></span> Download for Overwolf
+          </a>
+        </div>
+
+        <footer>
+          <span>© <span id="y"></span> Tilt Buddy</span>
+          <span>
+            <a href="mailto:hello@tiltbuddy.com">hello@tiltbuddy.com</a>
+            &nbsp;•&nbsp;
+            <a href="https://tiltbuddy.com">tiltbuddy.com</a>
+          </span>
+        </footer>
+
+      </div>
+    </div>
   </div>
 
   <script>
