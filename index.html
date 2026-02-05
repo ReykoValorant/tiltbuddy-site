@@ -3,476 +3,116 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>Tilt Buddy — Mental Reset Assistant for VALORANT</title>
   <meta name="description" content="Tilt Buddy is a lightweight in-game overlay for Valorant. Short reset prompts after stressful moments — so tilt doesn’t take over the next round." />
   <meta name="theme-color" content="#0b0d12" />
+
+  <!-- FAVICON FIX -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+
   <style>
+    /* ====== SAME STYLE AS YOUR LAUNCHER UI ====== */
     :root{
-      --valo: #ff4654;
+      --valo:#ff4654;
       --bg0:#07080b;
       --bg1:#0b0d12;
-
-      --card: rgba(12,14,18,0.78);
-      --card2: rgba(14,16,20,0.62);
-
-      --strokeA: rgba(255,255,255,0.10);
-      --strokeB: rgba(255,255,255,0.06);
-
-      --text: rgba(255,255,255,0.92);
-      --muted: rgba(255,255,255,0.68);
-
-      --ok: rgba(70, 230, 150, 0.92);
-
-      --glow:  rgba(255, 70, 84, 0.18);
-      --glow2: rgba(255, 70, 84, 0.10);
-
-      --max: 1180px;
+      --card:rgba(12,14,18,.78);
+      --card2:rgba(14,16,20,.62);
+      --strokeA:rgba(255,255,255,.10);
+      --strokeB:rgba(255,255,255,.06);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.68);
+      --glow:rgba(255,70,84,.18);
+      --max:1180px;
     }
-
-    *{ box-sizing:border-box; }
-    html, body{ height:100%; }
-    html{ color-scheme: dark; scroll-behavior:smooth; }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;background:#000;color:var(--text);font-family:Inter,system-ui}
     body{
-      margin:0;
       background:
-        radial-gradient(1100px 620px at 15% 0%, rgba(255,70,84,0.16), transparent 60%),
-        radial-gradient(1100px 620px at 85% 0%, rgba(17,24,35,0.28), transparent 62%),
-        radial-gradient(900px 520px at 60% 20%, rgba(255,255,255,0.04), transparent 60%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color: var(--text);
-      overflow-x:hidden;
+        radial-gradient(1100px 600px at 15% 0%, rgba(255,70,84,.16), transparent 60%),
+        linear-gradient(180deg,var(--bg0),var(--bg1));
     }
-
-    a{ color:inherit; text-decoration:none; }
-    a:hover{ text-decoration:underline; }
-
-    /* Topbar */
+    a{color:inherit;text-decoration:none}
     .topbar{
-      position:sticky;
-      top:0;
-      z-index:50;
-      height: 70px;
+      height:72px;
       display:flex;
       align-items:center;
-      justify-content:space-between;
-      padding: 12px 16px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      padding:0 18px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      backdrop-filter:blur(10px);
     }
-    .topbar::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        radial-gradient(900px 180px at 10% 0%, rgba(255,70,84,0.20), transparent 62%),
-        radial-gradient(900px 200px at 88% 10%, rgba(17,24,35,0.45), transparent 62%),
-        linear-gradient(90deg, rgba(255,255,255,0.05), transparent 55%, rgba(255,255,255,0.02));
-      opacity: 0.95;
-      pointer-events:none;
-    }
-    .topbar::after{
-      content:"";
-      position:absolute;
-      left:0; right:0; bottom:0;
-      height: 1px;
-      background: linear-gradient(90deg, rgba(255,70,84,0.70), rgba(255,255,255,0.10), rgba(17,24,35,0.55));
-      opacity: 0.7;
-      pointer-events:none;
-    }
-    .topbar > *{ position:relative; z-index:1; }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:0;
-    }
+    .brand{display:flex;align-items:center;gap:12px}
     .icon{
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
+      width:42px;height:42px;border-radius:14px;
       overflow:hidden;
-      border:1px solid rgba(255,255,255,0.10);
-      background: rgba(0,0,0,0.35);
-      box-shadow:
-        0 10px 22px rgba(0,0,0,0.55),
-        0 0 0 1px rgba(255,70,84,0.18) inset,
-        0 0 28px var(--glow),
-        0 0 18px var(--glow2);
-      flex: 0 0 auto;
-      transform: translateZ(0);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 0 28px var(--glow);
     }
-    .icon img{ width:100%; height:100%; object-fit:cover; transform: scale(1.06); display:block; }
-    .titles{ display:flex; flex-direction:column; gap:3px; min-width:0; }
-    .name{
-      font-weight: 1000;
-      letter-spacing: 2.2px;
-      text-transform: uppercase;
-      font-size: 16px;
-      line-height: 1.05;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-shadow: 0 12px 30px rgba(0,0,0,0.55);
-    }
-    .tag{
-      font-size: 11.5px;
-      font-weight: 900;
-      letter-spacing: 1.1px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.72);
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-      position:relative;
-      padding-bottom:2px;
-    }
-    .tag b{ color: rgba(255,70,84,0.95); text-shadow: 0 0 20px rgba(255,70,84,0.20); }
-    .tag::after{
-      content:"";
-      position:absolute;
-      left:0;
-      bottom:-2px;
-      height: 2px;
-      width: 160px;
-      background: linear-gradient(90deg, rgba(255,70,84,0.75), rgba(255,255,255,0.08), rgba(17,24,35,0.55));
-      border-radius: 999px;
-      opacity: 0.75;
-    }
+    .icon img{width:100%;height:100%;object-fit:cover}
+    .name{font-weight:900;letter-spacing:2px}
+    .tag{font-size:12px;opacity:.8}
+    .tag b{color:var(--valo)}
 
-    /* Layout */
-    .wrap{
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 28px 16px 78px; /* bigger */
-    }
-
+    .wrap{max-width:var(--max);margin:0 auto;padding:28px 16px 80px}
     .card{
-      width:100%;
-      border-radius: 26px;
-      border: 1px solid var(--strokeA);
+      border-radius:26px;
+      padding:26px;
       background:
-        radial-gradient(1100px 520px at 18% 0%, rgba(255,70,84,0.12), transparent 62%),
-        radial-gradient(820px 520px at 86% 25%, rgba(17,24,35,0.22), transparent 62%),
-        linear-gradient(180deg, var(--card), var(--card2));
-      box-shadow:
-        0 22px 60px rgba(0,0,0,0.62),
-        0 0 0 1px rgba(255,255,255,0.04) inset,
-        0 0 28px var(--glow);
-      padding: 26px; /* bigger */
-      overflow:hidden;
+        radial-gradient(1000px 500px at 20% 0%, rgba(255,70,84,.12), transparent 60%),
+        linear-gradient(180deg,var(--card),var(--card2));
+      border:1px solid var(--strokeA);
+      box-shadow:0 24px 60px rgba(0,0,0,.6);
     }
 
-    .hero{
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap: 18px; /* bigger */
-      align-items:stretch;
-    }
-
-    h1{
-      margin:0;
-      font-size: clamp(34px, 4.4vw, 56px); /* bigger */
-      line-height: 1.02;
-      letter-spacing: -0.8px;
-      text-shadow: 0 18px 44px rgba(0,0,0,0.55);
-    }
-    .lead{
-      margin:12px 0 0;
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 14.5px;
-      max-width: 72ch;
-    }
-
-    .ctaRow{
-      display:flex;
-      gap: 10px;
-      flex-wrap:wrap;
-      margin-top: 16px;
-    }
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:20px}
+    h1{font-size:clamp(36px,4.5vw,56px);margin:0}
+    .lead{color:var(--muted);line-height:1.7;margin-top:12px}
 
     .btn{
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.92);
-      padding: 11px 16px;
-      font-weight: 950;
-      letter-spacing: 0.55px;
-      text-transform: uppercase;
-      font-size: 12px;
-      cursor:pointer;
-      box-shadow: 0 10px 22px rgba(0,0,0,0.35);
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      user-select:none;
-      transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+      display:inline-flex;align-items:center;gap:10px;
+      padding:12px 18px;border-radius:999px;
+      font-weight:900;font-size:12px;text-transform:uppercase;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      box-shadow:0 10px 24px rgba(0,0,0,.4);
     }
-    .btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,0.14); background: rgba(255,255,255,0.08); }
     .btn.primary{
-      border-color: rgba(255,70,84,0.28);
-      background: radial-gradient(140px 70px at 20% 0%, rgba(255,255,255,0.10), transparent 60%),
-                  linear-gradient(180deg, rgba(255,70,84,0.24), rgba(255,255,255,0.03));
-      box-shadow:
-        0 10px 22px rgba(0,0,0,0.35),
-        0 0 0 1px rgba(255,70,84,0.14) inset,
-        0 0 34px rgba(255,70,84,0.18);
-    }
-    .btn .btnDot{
-      width:8px; height:8px; border-radius:999px;
-      background: rgba(255,70,84,0.95);
-      box-shadow: 0 0 0 4px rgba(255,70,84,0.12);
-    }
-    .btn.secondary .btnDot{
-      background: rgba(255,255,255,0.35);
-      box-shadow: 0 0 0 3px rgba(255,255,255,0.05);
+      background:linear-gradient(180deg, rgba(255,70,84,.28), rgba(255,255,255,.04));
+      border-color:rgba(255,70,84,.35);
+      box-shadow:0 0 32px rgba(255,70,84,.25);
     }
 
-    /* Preview */
     .preview{
-      position:relative;
-      border-radius: 22px;
-      border: 1px solid var(--strokeB);
-      background: rgba(10,12,16,0.55);
-      box-shadow: 0 14px 34px rgba(0,0,0,0.45);
+      border-radius:22px;
       overflow:hidden;
-      min-height: 320px; /* bigger */
-      transform: translateZ(0);
+      border:1px solid var(--strokeB);
+      background:#000;
     }
-    .preview::after{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      opacity: 0;
-      background:
-        radial-gradient(240px 90px at 10% 0%, rgba(255,255,255,0.11), transparent 60%),
-        radial-gradient(220px 90px at 90% 20%, rgba(255,255,255,0.07), transparent 60%),
-        linear-gradient(90deg, transparent 0%, rgba(255,70,84,0.12) 35%, transparent 70%);
-      transform: translateX(-55%);
-      filter: blur(0.4px);
-      pointer-events:none;
-      mix-blend-mode: screen;
-    }
-    .preview:hover::after{
-      opacity: 0.95;
-      animation: sheenLoop 1.35s ease-in-out infinite;
-    }
-    @keyframes sheenLoop{
-      0%   { transform: translateX(-58%); }
-      50%  { transform: translateX(58%); }
-      100% { transform: translateX(-58%); }
-    }
-    .preview img{
-      width:100%;
-      height:100%;
-      object-fit: cover;
-      display:block;
-      opacity:.96;
-    }
-    .previewFallback{
-      position:absolute;
-      inset:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding: 16px;
-      text-align:center;
-      color: rgba(255,255,255,0.70);
-      font-weight: 900;
-      letter-spacing: .6px;
-      text-transform: uppercase;
-      font-size: 12px;
-    }
+    .preview img{width:100%;display:block}
 
-    /* Feature grid */
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 18px; /* bigger */
-    }
-
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
     .row{
-      position:relative;
-      border-radius: 18px;
-      padding: 14px;
-      border: 1px solid var(--strokeB);
-      background: rgba(10,12,16,0.55);
-      box-shadow: 0 14px 34px rgba(0,0,0,0.45);
-      overflow:hidden;
-      transform: translateZ(0);
-      min-height: 92px;
+      padding:14px;border-radius:18px;
+      background:rgba(10,12,16,.55);
+      border:1px solid var(--strokeB);
     }
-    .row::after{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      opacity: 0;
-      background:
-        radial-gradient(240px 90px at 10% 0%, rgba(255,255,255,0.11), transparent 60%),
-        radial-gradient(220px 90px at 90% 20%, rgba(255,255,255,0.07), transparent 60%),
-        linear-gradient(90deg, transparent 0%, rgba(255,70,84,0.12) 35%, transparent 70%);
-      transform: translateX(-55%);
-      filter: blur(0.4px);
-      pointer-events:none;
-      mix-blend-mode: screen;
-    }
-    .row:hover::after{
-      opacity: 0.95;
-      animation: sheenLoop 1.35s ease-in-out infinite;
-    }
+    .t{font-weight:900;text-transform:uppercase;font-size:12px}
+    .s{font-size:12.5px;color:var(--muted)}
 
-    .t{
-      font-weight: 1000;
-      letter-spacing: 0.7px;
-      text-transform: uppercase;
-      font-size: 12.5px;
-      color: rgba(255,255,255,0.92);
-      margin-bottom: 6px;
-    }
-    .s{
-      font-size: 12.5px;
-      color: rgba(255,255,255,0.68);
-      line-height: 1.5;
-    }
+    .section{margin-top:20px;padding:16px;border-radius:22px;
+      background:rgba(10,12,16,.5);border:1px solid var(--strokeA)}
+    .sectionTitle{font-weight:900;text-transform:uppercase;font-size:12px;margin-bottom:10px}
 
-    /* Section cards */
-    .section{
-      margin-top: 18px;
-      border-radius: 22px;
-      border: 1px solid var(--strokeA);
-      background: rgba(10,12,16,0.44);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.50);
-      padding: 16px;
-      overflow:hidden;
-      position:relative;
-      transform: translateZ(0);
-    }
-    .section::after{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      opacity: 0;
-      background:
-        radial-gradient(240px 90px at 10% 0%, rgba(255,255,255,0.10), transparent 60%),
-        radial-gradient(220px 90px at 90% 20%, rgba(255,255,255,0.06), transparent 60%),
-        linear-gradient(90deg, transparent 0%, rgba(255,70,84,0.10) 35%, transparent 70%);
-      transform: translateX(-55%);
-      filter: blur(0.4px);
-      pointer-events:none;
-      mix-blend-mode: screen;
-    }
-    .section:hover::after{
-      opacity: 0.9;
-      animation: sheenLoop 1.35s ease-in-out infinite;
-    }
-
-    .sectionHeader{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom: 10px;
-      position:relative;
-      z-index:1;
-    }
-    .sectionTitle{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-weight: 1000;
-      color: rgba(255,255,255,0.78);
-    }
-    .miniDot{
-      width: 6px; height: 6px; border-radius:999px;
-      background: rgba(255,70,84,0.80);
-      box-shadow: 0 0 0 4px rgba(255,70,84,0.12);
-    }
-
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.06);
-      box-shadow: 0 10px 22px rgba(0,0,0,0.25);
-      font-weight: 950;
-      font-size: 12px;
-      letter-spacing: .6px;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-    .pillDot{
-      width: 8px; height: 8px; border-radius:999px;
-      background: rgba(255,255,255,0.35);
-      box-shadow: 0 0 0 3px rgba(255,255,255,0.05);
-    }
-    .pill.ok{ border-color: rgba(70,230,150,0.22); background: rgba(70,230,150,0.08); }
-    .pill.ok .pillDot{ background: var(--ok); }
-
-    .twoCol{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      position:relative;
-      z-index:1;
-    }
-    .bullet{
-      border-radius: 18px;
-      border: 1px solid var(--strokeB);
-      background: rgba(10,12,16,0.55);
-      box-shadow: 0 14px 34px rgba(0,0,0,0.45);
-      padding: 14px 14px;
-      position:relative;
-      overflow:hidden;
-      transform: translateZ(0);
-    }
-    .bullet b{
-      display:block;
-      font-weight: 1000;
-      letter-spacing: .6px;
-      text-transform: uppercase;
-      font-size: 12px;
-      margin-bottom: 6px;
-      color: rgba(255,255,255,0.92);
-    }
-    .bullet span{
-      color: rgba(255,255,255,0.68);
-      font-size: 12.5px;
-      line-height: 1.55;
-      display:block;
-    }
-
-    /* Footer */
     footer{
-      margin-top: 18px;
-      display:flex;
-      justify-content:space-between;
-      gap: 10px;
-      flex-wrap:wrap;
-      color: rgba(255,255,255,0.62);
-      font-size: 12px;
-      padding: 6px 2px;
+      margin-top:18px;
+      display:flex;justify-content:space-between;
+      font-size:12px;color:var(--muted)
     }
-    footer a{ color: rgba(255,255,255,0.78); }
-    footer a:hover{ color: rgba(255,255,255,0.92); }
 
-    @media (max-width: 980px){
-      .hero{ grid-template-columns: 1fr; }
-      .grid{ grid-template-columns: 1fr; }
-      .twoCol{ grid-template-columns: 1fr; }
-      .preview{ min-height: 240px; }
-      .card{ padding: 18px; }
-      .wrap{ padding: 22px 14px 64px; }
+    @media(max-width:900px){
+      .hero{grid-template-columns:1fr}
+      .grid{grid-template-columns:1fr}
     }
   </style>
 </head>
@@ -480,10 +120,8 @@
 <body>
   <div class="topbar">
     <div class="brand">
-      <div class="icon">
-        <img src="logo.png" alt="Tilt Buddy logo">
-      </div>
-      <div class="titles">
+      <div class="icon"><img src="logo.png" alt="Tilt Buddy"></div>
+      <div>
         <div class="name">TILT BUDDY</div>
         <div class="tag">MENTAL RESET ASSISTANT FOR <b>VALORANT</b></div>
       </div>
@@ -497,90 +135,41 @@
           <h1>Stay calm.<br>Stay in control.</h1>
           <p class="lead">
             Tilt Buddy is a lightweight in-game overlay built specifically for <b>Valorant</b>.
-            After deaths or stressful moments, it shows short reset prompts to interrupt tilt and bring focus back to the next round.
+            After stressful moments, it shows short reset prompts to stop tilt before it spirals.
           </p>
 
-          <div class="ctaRow" id="download">
-            <a class="btn primary" href="OVERWOLF_DOWNLOAD_URL_HERE" target="_blank" rel="noopener">
-              <span class="btnDot"></span> Download for Overwolf
+          <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn primary" href="OVERWOLF_DOWNLOAD_URL_HERE" target="_blank">
+              Download for Overwolf
             </a>
-            <a class="btn secondary" href="#support">
-              <span class="btnDot"></span> Support
-            </a>
+            <a class="btn" href="#support">Support</a>
           </div>
         </div>
 
-        <div class="preview" aria-label="App preview">
-          <img src="app.png" alt="Tilt Buddy preview" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="previewFallback" style="display:none;">Drop app.png to show preview</div>
+        <div class="preview">
+          <img src="app.png" alt="Tilt Buddy UI">
         </div>
       </div>
 
       <div class="grid">
-        <div class="row">
-          <div class="t">Micro-prompts</div>
-          <div class="s">Short cues that help in the moment — no long paragraphs.</div>
-        </div>
-        <div class="row">
-          <div class="t">Low distraction</div>
-          <div class="s">Subtle overlay designed to stay out of your way mid-round.</div>
-        </div>
-        <div class="row">
-          <div class="t">No coaching</div>
-          <div class="s">No analysis, no judgment — just a mental reset.</div>
-        </div>
-      </div>
-
-      <div class="section" id="how">
-        <div class="sectionHeader">
-          <div class="sectionTitle"><span class="miniDot"></span> How it works</div>
-          <span class="pill ok"><span class="pillDot"></span><span>Reset prompts</span></span>
-        </div>
-
-        <div class="twoCol">
-          <div class="bullet">
-            <b>Triggers after stressful moments</b>
-            <span>Short prompts designed to slow your reaction and break tilt loops.</span>
-          </div>
-          <div class="bullet">
-            <b>No coaching. No analysis.</b>
-            <span>It doesn’t tell you how to play — it helps you reset for the next round.</span>
-          </div>
-        </div>
+        <div class="row"><div class="t">Micro-prompts</div><div class="s">Instant cues, no paragraphs.</div></div>
+        <div class="row"><div class="t">Low distraction</div><div class="s">Designed to stay out of the way.</div></div>
+        <div class="row"><div class="t">No coaching</div><div class="s">No analysis. Just reset.</div></div>
       </div>
 
       <div class="section" id="support">
-        <div class="sectionHeader">
-          <div class="sectionTitle"><span class="miniDot"></span> Support / Contact</div>
-          <span class="pill"><span class="pillDot"></span><span>Discord</span></span>
-        </div>
-
-        <div class="twoCol">
-          <div class="bullet">
-            <b>Need help or want to report a bug?</b>
-            <span>Join the Discord and ping me — I’ll respond there.</span>
-            <div class="ctaRow" style="margin-top:12px;">
-              <a class="btn primary" href="DISCORD_INVITE_URL_HERE" target="_blank" rel="noopener">
-                <span class="btnDot"></span> Join Discord
-              </a>
-            </div>
-          </div>
-
-          <div class="bullet">
-            <b>Fast setup</b>
-            <span>
-              In Discord, enable “Allow direct messages from server members” if you want DMs to work.
-              Otherwise you can still post in the support channel.
-            </span>
-          </div>
-        </div>
+        <div class="sectionTitle">Support / Contact</div>
+        <p class="lead">
+          For bugs, feedback or help — join the Discord and post in support.
+        </p>
+        <a class="btn primary" href="DISCORD_INVITE_URL_HERE" target="_blank">
+          Join Discord
+        </a>
       </div>
 
       <footer>
         <span>© <span id="y"></span> Tilt Buddy</span>
-        <span>
-          <a href="DISCORD_INVITE_URL_HERE" target="_blank" rel="noopener">Discord</a>
-        </span>
+        <span>Discord: .reyko</span>
       </footer>
     </div>
   </div>
