@@ -8,171 +8,453 @@
   <meta name="description" content="Tilt Buddy is a lightweight in-game overlay for Valorant. Short reset prompts after stressful moments — so tilt doesn’t take over the next round." />
   <meta name="theme-color" content="#0b0d12" />
 
-  <!-- FAVICON FIX -->
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 
   <style>
-    /* ====== SAME STYLE AS YOUR LAUNCHER UI ====== */
     :root{
       --valo:#ff4654;
-      --bg0:#07080b;
-      --bg1:#0b0d12;
-      --card:rgba(12,14,18,.78);
-      --card2:rgba(14,16,20,.62);
-      --strokeA:rgba(255,255,255,.10);
-      --strokeB:rgba(255,255,255,.06);
+      --bg:#07080b;
+      --panel:#0d1016;
+      --panel2:#0b0d12;
       --text:rgba(255,255,255,.92);
       --muted:rgba(255,255,255,.68);
-      --glow:rgba(255,70,84,.18);
-      --max:1180px;
+      --line:rgba(255,255,255,.10);
+      --line2:rgba(255,255,255,.06);
+      --max:1120px;
+      --radius:18px;
     }
+
     *{box-sizing:border-box}
-    html,body{margin:0;height:100%;background:#000;color:var(--text);font-family:Inter,system-ui}
+    html,body{height:100%}
+    html{color-scheme:dark;scroll-behavior:smooth}
     body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       background:
-        radial-gradient(1100px 600px at 15% 0%, rgba(255,70,84,.16), transparent 60%),
-        linear-gradient(180deg,var(--bg0),var(--bg1));
+        radial-gradient(900px 500px at 10% -10%, rgba(255,70,84,.18), transparent 60%),
+        radial-gradient(900px 500px at 90% -10%, rgba(255,255,255,.06), transparent 60%),
+        linear-gradient(180deg, #05060a, var(--bg));
+      color:var(--text);
+      overflow-x:hidden;
     }
+
     a{color:inherit;text-decoration:none}
-    .topbar{
+    a:hover{opacity:.92}
+
+    .container{max-width:var(--max);margin:0 auto;padding:0 18px}
+
+    /* ===== Top nav (webby, not app) ===== */
+    .nav{
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(5,6,10,.55);
+      border-bottom: 1px solid var(--line2);
+    }
+    .navInner{
+      display:flex;align-items:center;justify-content:space-between;
       height:72px;
-      display:flex;
-      align-items:center;
-      padding:0 18px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      backdrop-filter:blur(10px);
     }
-    .brand{display:flex;align-items:center;gap:12px}
-    .icon{
-      width:42px;height:42px;border-radius:14px;
-      overflow:hidden;
+    .brand{display:flex;align-items:center;gap:12px;min-width:0}
+    .logo{
+      width:38px;height:38px;border-radius:12px;overflow:hidden;
       border:1px solid rgba(255,255,255,.12);
-      box-shadow:0 0 28px var(--glow);
+      box-shadow: 0 0 26px rgba(255,70,84,.18);
+      flex:0 0 auto;
+      background:rgba(0,0,0,.35);
     }
-    .icon img{width:100%;height:100%;object-fit:cover}
-    .name{font-weight:900;letter-spacing:2px}
-    .tag{font-size:12px;opacity:.8}
-    .tag b{color:var(--valo)}
-
-    .wrap{max-width:var(--max);margin:0 auto;padding:28px 16px 80px}
-    .card{
-      border-radius:26px;
-      padding:26px;
-      background:
-        radial-gradient(1000px 500px at 20% 0%, rgba(255,70,84,.12), transparent 60%),
-        linear-gradient(180deg,var(--card),var(--card2));
-      border:1px solid var(--strokeA);
-      box-shadow:0 24px 60px rgba(0,0,0,.6);
+    .logo img{width:100%;height:100%;object-fit:cover}
+    .brandText{min-width:0}
+    .brandName{
+      font-weight:900;letter-spacing:2px;text-transform:uppercase;
+      font-size:14px;line-height:1.1;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
     }
+    .brandTag{
+      font-size:11px;letter-spacing:1px;text-transform:uppercase;
+      color:rgba(255,255,255,.65);
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    }
+    .brandTag b{color:var(--valo)}
+    .navLinks{display:flex;gap:18px;align-items:center}
+    .navLinks a{
+      font-size:12px;text-transform:uppercase;letter-spacing:1px;
+      color:rgba(255,255,255,.68);
+      padding:10px 10px;border-radius:999px;
+    }
+    .navLinks a:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.86)}
+    .navCta{display:flex;gap:10px;align-items:center}
 
-    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:20px}
-    h1{font-size:clamp(36px,4.5vw,56px);margin:0}
-    .lead{color:var(--muted);line-height:1.7;margin-top:12px}
-
+    /* ===== Buttons ===== */
     .btn{
-      display:inline-flex;align-items:center;gap:10px;
-      padding:12px 18px;border-radius:999px;
-      font-weight:900;font-size:12px;text-transform:uppercase;
+      display:inline-flex;align-items:center;justify-content:center;
+      gap:10px;
+      border-radius:999px;
+      padding:11px 16px;
+      font-weight:900;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.7px;
       border:1px solid rgba(255,255,255,.12);
       background:rgba(255,255,255,.06);
-      box-shadow:0 10px 24px rgba(0,0,0,.4);
+      color:rgba(255,255,255,.90);
+      box-shadow: 0 10px 22px rgba(0,0,0,.35);
+      cursor:pointer;
+      transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+      white-space:nowrap;
     }
+    .btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16)}
     .btn.primary{
-      background:linear-gradient(180deg, rgba(255,70,84,.28), rgba(255,255,255,.04));
-      border-color:rgba(255,70,84,.35);
-      box-shadow:0 0 32px rgba(255,70,84,.25);
+      border-color: rgba(255,70,84,.38);
+      background: linear-gradient(180deg, rgba(255,70,84,.28), rgba(255,255,255,.03));
+      box-shadow: 0 14px 34px rgba(0,0,0,.45), 0 0 34px rgba(255,70,84,.16);
+    }
+    .dot{
+      width:8px;height:8px;border-radius:999px;
+      background: var(--valo);
+      box-shadow: 0 0 0 4px rgba(255,70,84,.12);
+      flex:0 0 auto;
     }
 
-    .preview{
-      border-radius:22px;
+    /* ===== Sections ===== */
+    section{padding:72px 0;border-bottom:1px solid var(--line2)}
+    section:last-of-type{border-bottom:none}
+    .kicker{
+      display:inline-flex;align-items:center;gap:10px;
+      font-size:12px;text-transform:uppercase;letter-spacing:1px;
+      color:rgba(255,255,255,.70);
+      margin-bottom:14px;
+    }
+    .kicker .dot{background:rgba(255,255,255,.35);box-shadow:0 0 0 3px rgba(255,255,255,.06)}
+    h1{
+      margin:0;
+      font-size: clamp(36px, 5vw, 56px);
+      line-height:1.02;
+      letter-spacing:-.9px;
+    }
+    h2{
+      margin:0;
+      font-size: clamp(24px, 3vw, 34px);
+      letter-spacing:-.5px;
+    }
+    p{margin:12px 0 0;color:var(--muted);line-height:1.75;font-size:14.5px;max-width:72ch}
+
+    /* ===== Hero layout ===== */
+    .heroGrid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 28px;
+      align-items:center;
+      margin-top:18px;
+    }
+    .heroCard{
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(13,16,22,.72), rgba(9,11,16,.55));
+      padding: 18px;
+    }
+    .ctaRow{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+    .subRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      color:rgba(255,255,255,.70);
+      font-size:12px;
+    }
+    .pill .dot{width:6px;height:6px;box-shadow:0 0 0 3px rgba(255,70,84,.10)}
+
+    /* Image (looks like marketing screenshot, not embedded app window) */
+    .shotWrap{
+      border-radius: 20px;
+      border:1px solid rgba(255,255,255,.10);
+      background: radial-gradient(600px 300px at 50% 0%, rgba(255,70,84,.10), transparent 60%),
+                  rgba(0,0,0,.25);
+      padding: 14px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.55);
+    }
+    .shot{
+      border-radius: 14px;
       overflow:hidden;
-      border:1px solid var(--strokeB);
+      border:1px solid rgba(255,255,255,.08);
       background:#000;
     }
-    .preview img{width:100%;display:block}
+    .shot img{display:block;width:100%;height:auto}
 
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
-    .row{
-      padding:14px;border-radius:18px;
-      background:rgba(10,12,16,.55);
-      border:1px solid var(--strokeB);
+    /* Feature cards */
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 22px;
     }
-    .t{font-weight:900;text-transform:uppercase;font-size:12px}
-    .s{font-size:12.5px;color:var(--muted)}
+    .card{
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(12,14,18,.55);
+      padding: 16px;
+    }
+    .card b{
+      display:block;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.9px;
+      margin-bottom:6px;
+    }
+    .card span{display:block;color:var(--muted);font-size:13px;line-height:1.6}
 
-    .section{margin-top:20px;padding:16px;border-radius:22px;
-      background:rgba(10,12,16,.5);border:1px solid var(--strokeA)}
-    .sectionTitle{font-weight:900;text-transform:uppercase;font-size:12px;margin-bottom:10px}
+    /* Steps */
+    .steps{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .step{
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(12,14,18,.55);
+      padding: 16px;
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .num{
+      width:30px;height:30px;border-radius:10px;
+      border:1px solid rgba(255,70,84,.35);
+      background: rgba(255,70,84,.12);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:900;
+      color:rgba(255,255,255,.9);
+      flex:0 0 auto;
+    }
 
+    /* Support */
+    .supportBox{
+      margin-top: 18px;
+      border-radius: 20px;
+      border:1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(12,14,18,.65), rgba(10,12,16,.50));
+      padding: 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+
+    /* Footer */
     footer{
-      margin-top:18px;
-      display:flex;justify-content:space-between;
-      font-size:12px;color:var(--muted)
+      padding: 30px 0;
+      color: rgba(255,255,255,.58);
+      font-size: 12px;
     }
+    .footRow{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .footRow a{color:rgba(255,255,255,.72)}
+    .footRow a:hover{color:rgba(255,255,255,.9)}
 
-    @media(max-width:900px){
-      .hero{grid-template-columns:1fr}
-      .grid{grid-template-columns:1fr}
+    @media (max-width: 980px){
+      .heroGrid{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr}
+      .steps{grid-template-columns:1fr}
+      section{padding:56px 0}
+      .navLinks{display:none} /* mobile: clean */
     }
   </style>
 </head>
 
 <body>
-  <div class="topbar">
-    <div class="brand">
-      <div class="icon"><img src="logo.png" alt="Tilt Buddy"></div>
-      <div>
-        <div class="name">TILT BUDDY</div>
-        <div class="tag">MENTAL RESET ASSISTANT FOR <b>VALORANT</b></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="wrap">
-    <div class="card">
-      <div class="hero">
-        <div>
-          <h1>Stay calm.<br>Stay in control.</h1>
-          <p class="lead">
-            Tilt Buddy is a lightweight in-game overlay built specifically for <b>Valorant</b>.
-            After stressful moments, it shows short reset prompts to stop tilt before it spirals.
-          </p>
-
-          <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
-            <a class="btn primary" href="OVERWOLF_DOWNLOAD_URL_HERE" target="_blank">
-              Download for Overwolf
-            </a>
-            <a class="btn" href="#support">Support</a>
+  <div class="nav">
+    <div class="container">
+      <div class="navInner">
+        <div class="brand">
+          <div class="logo"><img src="logo.png" alt="Tilt Buddy"></div>
+          <div class="brandText">
+            <div class="brandName">TILT BUDDY</div>
+            <div class="brandTag">MENTAL RESET ASSISTANT FOR <b>VALORANT</b></div>
           </div>
         </div>
 
-        <div class="preview">
-          <img src="app.png" alt="Tilt Buddy UI">
+        <div class="navLinks">
+          <a href="#how">How it works</a>
+          <a href="#features">Features</a>
+          <a href="#download">Download</a>
+          <a href="#support">Support</a>
+        </div>
+
+        <div class="navCta">
+          <a class="btn primary" href="OVERWOLF_DOWNLOAD_URL_HERE" target="_blank" rel="noopener">
+            <span class="dot"></span> Download
+          </a>
         </div>
       </div>
-
-      <div class="grid">
-        <div class="row"><div class="t">Micro-prompts</div><div class="s">Instant cues, no paragraphs.</div></div>
-        <div class="row"><div class="t">Low distraction</div><div class="s">Designed to stay out of the way.</div></div>
-        <div class="row"><div class="t">No coaching</div><div class="s">No analysis. Just reset.</div></div>
-      </div>
-
-      <div class="section" id="support">
-        <div class="sectionTitle">Support / Contact</div>
-        <p class="lead">
-          For bugs, feedback or help — join the Discord and post in support.
-        </p>
-        <a class="btn primary" href="DISCORD_INVITE_URL_HERE" target="_blank">
-          Join Discord
-        </a>
-      </div>
-
-      <footer>
-        <span>© <span id="y"></span> Tilt Buddy</span>
-        <span>Discord: .reyko</span>
-      </footer>
     </div>
   </div>
+
+  <!-- HERO -->
+  <section>
+    <div class="container">
+      <div class="kicker"><span class="dot"></span> Competitive reset tool (Valorant-only)</div>
+      <h1>Stay calm.<br/>Stay in control.</h1>
+      <p>
+        Tilt Buddy is a lightweight in-game overlay built specifically for <b>Valorant</b>.
+        After deaths or stressful moments, it shows short reset prompts to interrupt tilt and bring focus back to the next round.
+      </p>
+
+      <div class="ctaRow">
+        <a class="btn primary" href="OVERWOLF_DOWNLOAD_URL_HERE" target="_blank" rel="noopener">
+          <span class="dot"></span> Download for Overwolf
+        </a>
+        <a class="btn" href="#how">See how it works</a>
+      </div>
+
+      <div class="heroGrid">
+        <div class="heroCard">
+          <div class="subRow">
+            <span class="pill"><span class="dot"></span> Micro-prompts</span>
+            <span class="pill"><span class="dot"></span> Low distraction</span>
+            <span class="pill"><span class="dot"></span> No coaching</span>
+          </div>
+
+          <p style="margin-top:14px;">
+            It doesn’t analyze your gameplay or tell you what you did wrong.
+            It simply gives you a short mental reset so tilt doesn’t take over.
+          </p>
+        </div>
+
+        <div class="shotWrap">
+          <div class="shot">
+            <img src="app.png" alt="Tilt Buddy preview">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="container">
+      <h2>How it works</h2>
+      <p>Three steps. No setup hell. Built for competitive sessions.</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="num">1</div>
+          <div>
+            <b style="display:block;text-transform:uppercase;letter-spacing:.9px;font-size:12px;margin-bottom:6px;">Runs in Overwolf</b>
+            <span style="color:var(--muted);font-size:13px;line-height:1.6;">
+              Install once. Tilt Buddy stays lightweight and out of the way.
+            </span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="num">2</div>
+          <div>
+            <b style="display:block;text-transform:uppercase;letter-spacing:.9px;font-size:12px;margin-bottom:6px;">Triggers at the right moments</b>
+            <span style="color:var(--muted);font-size:13px;line-height:1.6;">
+              After deaths or stressful spikes, you get a short reset prompt.
+            </span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="num">3</div>
+          <div>
+            <b style="display:block;text-transform:uppercase;letter-spacing:.9px;font-size:12px;margin-bottom:6px;">Back to the next round</b>
+            <span style="color:var(--muted);font-size:13px;line-height:1.6;">
+              The goal is simple: slow down, interrupt tilt, keep control.
+            </span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="num">✓</div>
+          <div>
+            <b style="display:block;text-transform:uppercase;letter-spacing:.9px;font-size:12px;margin-bottom:6px;">No coaching</b>
+            <span style="color:var(--muted);font-size:13px;line-height:1.6;">
+              No “play better” lectures. Just short, practical micro-resets.
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="container">
+      <h2>Built for competitive players</h2>
+      <p>Minimal, practical, and fast — designed for real ranked sessions.</p>
+
+      <div class="cards">
+        <div class="card">
+          <b>Micro-prompts</b>
+          <span>Short cues that actually help in the moment — no long paragraphs.</span>
+        </div>
+        <div class="card">
+          <b>Low distraction</b>
+          <span>Clean overlay designed to stay out of the way mid-round.</span>
+        </div>
+        <div class="card">
+          <b>Valorant-only</b>
+          <span>Focused scope = faster iteration and a cleaner experience.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOAD -->
+  <section id="download">
+    <div class="container">
+      <h2>Download</h2>
+      <p>Install via Overwolf. That’s it.</p>
+
+      <div class="supportBox" style="margin-top:16px;">
+        <div>
+          <div class="kicker" style="margin:0 0 6px;"><span class="dot"></span> Lightweight overlay</div>
+          <div style="font-weight:900;font-size:16px;letter-spacing:-.2px;">Tilt Buddy for Overwolf</div>
+          <div style="color:var(--muted);font-size:13px;margin-top:6px;">One-click install. Ready for ranked.</div>
+        </div>
+        <a class="btn primary" href="OVERWOLF_DOWNLOAD_URL_HERE" target="_blank" rel="noopener">
+          <span class="dot"></span> Download for Overwolf
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUPPORT -->
+  <section id="support">
+    <div class="container">
+      <h2>Support / Contact</h2>
+      <p>Report bugs, request features, or just tell me what feels off.</p>
+
+      <div class="supportBox">
+        <div>
+          <div style="font-weight:900;letter-spacing:-.2px;">Discord support</div>
+          <div style="color:var(--muted);font-size:13px;margin-top:6px;">Join the server and post in support.</div>
+        </div>
+        <a class="btn primary" href="DISCORD_INVITE_URL_HERE" target="_blank" rel="noopener">
+          <span class="dot"></span> Join Discord
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footRow">
+        <span>© <span id="y"></span> Tilt Buddy</span>
+        <span>
+          <a href="DISCORD_INVITE_URL_HERE" target="_blank" rel="noopener">Discord</a>
+        </span>
+      </div>
+    </div>
+  </footer>
 
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
