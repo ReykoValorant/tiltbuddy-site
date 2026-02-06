@@ -14,26 +14,25 @@
   <style>
     :root{
       --valo:#ff4654;
-      --bg0:#05060a;
-      --bg1:#07080b;
+      --ink:#0b0d12;
+      --ink2:#07080b;
 
-      --text:rgba(255,255,255,.94);
-      --muted:rgba(255,255,255,.74);
-      --muted2:rgba(255,255,255,.58);
-
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.72);
+      --muted2:rgba(255,255,255,.56);
       --line:rgba(255,255,255,.11);
 
-      /* Wider landing width */
-      --max: 1560px;
+      --card:rgba(14,16,22,.44);
+      --card2:rgba(14,16,22,.58);
 
-      --r: 18px;
-      --r2: 28px;
+      --r:18px;
+      --r2:28px;
 
-      --shadow: 0 28px 90px rgba(0,0,0,.60);
-      --shadow2: 0 20px 60px rgba(0,0,0,.52);
+      /* landing width */
+      --max: 1220px;
 
-      --glass: rgba(12,14,18,.46);
-      --glass2: rgba(12,14,18,.58);
+      --shadow: 0 28px 90px rgba(0,0,0,.62);
+      --shadow2: 0 18px 54px rgba(0,0,0,.52);
     }
 
     *{box-sizing:border-box}
@@ -47,20 +46,20 @@
         radial-gradient(1200px 700px at 12% -10%, rgba(255,70,84,.22), transparent 62%),
         radial-gradient(900px 560px at 88% -10%, rgba(120,160,255,.12), transparent 58%),
         radial-gradient(1100px 720px at 50% 120%, rgba(255,70,84,.12), transparent 68%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
+        linear-gradient(180deg, var(--ink), var(--ink2));
       overflow-x:hidden;
     }
 
-    /* Animated glow layer */
+    /* animated glow (subtle, web-like) */
     .bgGlow{
       position:fixed;
-      inset:-38vh -35vw auto -35vw;
-      height:74vh;
+      inset:-40vh -40vw auto -40vw;
+      height:78vh;
       background:
-        radial-gradient(circle at 30% 35%, rgba(255,70,84,.20), transparent 56%),
-        radial-gradient(circle at 75% 35%, rgba(120,160,255,.12), transparent 60%),
+        radial-gradient(circle at 28% 35%, rgba(255,70,84,.22), transparent 56%),
+        radial-gradient(circle at 76% 30%, rgba(120,160,255,.13), transparent 62%),
         radial-gradient(circle at 50% 70%, rgba(255,255,255,.05), transparent 66%);
-      filter: blur(52px);
+      filter: blur(56px);
       opacity:.62;
       pointer-events:none;
       animation: drift 12s ease-in-out infinite alternate;
@@ -71,7 +70,7 @@
       to{transform: translate3d(2%,2%,0) scale(1.04)}
     }
 
-    /* Noise overlay (very subtle) */
+    /* very subtle noise */
     .noise{
       position:fixed; inset:0;
       pointer-events:none;
@@ -82,25 +81,27 @@
       mix-blend-mode: overlay;
     }
 
-    a{color:inherit;text-decoration:none}
-    .container{max-width:var(--max);margin:0 auto;padding:0 34px}
+    a{color:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:0 22px}
+    .muted{color:var(--muted)}
+    .muted2{color:var(--muted2)}
 
-    /* Brand header */
-    header{padding: 30px 0 12px}
+    /* ===== Header (more impact) ===== */
+    header{
+      padding: 28px 0 18px;
+    }
     .brand{
-      display:flex;align-items:center;gap:14px;
-      padding: 8px 0;
+      display:flex; align-items:center; gap:14px;
     }
     .logo{
-      width:64px;height:64px;border-radius:22px;overflow:hidden;
+      width:64px; height:64px; border-radius:22px; overflow:hidden;
       border:1px solid rgba(255,255,255,.16);
-      background:rgba(0,0,0,.22);
+      background:rgba(0,0,0,.18);
       box-shadow:
         0 0 0 1px rgba(255,255,255,.04),
-        0 0 70px rgba(255,70,84,.22);
+        0 0 74px rgba(255,70,84,.22);
       position:relative;
       flex:0 0 auto;
-      transform: translateZ(0);
     }
     .logo:after{
       content:"";
@@ -110,42 +111,38 @@
       pointer-events:none;
       opacity:.95;
     }
-    .logo img{width:100%;height:100%;object-fit:cover}
-    .brandText{line-height:1.06}
+    .logo img{width:100%; height:100%; object-fit:cover}
+
+    .brandText{line-height:1.05}
     .brandName{
       font-weight:980;
-      letter-spacing:3.4px;
+      letter-spacing:3.6px;
       text-transform:uppercase;
       font-size:18px;
-      text-shadow: 0 10px 36px rgba(0,0,0,.55);
+      text-shadow: 0 18px 66px rgba(0,0,0,.58);
     }
     .brandTag{
-      margin-top:7px;
+      margin-top:8px;
       font-size:12px;
-      letter-spacing:1.2px;
+      letter-spacing:1.15px;
       text-transform:uppercase;
       color:rgba(255,255,255,.72);
     }
-    .brandTag b{
-      color:var(--valo);
-      text-shadow: 0 0 24px rgba(255,70,84,.22);
-    }
+    .brandTag b{color:var(--valo); text-shadow:0 0 26px rgba(255,70,84,.22)}
 
-    /* Main shell (more landing-page, less "app") */
-    main.shell{
-      margin: 14px auto 40px;
-      border-radius: 34px;
+    /* ===== Main layout (web landing, not app) ===== */
+    main{
+      border-radius: 30px;
       border:1px solid rgba(255,255,255,.10);
       background:
-        radial-gradient(1200px 580px at 18% 0%, rgba(255,70,84,.14), transparent 66%),
-        radial-gradient(1000px 540px at 85% 0%, rgba(120,160,255,.10), transparent 68%),
-        linear-gradient(180deg, rgba(14,16,20,.56), rgba(10,12,16,.34));
+        radial-gradient(1100px 560px at 18% 0%, rgba(255,70,84,.14), transparent 66%),
+        radial-gradient(900px 520px at 86% 0%, rgba(120,160,255,.10), transparent 68%),
+        linear-gradient(180deg, rgba(14,16,20,.58), rgba(10,12,16,.34));
       box-shadow: var(--shadow);
       overflow:hidden;
       position:relative;
     }
-    /* subtle “web” sheen */
-    main.shell:before{
+    main:before{
       content:"";
       position:absolute; inset:0;
       background:
@@ -155,109 +152,97 @@
       opacity:.9;
     }
 
-    .pad{padding:44px}
-    .divider{
+    .section{position:relative; padding: 34px 34px}
+    .sep{
       height:1px;
       background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
       opacity:.9;
     }
 
-    .dot{
-      width:8px;height:8px;border-radius:999px;
-      background:var(--valo);
-      box-shadow:0 0 0 4px rgba(255,70,84,.12);
-      flex:0 0 auto;
-    }
-
-    /* HERO (more breathing room, more web layout) */
+    /* ===== Hero ===== */
     .hero{
       display:grid;
       grid-template-columns: 1.05fr .95fr;
-      gap: 38px;
+      gap: 28px;
       align-items:center;
-      position:relative;
-      padding-bottom: 8px;
-    }
-
-    .heroTopLine{
-      display:flex;align-items:center;gap:10px;
-      color:rgba(255,255,255,.72);
-      letter-spacing:.9px;
-      text-transform:uppercase;
-      font-size:12px;
-      margin-bottom: 12px;
-    }
-    .heroTopLine .pill{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 10px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
-      backdrop-filter: blur(10px);
-    }
-    .heroTopLine .pill .miniDot{
-      width:7px;height:7px;border-radius:999px;
-      background:rgba(255,255,255,.38);
-      box-shadow:0 0 0 4px rgba(255,255,255,.08);
+      padding-top: 38px;
+      padding-bottom: 38px;
     }
 
     h1{
       margin:0;
-      font-size: clamp(40px, 3.5vw, 62px);
+      font-size: clamp(38px, 4vw, 56px);
       line-height:1.02;
-      letter-spacing:-.7px;
-      text-shadow: 0 18px 70px rgba(0,0,0,.55);
+      letter-spacing:-.8px;
+      text-shadow: 0 18px 70px rgba(0,0,0,.56);
     }
 
-    /* Smaller (per your feedback) – less dominant than a huge tagline */
-    .subline{
-      margin-top:14px;
-      color:rgba(255,255,255,.86);
-      font-size:14.5px;
-      line-height:1.6;
+    .tagline{
+      margin-top: 14px;
+      font-size: 16px;
+      line-height:1.7;
+      color: rgba(255,255,255,.84);
+      max-width: 62ch;
+    }
+
+    .heroCopy{
+      margin-top: 14px;
+      font-size: 15.2px;
+      line-height:1.8;
+      color: var(--muted);
       max-width: 70ch;
     }
-    .subline b{
-      color:rgba(255,255,255,.94);
-      font-weight:850;
+
+    /* Quick highlights (more web-like than pills) */
+    .highlights{
+      margin-top: 18px;
+      display:flex; flex-wrap:wrap;
+      gap: 10px;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      backdrop-filter: blur(10px);
+      font-size: 12px;
+      color: rgba(255,255,255,.78);
+      letter-spacing:.2px;
+    }
+    .chip .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: var(--valo);
+      box-shadow: 0 0 0 4px rgba(255,70,84,.12);
+      flex:0 0 auto;
     }
 
-    p{
-      margin:14px 0 0;
-      color:var(--muted);
-      line-height:1.78;
-      font-size:15.4px;
-      max-width: 78ch;
-    }
-    .accent{
-      color:rgba(255,255,255,.92);
-    }
-
-    /* Buttons (bigger + nicer hover) */
-    .ctaRow{display:flex;gap:14px;flex-wrap:wrap;margin-top:22px}
+    /* CTAs */
+    .ctaRow{display:flex; gap:12px; flex-wrap:wrap; margin-top: 18px}
     .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
       border-radius:999px;
-      padding:15px 22px;
+      padding: 15px 22px;
       font-weight:980;
-      font-size:12.8px;
+      font-size: 12.8px;
       text-transform:uppercase;
       letter-spacing:.78px;
       border:1px solid rgba(255,255,255,.13);
-      background:rgba(255,255,255,.06);
-      color:rgba(255,255,255,.92);
-      box-shadow:0 12px 26px rgba(0,0,0,.36);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.92);
+      box-shadow: 0 12px 26px rgba(0,0,0,.36);
       transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
       white-space:nowrap;
       cursor:pointer;
       user-select:none;
+      text-decoration:none;
     }
     .btn:hover{
-      transform:translateY(-2px);
-      background:rgba(255,255,255,.09);
-      border-color:rgba(255,255,255,.18);
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.09);
+      border-color: rgba(255,255,255,.18);
       box-shadow: 0 22px 50px rgba(0,0,0,.50);
     }
-    .btn:active{transform:translateY(-1px)}
     .btn.primary{
       border-color: rgba(255,70,84,.55);
       background:
@@ -275,14 +260,14 @@
       box-shadow:0 0 0 4px rgba(255,255,255,.08);
     }
 
-    /* Screenshot */
-    .shotWrap{
-      border-radius: 30px;
+    /* Screenshot card */
+    .shotCard{
+      border-radius: var(--r2);
       border:1px solid rgba(255,255,255,.10);
       background:
         radial-gradient(900px 420px at 50% 0%, rgba(255,70,84,.14), transparent 62%),
-        rgba(0,0,0,.20);
-      padding: 18px;
+        rgba(0,0,0,.18);
+      padding: 16px;
       box-shadow: var(--shadow2);
       position:relative;
     }
@@ -295,22 +280,18 @@
       width:100%;
       cursor: zoom-in;
     }
-
     .shot{
       border-radius: 18px;
       overflow:hidden;
       border:1px solid rgba(255,255,255,.10);
       background:#000;
-      position:relative;
-      transform: translateZ(0);
     }
-    .shot img{display:block;width:100%;height:auto}
+    .shot img{display:block; width:100%; height:auto}
 
-    /* zoom hint (clearer, more “web”) */
     .zoomHint{
       position:absolute;
-      left: 22px;
-      bottom: 22px;
+      left: 18px;
+      bottom: 18px;
       display:inline-flex; align-items:center; gap:10px;
       padding:10px 12px;
       border-radius:999px;
@@ -319,141 +300,112 @@
       color:rgba(255,255,255,.86);
       font-size:12px;
       backdrop-filter: blur(10px);
-      opacity:.0;
+      opacity:0;
       transform: translateY(6px);
       transition: opacity 170ms ease, transform 170ms ease;
       pointer-events:none;
     }
-    .zoomIcon{
-      width:18px;height:18px;border-radius:9px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      display:inline-flex;align-items:center;justify-content:center;
-      box-shadow: 0 10px 22px rgba(0,0,0,.25);
-      position:relative;
-    }
-    .zoomIcon:before{
-      content:"";
-      width:7px;height:7px;border-radius:999px;
-      border:2px solid rgba(255,255,255,.84);
-      position:absolute;
-      top:4px; left:4px;
-    }
-    .zoomIcon:after{
-      content:"";
-      width:7px;height:2px;
-      background:rgba(255,255,255,.84);
-      position:absolute;
-      right:3px; bottom:4px;
-      transform: rotate(45deg);
-      border-radius:2px;
-    }
-    .shotWrap:hover .zoomHint{opacity:1;transform:translateY(0)}
-    .shotWrap:hover .shot{
-      box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 26px 78px rgba(0,0,0,.50);
-    }
+    .shotCard:hover .zoomHint{opacity:1; transform:translateY(0)}
 
-    /* Sections */
-    .sectionBlock{padding: 28px 44px}
-    .sectionTitle{
-      margin:0;
-      font-size: 18px;
-      letter-spacing:.2px;
-      color:rgba(255,255,255,.92);
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .sectionTitle:before{
-      content:"";
-      width:10px;height:10px;border-radius:999px;
-      background:rgba(255,70,84,.95);
-      box-shadow:0 0 0 5px rgba(255,70,84,.10);
-      opacity:.95;
-    }
-
-    /* “Not boring”: one clean text block with a nice callout line + 3 concise lines */
-    .copyBlock{
-      margin-top: 14px;
-      max-width: 98ch;
-    }
-    .calloutLine{
-      margin: 0 0 14px;
-      padding: 14px 16px;
-      border-radius: 18px;
-      border:1px solid rgba(255,255,255,.10);
-      background:
-        radial-gradient(520px 180px at 18% 0%, rgba(255,70,84,.14), transparent 62%),
-        rgba(12,14,18,.42);
-      box-shadow: 0 14px 42px rgba(0,0,0,.34);
-      color: rgba(255,255,255,.86);
-      line-height:1.65;
-      font-size:15.3px;
-    }
-    .calloutLine b{color:rgba(255,255,255,.94);font-weight:900}
-
-    .lineList{
+    /* ===== Content blocks (make the middle part “not ugly”) ===== */
+    .twoCol{
       display:grid;
-      gap: 12px;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .panel{
+      border-radius: var(--r2);
+      border:1px solid rgba(255,255,255,.10);
+      background: var(--card);
+      padding: 18px 18px 16px;
+      position:relative;
+      overflow:hidden;
+    }
+    .panel:before{
+      content:"";
+      position:absolute; inset:-1px;
+      background: radial-gradient(520px 220px at 14% 0%, rgba(255,70,84,.14), transparent 66%);
+      opacity:.95;
+      pointer-events:none;
+    }
+    .kicker{
+      display:flex; align-items:center; gap:10px;
+      font-weight:900;
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:1.0px;
+      color: rgba(255,255,255,.88);
+      margin-bottom: 10px;
+    }
+    .kicker .kDot{
+      width:10px; height:10px; border-radius:999px;
+      background: rgba(255,70,84,.95);
+      box-shadow: 0 0 0 5px rgba(255,70,84,.10);
+      flex:0 0 auto;
+    }
+
+    .lead{
       margin:0;
-      padding:0;
-      list-style:none;
+      color: rgba(255,255,255,.86);
+      line-height:1.7;
+      font-size: 15px;
     }
-    .lineList li{
-      display:flex; gap:12px;
-      align-items:flex-start;
+    .list{margin: 12px 0 0; padding:0; list-style:none; display:grid; gap:10px}
+    .li{
+      display:flex; gap:12px; align-items:flex-start;
       color: var(--muted);
-      line-height:1.72;
-      font-size:15.2px;
+      line-height:1.7;
+      font-size: 14.6px;
     }
-    .marker{
-      width:18px;height:18px;border-radius:7px;
+    .mark{
+      width:18px; height:18px; border-radius:7px;
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.06);
-      display:flex;align-items:center;justify-content:center;
-      box-shadow: 0 10px 22px rgba(0,0,0,.25);
+      display:flex; align-items:center; justify-content:center;
       margin-top:2px;
       flex:0 0 auto;
+      box-shadow: 0 10px 22px rgba(0,0,0,.25);
       position:relative;
     }
-    .marker:before{
+    .mark:before{
       content:"";
-      width:8px;height:8px;border-radius:999px;
-      background:rgba(255,70,84,.92);
-      box-shadow:0 0 0 4px rgba(255,70,84,.10);
+      width:8px; height:8px; border-radius:999px;
+      background: rgba(255,70,84,.92);
+      box-shadow: 0 0 0 4px rgba(255,70,84,.10);
     }
-    .lineList b{color:rgba(255,255,255,.92);font-weight:900}
+    .li b{color: rgba(255,255,255,.92); font-weight:900}
 
-    /* Who it's for (bigger + more presence) */
-    .grid3{
+    /* ===== Who it's for (bigger cards) ===== */
+    .whoGrid{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 16px;
-      margin-top: 16px;
+      margin-top: 14px;
     }
-    .card{
+    .whoCard{
       border-radius: 30px;
       border:1px solid rgba(255,255,255,.10);
       background: rgba(12,14,18,.46);
       padding: 20px 20px 18px;
-      min-height: 110px;
+      min-height: 112px;
       transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
       position:relative;
       overflow:hidden;
     }
-    .card:before{
+    .whoCard:before{
       content:"";
       position:absolute; inset:-1px;
-      background: radial-gradient(360px 190px at 18% 0%, rgba(255,70,84,.14), transparent 66%);
+      background: radial-gradient(520px 220px at 14% 0%, rgba(255,70,84,.14), transparent 66%);
       opacity:.95;
       pointer-events:none;
     }
-    .card:hover{
+    .whoCard:hover{
       transform: translateY(-3px);
       background: rgba(12,14,18,.58);
       border-color: rgba(255,255,255,.14);
     }
-    .card b{
+    .whoCard b{
       display:block;
       font-size:12.8px;
       text-transform:uppercase;
@@ -461,48 +413,41 @@
       margin-bottom:10px;
       color: rgba(255,255,255,.94);
     }
-    .card span{
+    .whoCard span{
       display:block;
       color:rgba(255,255,255,.74);
       font-size:14.4px;
       line-height:1.6
     }
 
-    /* Bottom CTA bar (bigger + clean split) */
-    .bottomCtas{
-      margin-top: 22px;
+    /* ===== Bottom bar ===== */
+    .bottomBar{
+      margin-top: 18px;
       border-radius: 30px;
       border:1px solid rgba(255,255,255,.10);
       background:
         radial-gradient(900px 260px at 18% 0%, rgba(255,70,84,.12), transparent 66%),
         linear-gradient(180deg, rgba(12,14,18,.56), rgba(10,12,16,.40));
-      padding: 20px 22px;
+      padding: 18px 18px;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap: 12px;
       flex-wrap:wrap;
     }
-    .bottomLeft, .bottomRight{
-      display:flex; align-items:center; gap:14px; flex-wrap:wrap;
-    }
-    .hint{
-      color:rgba(255,255,255,.60);
-      font-size:12.8px;
-      line-height:1.5;
-      max-width: 52ch;
-    }
+    .bottomLeft,.bottomRight{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+    .hint{color:rgba(255,255,255,.60); font-size:12.8px; line-height:1.5}
 
     footer{
-      padding: 12px 0 44px;
+      padding: 14px 0 44px;
       color: rgba(255,255,255,.58);
       font-size: 12px;
     }
-    .footRow{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-    .footRow a{color:rgba(255,255,255,.78)}
+    .footRow{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap}
+    .footRow a{color:rgba(255,255,255,.78); text-decoration:none}
     .footRow a:hover{color:rgba(255,255,255,.92)}
 
-    /* Lightbox */
+    /* ===== Lightbox ===== */
     .lightbox{
       position:fixed; inset:0;
       display:none;
@@ -514,8 +459,8 @@
       z-index:9999;
     }
     .lightbox.open{display:flex}
-    .lightboxPanel{
-      max-width:min(1320px, 96vw);
+    .lbPanel{
+      max-width:min(1240px, 96vw);
       max-height:92vh;
       border-radius: 18px;
       border:1px solid rgba(255,255,255,.12);
@@ -524,7 +469,7 @@
       overflow:hidden;
       position:relative;
     }
-    .lightboxImg{
+    .lbImg{
       display:block;
       width:100%;
       height:auto;
@@ -538,28 +483,31 @@
       display:flex;
       justify-content:space-between;
       gap:10px;
+      pointer-events:none;
     }
     .lbBadge{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 10px;border-radius:999px;
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
       border:1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.42);
       color:rgba(255,255,255,.84);
       font-size:12px;
       backdrop-filter: blur(8px);
-      pointer-events:none;
     }
     .lbClose{
+      pointer-events:auto;
       cursor:pointer;
-      display:inline-flex;align-items:center;justify-content:center;
-      width:42px;height:42px;border-radius:14px;
+      display:inline-flex; align-items:center; justify-content:center;
+      width:42px; height:42px;
+      border-radius:14px;
       border:1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.48);
       color:rgba(255,255,255,.86);
       backdrop-filter: blur(8px);
       transition: transform 130ms ease, background 130ms ease;
     }
-    .lbClose:hover{transform:translateY(-1px);background: rgba(0,0,0,.58)}
+    .lbClose:hover{transform:translateY(-1px); background: rgba(0,0,0,.58)}
     .lbX{width:14px;height:14px;position:relative}
     .lbX:before,.lbX:after{
       content:""; position:absolute; left:6px; top:0;
@@ -569,27 +517,36 @@
     .lbX:before{transform:rotate(45deg)}
     .lbX:after{transform:rotate(-45deg)}
 
-    /* Mobile polish */
+    /* ===== Responsive (fix “chaotic” mobile) ===== */
     @media (max-width: 980px){
-      .container{padding:0 18px}
-      header{padding:22px 0 10px}
+      :root{ --max: 760px; }
+      header{padding:22px 0 14px}
       .logo{width:56px;height:56px;border-radius:20px}
       .brandName{font-size:16px;letter-spacing:3.1px}
 
-      .pad{padding:22px}
-      .sectionBlock{padding:20px 22px}
+      main{border-radius: 26px}
+      .section{padding: 22px 18px}
 
-      .hero{grid-template-columns:1fr;gap:18px}
-      .shotWrap{padding:14px}
+      .hero{
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding-top: 26px;
+        padding-bottom: 24px;
+      }
 
-      /* Full-width CTAs on mobile */
       .ctaRow{gap:10px}
       .btn{width:100%}
 
-      .grid3{grid-template-columns:1fr}
-      .bottomCtas{padding:18px}
+      .twoCol{grid-template-columns: 1fr}
+      .whoGrid{grid-template-columns: 1fr}
       .bottomLeft,.bottomRight{width:100%}
       .bottomRight{justify-content:space-between}
+    }
+
+    /* Small phones */
+    @media (max-width: 420px){
+      .brandName{letter-spacing:2.8px}
+      .chip{width:100%; justify-content:center}
     }
   </style>
 </head>
@@ -599,7 +556,7 @@
   <div class="noise" aria-hidden="true"></div>
 
   <header>
-    <div class="container">
+    <div class="wrap">
       <div class="brand">
         <div class="logo"><img src="./logo.png" alt="Tilt Buddy" /></div>
         <div class="brandText">
@@ -610,112 +567,101 @@
     </div>
   </header>
 
-  <div class="container">
-    <main class="shell">
+  <div class="wrap">
+    <main>
       <!-- HERO -->
-      <section class="pad hero">
+      <section class="section hero">
         <div>
-          <div class="heroTopLine">
-            <span class="pill"><span class="miniDot"></span> Overwolf overlay</span>
-            <span class="pill"><span class="miniDot"></span> Micro-resets after deaths</span>
-            <span class="pill"><span class="miniDot"></span> No coaching</span>
-          </div>
-
           <h1>Tilt Buddy</h1>
-
-          <div class="subline">
-            <b>A lightweight mental reset overlay</b> to prevent tilt and keep you locked in.
+          <div class="tagline">
+            A lightweight mental reset overlay to prevent tilt and keep you locked in.
           </div>
 
-          <p>
-            Tilt Buddy runs quietly in the background while you play. When the game detects a death, it shows a short,
-            practical reset prompt designed to interrupt emotional reactions, slow your tempo, and help you regain focus
-            before tilt starts to build.
-          </p>
+          <div class="heroCopy">
+            Tilt Buddy runs quietly in the background while you play. When the game detects a death, it shows a short, practical reset prompt designed to interrupt emotional reactions, slow your tempo, and help you regain focus before tilt starts to build.
+          </div>
+
+          <div class="highlights" aria-label="Key points">
+            <div class="chip"><span class="dot"></span> Runs in the background</div>
+            <div class="chip"><span class="dot"></span> Micro-resets after deaths</div>
+            <div class="chip"><span class="dot"></span> No coaching / no stats</div>
+          </div>
 
           <div class="ctaRow">
             <!-- TODO: replace with your real Overwolf listing/download -->
             <a class="btn primary" href="OVERWOLF_DOWNLOAD_URL_HERE" target="_blank" rel="noopener">
               <span class="btnDot"></span> Download for Overwolf
             </a>
-
             <a class="btn" href="https://discord.gg/xXrMAWqKeA" target="_blank" rel="noopener">
               <span class="btnDot muted"></span> Join Discord
             </a>
           </div>
         </div>
 
-        <div class="shotWrap">
+        <div class="shotCard">
           <button class="shotBtn" id="openLightbox" aria-haspopup="dialog" aria-controls="lightbox" title="Click to enlarge">
             <div class="shot">
               <img src="./app.png" alt="Tilt Buddy overlay preview (click to enlarge)" />
             </div>
           </button>
-          <div class="zoomHint" aria-hidden="true">
-            <span class="zoomIcon"></span>
-            Click to enlarge
+          <div class="zoomHint" aria-hidden="true">Click to enlarge</div>
+        </div>
+      </section>
+
+      <div class="sep" aria-hidden="true"></div>
+
+      <!-- Middle content: redesigned to look like web sections (2 cards) -->
+      <section class="section">
+        <div class="twoCol">
+          <div class="panel">
+            <div class="kicker"><span class="kDot"></span> What it does</div>
+            <p class="lead">
+              Tilt usually starts as a <b>physical + emotional reaction</b> — not a “thinking” problem.
+              Tilt Buddy gives you a quick reset right when tilt usually begins: <b>after a death</b>.
+            </p>
+            <ul class="list">
+              <li class="li"><span class="mark"></span> <b>Detects deaths</b> and triggers at the exact moment emotions spike.</li>
+              <li class="li"><span class="mark"></span> Shows a <b>short reset prompt</b> (breathing, posture, eye focus, brief pause) and fades fast.</li>
+              <li class="li"><span class="mark"></span> <b>No coaching</b>, no analysis, no stat tracking — just a reset so you stay locked in.</li>
+            </ul>
+          </div>
+
+          <div class="panel">
+            <div class="kicker"><span class="kDot"></span> How it works</div>
+            <p class="lead">
+              A gentle interruption at the exact moment tilt begins — without pulling you out of the round.
+            </p>
+            <ul class="list">
+              <li class="li"><span class="mark"></span> Runs quietly in the background while you play.</li>
+              <li class="li"><span class="mark"></span> <b>Death → prompt</b>: a short cue breaks the tilt loop and re-centers you.</li>
+              <li class="li"><span class="mark"></span> Lightweight overlay, minimal distraction, disappears quickly.</li>
+            </ul>
           </div>
         </div>
       </section>
 
-      <div class="divider" aria-hidden="true"></div>
+      <div class="sep" aria-hidden="true"></div>
 
-      <!-- WHAT IT DOES (one clean text block, not “app boxes”) -->
-      <section class="sectionBlock">
-        <div class="sectionTitle">What Tilt Buddy does</div>
+      <!-- Who it's for -->
+      <section class="section">
+        <div class="kicker" style="margin-bottom:12px;"><span class="kDot"></span> Who Tilt Buddy is for</div>
 
-        <div class="copyBlock">
-          <div class="calloutLine">
-            Tilt usually starts as a <b>physical + emotional reaction</b> — not a “thinking” problem.
-            Tilt Buddy gives you a quick, subtle reset right when tilt usually begins: <b>after a death</b>.
-          </div>
-
-          <ul class="lineList">
-            <li><span class="marker"></span> <b>Detects deaths</b> during gameplay and triggers at the exact moment emotions spike.</li>
-            <li><span class="marker"></span> Shows a <b>short reset prompt</b> (breathing, posture, eye focus, brief pause) and fades fast.</li>
-            <li><span class="marker"></span> <b>No coaching</b>, no analysis, no stat tracking — just a mental reset so you stay locked in.</li>
-          </ul>
-        </div>
-      </section>
-
-      <div class="divider" aria-hidden="true"></div>
-
-      <!-- HOW IT WORKS (still one clean block) -->
-      <section class="sectionBlock">
-        <div class="sectionTitle">How it works</div>
-
-        <div class="copyBlock">
-          <ul class="lineList">
-            <li><span class="marker"></span> Tilt Buddy <b>runs quietly</b> in the background while you play.</li>
-            <li><span class="marker"></span> <b>Death → prompt</b>: a short on-screen cue breaks the tilt loop and re-centers you.</li>
-            <li><span class="marker"></span> <b>Back to the round</b>: lightweight overlay, minimal distraction, disappears quickly.</li>
-          </ul>
-        </div>
-      </section>
-
-      <div class="divider" aria-hidden="true"></div>
-
-      <!-- WHO IT'S FOR (bigger cards only, no extra intro text) -->
-      <section class="sectionBlock">
-        <div class="sectionTitle">Who Tilt Buddy is for</div>
-
-        <div class="grid3">
-          <div class="card">
+        <div class="whoGrid">
+          <div class="whoCard">
             <b>Players who tilt after deaths</b>
             <span>Stop the spiral early — reset before frustration snowballs.</span>
           </div>
-          <div class="card">
+          <div class="whoCard">
             <b>Ranked grinders</b>
             <span>Long sessions are where small mental slips compound. Keep control.</span>
           </div>
-          <div class="card">
+          <div class="whoCard">
             <b>Competitive players under pressure</b>
             <span>Focus + composure matter. Stay stable — without “play better” advice.</span>
           </div>
         </div>
 
-        <!-- Bottom CTA (left download, right discord) -->
-        <div class="bottomCtas">
+        <div class="bottomBar">
           <div class="bottomLeft">
             <a class="btn primary" href="OVERWOLF_DOWNLOAD_URL_HERE" target="_blank" rel="noopener">
               <span class="btnDot"></span> Download
@@ -743,14 +689,14 @@
 
   <!-- LIGHTBOX -->
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Preview image">
-    <div class="lightboxPanel" role="document">
+    <div class="lbPanel" role="document">
       <div class="lbTop">
-        <div class="lbBadge"><span class="dot"></span> Tilt Buddy Preview</div>
+        <div class="lbBadge">Tilt Buddy Preview</div>
         <button class="lbClose" id="closeLightbox" aria-label="Close preview">
           <span class="lbX" aria-hidden="true"></span>
         </button>
       </div>
-      <img class="lightboxImg" src="./app.png" alt="Tilt Buddy preview enlarged" />
+      <img class="lbImg" src="./app.png" alt="Tilt Buddy preview enlarged" />
     </div>
   </div>
 
