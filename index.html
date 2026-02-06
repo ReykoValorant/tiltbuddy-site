@@ -25,6 +25,7 @@
 
       --accent:#ff3b4e;
       --accent2:#ff6b7a;
+      --blue:#6ea0ff;
 
       --shadow: 0 18px 70px rgba(0,0,0,.65);
       --shadow2: 0 12px 40px rgba(0,0,0,.50);
@@ -32,14 +33,12 @@
       --radius: 22px;
       --max: 1240px;
 
-      /* sticky cta */
       --cta-h: 86px;
     }
 
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
 
-    /* ✅ Smoother background: less “red band”, more blended */
     body{
       margin:0;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
@@ -55,7 +54,6 @@
 
     a{ color:inherit; text-decoration:none; }
 
-    /* subtle grain */
     body:before{
       content:"";
       position:fixed;
@@ -68,7 +66,6 @@
       transform: translateZ(0);
     }
 
-    /* ✅ Move content up: less top padding */
     .wrap{
       max-width: var(--max);
       margin: 0 auto;
@@ -115,7 +112,6 @@
       position:relative;
       border-radius: 30px;
       border: 1px solid rgba(255,255,255,.09);
-      /* ✅ smoother panel background, less left/right “stripe” */
       background:
         radial-gradient(900px 420px at 50% -8%, rgba(255,255,255,.08), transparent 62%),
         rgba(255,255,255,.03);
@@ -131,7 +127,6 @@
       opacity:.85;
     }
 
-    /* ✅ reduce inner padding so hero sits higher */
     .inner{
       position:relative;
       z-index:1;
@@ -140,7 +135,7 @@
 
     .hero{
       display:grid;
-      grid-template-columns: 1.08fr .92fr;
+      grid-template-columns: 1.06fr .94fr;
       gap: 22px;
       align-items:center;
       padding: 8px 6px 6px;
@@ -181,7 +176,7 @@
     }
 
     .lead{
-      margin: 0 0 18px;
+      margin: 0 0 14px;
       font-size: 14px;
       color: rgba(255,255,255,.66);
       line-height: 1.58;
@@ -193,6 +188,7 @@
       flex-wrap:wrap;
       gap: 12px;
       align-items:center;
+      margin-bottom: 10px;
     }
 
     .btn{
@@ -235,6 +231,28 @@
     }
     .btn.primary:hover{ filter: brightness(1.06); }
 
+    /* ✅ mini social proof (non-cringe) */
+    .proof{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color: rgba(255,255,255,.60);
+      font-size: 12.5px;
+      line-height: 1.35;
+    }
+    .proof .pDot{
+      width:10px;height:10px;border-radius:50%;
+      background: rgba(110,160,255,.45);
+      box-shadow: 0 0 0 6px rgba(110,160,255,.10);
+      flex: 0 0 auto;
+    }
+    .proof a{
+      color: rgba(255,255,255,.74);
+      border-bottom: 1px solid rgba(255,255,255,.18);
+    }
+    .proof a:hover{ border-bottom-color: rgba(255,255,255,.38); }
+
+    /* Screenshot card + parallax */
     .shot{
       position:relative;
       border-radius: 22px;
@@ -242,12 +260,35 @@
       background: rgba(0,0,0,.24);
       padding: 10px;
       box-shadow: 0 26px 88px rgba(0,0,0,.62);
+      transform: translateZ(0);
     }
+    /* subtle hover glow ring */
+    .shot:before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      border-radius: 24px;
+      background:
+        radial-gradient(360px 220px at 30% 15%, rgba(255,59,78,.16), transparent 62%),
+        radial-gradient(340px 220px at 85% 15%, rgba(110,160,255,.12), transparent 64%);
+      opacity: 0;
+      pointer-events:none;
+      transition: opacity .25s ease;
+    }
+    .shot:hover:before{ opacity: 1; }
+
     .shot .frame{
       border-radius: 16px;
       overflow:hidden;
       border: 1px solid rgba(255,255,255,.08);
       background: rgba(0,0,0,.22);
+      transform: translateZ(0);
+      box-shadow: 0 12px 34px rgba(0,0,0,.55);
+      transition: border-color .25s ease, box-shadow .25s ease;
+    }
+    .shot:hover .frame{
+      border-color: rgba(255,255,255,.12);
+      box-shadow: 0 16px 46px rgba(0,0,0,.62), 0 0 0 1px rgba(255,59,78,.08) inset;
     }
     .shot img{
       width:100%;
@@ -255,9 +296,11 @@
       display:block;
       border-radius: 16px;
       cursor: zoom-in;
-      transition: transform .25s ease, filter .25s ease;
+      transform: translate3d(var(--px,0), var(--py,0), 0) scale(var(--ps,1));
+      transition: transform .18s ease, filter .25s ease;
+      will-change: transform;
     }
-    .shot img:hover{ transform: scale(1.01); filter: brightness(1.03); }
+    .shot:hover img{ filter: brightness(1.03); }
 
     .shotHint{
       margin-top:8px;
@@ -279,6 +322,7 @@
       border-top: 1px solid rgba(255,255,255,.08);
       padding-top: 16px;
     }
+
     .sectionTitle{
       display:flex;
       align-items:center;
@@ -293,17 +337,30 @@
       box-shadow: 0 0 0 6px rgba(255,59,78,.10);
     }
 
-    /* ✅ Removed the “callout big box” entirely */
-    .introLine{
+    /* ✅ merged section layout (left text, right key points) */
+    .split{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 14px;
+      align-items:start;
+    }
+    .copy{
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.18);
+      border-radius: 20px;
+      padding: 14px 14px;
+    }
+    .copy p{
       margin: 0 0 10px;
-      color: rgba(255,255,255,.74);
+      color: rgba(255,255,255,.72);
       line-height: 1.55;
       font-size: 14px;
     }
-    .introLine b{ color: rgba(255,255,255,.92); }
+    .copy p:last-child{ margin-bottom:0; }
+    .copy b{ color: rgba(255,255,255,.92); }
 
     .bullets{
-      margin: 0;
+      margin: 10px 0 0;
       padding: 0;
       list-style:none;
       display:grid;
@@ -326,54 +383,43 @@
     }
     .bullets b{ color: rgba(255,255,255,.92); }
 
-    .steps{
+    .points{
       display:grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin-top: 10px;
     }
-    .step{
+    .point{
       border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.22);
+      background: rgba(255,255,255,.04);
       border-radius: 18px;
-      padding: 14px 14px;
-      min-height: 104px;
+      padding: 12px 12px;
+      min-height: 84px;
       position:relative;
       overflow:hidden;
-      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      transition: transform .18s ease, border-color .18s ease;
     }
-    .step:before{
+    .point:before{
       content:"";
       position:absolute;
       inset:-1px;
-      background: radial-gradient(240px 120px at 18% 0%, rgba(255,59,78,.10), transparent 68%);
+      background:
+        radial-gradient(220px 120px at 18% 0%, rgba(255,59,78,.10), transparent 68%),
+        radial-gradient(220px 120px at 92% 0%, rgba(110,160,255,.10), transparent 70%);
       pointer-events:none;
       opacity:.9;
     }
-    .step:hover{ transform: translateY(-2px); border-color: rgba(255,255,255,.14); }
-
-    .num{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      width: 32px; height: 32px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,59,78,.28);
-      background: rgba(255,59,78,.10);
-      color: rgba(255,255,255,.92);
-      font-weight: 900;
-      margin-bottom: 8px;
-      position:relative;
-      z-index:1;
-    }
-    .step h3{
-      margin:0 0 4px;
-      font-size: 13px;
+    .point:hover{ transform: translateY(-2px); border-color: rgba(255,255,255,.14); }
+    .point h3{
+      margin:0 0 6px;
+      font-size: 12px;
+      letter-spacing:.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.86);
       font-weight: 900;
       position:relative;
       z-index:1;
     }
-    .step p{
+    .point p{
       margin:0;
       font-size: 13px;
       color: rgba(255,255,255,.68);
@@ -547,15 +593,11 @@
     :root{
       --toast-bg0: rgba(17, 24, 35, 0.88);
       --toast-bg1: rgba(10, 11, 14, 0.92);
-
       --toast-text: rgba(255,255,255,0.96);
-
       --toast-stroke: rgba(255, 70, 84, 0.22);
       --toast-glow: rgba(255, 70, 84, 0.18);
-
       --toast-accentA: rgba(255, 70, 84, 1);
       --toast-accentB: rgba(255, 70, 84, 0.55);
-
       --ease-calm: cubic-bezier(.2,.9,.2,1);
       --ease-film: cubic-bezier(.16,1,.3,1);
     }
@@ -792,9 +834,10 @@
     @media (max-width: 980px){
       :root{ --cta-h: 92px; }
       .hero{ grid-template-columns: 1fr; }
-      .steps{ grid-template-columns: 1fr; }
-      .who{ grid-template-columns: 1fr; }
       .shot{ order: -1; }
+      .split{ grid-template-columns: 1fr; }
+      .points{ grid-template-columns: 1fr; }
+      .who{ grid-template-columns: 1fr; }
       .ctaNote{ max-width: 260px; }
     }
 
@@ -824,7 +867,7 @@
     }
 
     @media (prefers-reduced-motion: reduce){
-      .btn, .shot img, .step, .whoCard { transition: none; }
+      .btn, .shot img, .point, .whoCard { transition: none; }
       .toast, .toastMsg { transition: none; }
     }
   </style>
@@ -915,9 +958,14 @@
                 Join Discord
               </a>
             </div>
+
+            <div class="proof">
+              <span class="pDot"></span>
+              <span>Early build — join <a href="https://discord.gg/xXrMAWqKeA" target="_blank" rel="noopener">Discord</a> for updates + feedback.</span>
+            </div>
           </div>
 
-          <div class="shot">
+          <div class="shot" id="shot">
             <div class="frame">
               <img id="appShot" src="./app.png" alt="Tilt Buddy preview" />
             </div>
@@ -929,39 +977,55 @@
         </section>
 
         <div class="content">
+          <!-- ✅ MERGED SECTION -->
           <section class="section">
-            <h2 class="sectionTitle"><span class="dot"></span>What Tilt Buddy does</h2>
+            <h2 class="sectionTitle"><span class="dot"></span>What it does + how it works</h2>
 
-            <p class="introLine">
-              Tilt usually starts as a <b>physical + emotional reaction</b> — not a “thinking” problem.
-              Tilt Buddy gives you a quick, subtle reset right when tilt usually begins: <b>after a death</b>.
-            </p>
+            <div class="split">
+              <!-- left: text -->
+              <div class="copy">
+                <p>
+                  Tilt usually starts as a <b>physical + emotional reaction</b> — not a “thinking” problem.
+                  Tilt Buddy gives you a quick, subtle reset right when tilt usually begins: <b>after a death</b>.
+                </p>
+                <p>
+                  The prompts are not gameplay advice. They’re small actions (breathing, posture, eye focus, short pauses)
+                  that calm your nervous system and bring attention back to the present moment.
+                </p>
 
-            <ul class="bullets">
-              <li><span class="bDot"></span><span><b>Detects deaths</b> during gameplay and triggers at the exact moment emotions spike.</span></li>
-              <li><span class="bDot"></span><span>Shows a <b>short reset prompt</b> (breathing, posture, eye focus, brief pause) and fades fast.</span></li>
-              <li><span class="bDot"></span><span><b>No coaching</b>, no analysis, no stats — just a mental reset so you stay locked in.</span></li>
-            </ul>
-          </section>
-
-          <section class="section">
-            <h2 class="sectionTitle"><span class="dot"></span>How it works</h2>
-
-            <div class="steps">
-              <div class="step">
-                <div class="num">1</div>
-                <h3>Runs quietly</h3>
-                <p>Stays out of the way until it’s needed.</p>
+                <ul class="bullets">
+                  <li><span class="bDot"></span><span><b>Detects deaths</b> during gameplay and triggers at the exact moment emotions spike.</span></li>
+                  <li><span class="bDot"></span><span>Shows a <b>short reset prompt</b> and fades quickly so you stay in the round.</span></li>
+                  <li><span class="bDot"></span><span><b>No coaching</b>, no analysis, no stats — just a reset so you stay locked in.</span></li>
+                </ul>
               </div>
-              <div class="step">
-                <div class="num">2</div>
-                <h3>Death → reset prompt</h3>
-                <p>A short cue breaks the tilt loop and re-centers you.</p>
-              </div>
-              <div class="step">
-                <div class="num">3</div>
-                <h3>Back to the round</h3>
-                <p>Lightweight overlay, minimal distraction, disappears quickly.</p>
+
+              <!-- right: small key points -->
+              <div class="points" aria-label="Key points">
+                <div class="point">
+                  <h3>Triggers on death</h3>
+                  <p>Interruption at the exact moment tilt usually starts.</p>
+                </div>
+                <div class="point">
+                  <h3>Micro-resets</h3>
+                  <p>Breathing, posture, eye focus, short pause — nothing long.</p>
+                </div>
+                <div class="point">
+                  <h3>No coaching</h3>
+                  <p>No “play better” tips, no judgement — just re-center.</p>
+                </div>
+                <div class="point">
+                  <h3>No stat tracking</h3>
+                  <p>Doesn’t judge decisions or analyze performance.</p>
+                </div>
+                <div class="point">
+                  <h3>Runs quietly</h3>
+                  <p>Stays out of the way until it’s needed.</p>
+                </div>
+                <div class="point">
+                  <h3>Fades fast</h3>
+                  <p>Non-intrusive overlay that disappears quickly.</p>
+                </div>
               </div>
             </div>
           </section>
@@ -1052,6 +1116,41 @@
     appShot?.addEventListener("error", () => {
       appShot.alt = "Add your screenshot as app.png in the repo root.";
     });
+
+    // ✅ Parallax for screenshot (desktop only)
+    const shot = document.getElementById("shot");
+    const isTouch = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+
+    if (shot && !isTouch){
+      const img = shot.querySelector("img");
+      let raf = null;
+
+      function onMove(e){
+        const r = shot.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width;   // 0..1
+        const y = (e.clientY - r.top) / r.height;  // 0..1
+
+        const dx = (x - 0.5) * 10;  // px
+        const dy = (y - 0.5) * 10;  // px
+        const s = 1.008;
+
+        if (raf) cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          shot.style.setProperty("--px", dx.toFixed(2) + "px");
+          shot.style.setProperty("--py", dy.toFixed(2) + "px");
+          shot.style.setProperty("--ps", s);
+        });
+      }
+
+      function reset(){
+        shot.style.setProperty("--px", "0px");
+        shot.style.setProperty("--py", "0px");
+        shot.style.setProperty("--ps", 1);
+      }
+
+      shot.addEventListener("mousemove", onMove);
+      shot.addEventListener("mouseleave", reset);
+    }
 
     // Toast demo (every ~10s)
     const toast = document.getElementById("toast");
