@@ -6,7 +6,7 @@
   <title>Tilt Buddy — Mental Reset Overlay for Valorant</title>
   <meta name="description" content="Tilt Buddy is a lightweight mental reset overlay that interrupts tilt right after a death — helping you stay calm, focused, and locked in." />
 
-  <!-- Favicon (you said your file is favicon-32x32.png in the repo root) -->
+  <!-- Favicon -->
   <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="./favicon-32x32.png" />
 
@@ -14,51 +14,50 @@
     :root{
       --bg:#070a0f;
       --bg2:#0b0f18;
-      --card: rgba(255,255,255,.06);
-      --card2: rgba(255,255,255,.08);
-      --line: rgba(255,255,255,.10);
+
       --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.70);
-      --muted2: rgba(255,255,255,.55);
+      --muted: rgba(255,255,255,.68);
+      --muted2: rgba(255,255,255,.52);
+
+      --line: rgba(255,255,255,.10);
+      --card: rgba(255,255,255,.045);
+      --card2: rgba(255,255,255,.06);
+
       --accent:#ff3b4e;
       --accent2:#ff6b7a;
+      --blue: rgba(110,160,255,.16);
 
       --shadow: 0 18px 70px rgba(0,0,0,.65);
-      --shadow2: 0 10px 30px rgba(0,0,0,.45);
+      --shadow2: 0 12px 40px rgba(0,0,0,.50);
+
       --radius: 22px;
       --radius2: 16px;
 
-      --max: 1120px;
-      --pad: 22px;
-      --pad2: 16px;
+      --max: 1220px;
 
+      /* sticky cta */
       --cta-h: 86px;
     }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color: var(--text);
       background:
-        radial-gradient(900px 520px at 18% 8%, rgba(255,59,78,.26), transparent 60%),
-        radial-gradient(900px 520px at 82% 18%, rgba(120,160,255,.20), transparent 62%),
-        radial-gradient(900px 520px at 62% 88%, rgba(255,120,140,.12), transparent 60%),
+        radial-gradient(1200px 650px at 18% 10%, rgba(255,59,78,.22), transparent 55%),
+        radial-gradient(1000px 600px at 82% 14%, rgba(110,160,255,.18), transparent 58%),
+        radial-gradient(900px 520px at 55% 92%, rgba(255,120,140,.10), transparent 60%),
         linear-gradient(180deg, var(--bg), var(--bg2));
       overflow-x:hidden;
       padding-bottom: calc(var(--cta-h) + 26px);
     }
 
-    a{color:inherit}
-    .wrap{
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 34px 22px 28px;
-    }
+    a{ color:inherit; text-decoration:none; }
 
     /* subtle grain */
-    .grain:before{
+    body:before{
       content:"";
       position:fixed;
       inset:-20%;
@@ -66,81 +65,89 @@
       background-image:
         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E");
       mix-blend-mode: overlay;
-      opacity:.22;
+      opacity:.20;
       transform: translateZ(0);
     }
 
-    /* Header */
+    .wrap{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 34px 22px 28px;
+    }
+
+    /* Brand (more impact) */
     .brand{
       display:flex;
       align-items:center;
-      gap:12px;
-      margin-bottom: 18px;
+      gap:14px;
+      margin-bottom: 16px;
     }
     .brand img{
-      width:40px;height:40px;
-      border-radius: 12px;
-      box-shadow: 0 10px 26px rgba(0,0,0,.45);
+      width:44px;height:44px;
+      border-radius: 14px;
+      box-shadow: 0 14px 30px rgba(0,0,0,.55);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.25);
     }
-    .brand-title{
+    .brandTitle{
       display:flex;
       flex-direction:column;
-      line-height:1.05;
+      line-height: 1.06;
     }
-    .brand-title .name{
-      font-weight: 820;
-      letter-spacing:.06em;
+    .brandTitle .name{
+      font-weight: 900;
+      letter-spacing:.08em;
       text-transform: uppercase;
-      font-size: 14px;
+      font-size: 15px;
     }
-    .brand-title .sub{
-      margin-top:3px;
+    .brandTitle .sub{
+      margin-top:4px;
       font-size: 11px;
-      letter-spacing:.10em;
+      letter-spacing:.12em;
       text-transform: uppercase;
       color: var(--muted2);
     }
-    .brand-title .sub b{ color: rgba(255,255,255,.86); font-weight:750;}
-    .brand-title .sub .valo{ color: var(--accent2); font-weight:800;}
+    .brandTitle .sub b{ color: rgba(255,255,255,.86); font-weight:800;}
+    .brandTitle .sub .valo{ color: var(--accent2); font-weight:900;}
 
-    /* Main card */
+    /* Main panel (looks like a site, not an app window) */
     .panel{
       position:relative;
-      border-radius: 28px;
-      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,.09);
       background:
-        radial-gradient(900px 380px at 24% 5%, rgba(255,59,78,.16), transparent 62%),
-        radial-gradient(900px 420px at 86% 18%, rgba(110,160,255,.14), transparent 64%),
-        rgba(255,255,255,.035);
+        radial-gradient(1200px 520px at 22% 0%, rgba(255,59,78,.16), transparent 62%),
+        radial-gradient(1100px 520px at 86% 12%, rgba(110,160,255,.14), transparent 64%),
+        rgba(255,255,255,.03);
       box-shadow: var(--shadow);
-      padding: clamp(18px, 2.2vw, 28px);
       overflow:hidden;
     }
     .panel:after{
       content:"";
       position:absolute;
-      inset:-1px;
-      background: radial-gradient(700px 220px at 50% 0%, rgba(255,255,255,.10), transparent 60%);
+      inset:-2px;
+      background: radial-gradient(900px 260px at 50% -5%, rgba(255,255,255,.10), transparent 60%);
       pointer-events:none;
+      opacity:.9;
     }
 
-    /* HERO */
-    .hero{
+    .inner{
       position:relative;
+      z-index:1;
+      padding: clamp(18px, 2.2vw, 28px);
+    }
+
+    /* Hero layout */
+    .hero{
       display:grid;
-      grid-template-columns: 1.05fr .95fr;
+      grid-template-columns: 1.08fr .92fr;
       gap: 22px;
       align-items:center;
-      padding: 18px 4px 4px;
+      padding: 14px 6px 6px;
     }
 
-    .kicker{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom: 12px;
-    }
-    .pill{
+    .chips{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom: 12px; }
+    .chip{
       display:inline-flex;
       align-items:center;
       gap:8px;
@@ -151,8 +158,9 @@
       color: rgba(255,255,255,.78);
       font-size: 12px;
       letter-spacing:.02em;
+      user-select:none;
     }
-    .pill .dot{
+    .chip .dot{
       width:8px;height:8px;border-radius:50%;
       background: var(--accent);
       box-shadow: 0 0 0 4px rgba(255,59,78,.12);
@@ -160,52 +168,56 @@
 
     h1{
       margin: 0 0 8px;
-      font-size: clamp(36px, 5.2vw, 54px);
-      letter-spacing:-.02em;
-      line-height: 1.04;
+      font-size: clamp(42px, 5.2vw, 62px);
+      letter-spacing:-.03em;
+      line-height: 1.02;
     }
+
+    /* This is the text you requested: smaller than old headline */
     .tagline{
       margin: 0 0 12px;
       font-size: 15px;
-      color: rgba(255,255,255,.80);
-      max-width: 46ch;
+      color: rgba(255,255,255,.82);
+      max-width: 62ch;
     }
+
     .lead{
       margin: 0 0 18px;
       font-size: 14px;
       color: rgba(255,255,255,.66);
-      line-height: 1.55;
-      max-width: 62ch;
+      line-height: 1.58;
+      max-width: 70ch;
     }
 
     .actions{
       display:flex;
-      gap: 12px;
       flex-wrap:wrap;
+      gap: 12px;
       align-items:center;
     }
+
     .btn{
       cursor:pointer;
       display:inline-flex;
       align-items:center;
       justify-content:center;
       gap:10px;
-      padding: 13px 16px;
+      padding: 14px 18px; /* bigger buttons */
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.11);
       background: rgba(0,0,0,.22);
-      color: rgba(255,255,255,.90);
-      font-weight: 750;
+      color: rgba(255,255,255,.92);
+      font-weight: 820;
       letter-spacing:.02em;
-      text-decoration:none;
       box-shadow: var(--shadow2);
-      transition: transform .18s ease, background .18s ease, border-color .18s ease, filter .18s ease;
-      user-select:none;
+      transition: transform .18s ease, filter .18s ease, border-color .18s ease;
+      min-height: 46px;
       -webkit-tap-highlight-color: transparent;
-      min-height: 44px;
+      user-select:none;
     }
     .btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.16); }
-    .btn:active{ transform: translateY(0px) scale(.99); }
+    .btn:active{ transform: translateY(0) scale(.99); }
+
     .btn .dot{
       width:8px;height:8px;border-radius:50%;
       background: rgba(255,255,255,.25);
@@ -214,27 +226,26 @@
     .btn.primary{
       border-color: rgba(255,59,78,.35);
       background:
-        radial-gradient(120px 60px at 20% 30%, rgba(255,255,255,.10), transparent 60%),
+        radial-gradient(140px 70px at 20% 30%, rgba(255,255,255,.10), transparent 60%),
         linear-gradient(180deg, rgba(255,59,78,.26), rgba(255,59,78,.12));
-      box-shadow: 0 16px 50px rgba(255,59,78,.12), var(--shadow2);
+      box-shadow: 0 18px 56px rgba(255,59,78,.12), var(--shadow2);
     }
     .btn.primary .dot{
       background: var(--accent);
       box-shadow: 0 0 0 5px rgba(255,59,78,.12);
     }
-    .btn.primary:hover{ filter: brightness(1.05); }
+    .btn.primary:hover{ filter: brightness(1.06); }
 
-    /* Screenshot card */
+    /* Screenshot card (click to zoom) */
     .shot{
       position:relative;
       border-radius: 22px;
       border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.26);
+      background: rgba(0,0,0,.24);
       padding: 10px;
-      box-shadow: 0 24px 80px rgba(0,0,0,.60);
-      transform: translateZ(0);
+      box-shadow: 0 26px 88px rgba(0,0,0,.62);
     }
-    .shot .inner{
+    .shot .frame{
       border-radius: 16px;
       overflow:hidden;
       border: 1px solid rgba(255,255,255,.08);
@@ -248,11 +259,9 @@
       cursor: zoom-in;
       transition: transform .25s ease, filter .25s ease;
     }
-    .shot img:hover{
-      transform: scale(1.01);
-      filter: brightness(1.03);
-    }
-    .hint{
+    .shot img:hover{ transform: scale(1.01); filter: brightness(1.03); }
+
+    .shotHint{
       margin-top:8px;
       font-size: 12px;
       color: rgba(255,255,255,.55);
@@ -262,67 +271,67 @@
       padding: 0 4px 2px;
     }
 
-    /* Sections */
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
+    /* Content blocks (make center area less "boring") */
+    .content{
       margin-top: 18px;
-      position:relative;
-      z-index:1;
+      display:grid;
+      gap: 16px;
     }
 
     .section{
       border-top: 1px solid rgba(255,255,255,.08);
       padding-top: 16px;
     }
-    .section h2{
-      margin: 0 0 10px;
-      font-size: 18px;
-      letter-spacing:-.01em;
+    .sectionTitle{
       display:flex;
       align-items:center;
       gap:10px;
+      margin:0 0 10px;
+      font-size: 18px;
+      letter-spacing:-.01em;
     }
-    .section h2 .dot{
+    .sectionTitle .dot{
       width:10px;height:10px;border-radius:50%;
       background: var(--accent);
       box-shadow: 0 0 0 6px rgba(255,59,78,.10);
     }
 
+    /* "What it does" - single nice block + bullets */
     .callout{
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.04);
       border-radius: 16px;
       padding: 14px 14px;
-      color: rgba(255,255,255,.82);
-      line-height:1.55;
+      line-height: 1.58;
+      color: rgba(255,255,255,.80);
     }
-    .callout b{ color: rgba(255,255,255,.92); }
-    .list{
+    .callout b{ color: rgba(255,255,255,.94); }
+
+    .bullets{
       margin: 10px 0 0;
       padding: 0;
       list-style:none;
       display:grid;
       gap:10px;
     }
-    .li{
+    .bullets li{
       display:flex;
       gap:10px;
       align-items:flex-start;
       color: rgba(255,255,255,.70);
-      line-height:1.45;
+      line-height: 1.5;
       font-size: 14px;
     }
-    .li .dot{
+    .bullets .bDot{
       margin-top:6px;
       width:10px;height:10px;border-radius:50%;
       background: rgba(255,59,78,.55);
       box-shadow: 0 0 0 6px rgba(255,59,78,.08);
       flex: 0 0 auto;
     }
-    .li b{ color: rgba(255,255,255,.90); }
+    .bullets b{ color: rgba(255,255,255,.92); }
 
+    /* Steps (more visual) */
     .steps{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
@@ -332,64 +341,118 @@
     .step{
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(0,0,0,.22);
-      border-radius: 16px;
-      padding: 12px 12px;
-      min-height: 92px;
+      border-radius: 18px;
+      padding: 14px 14px;
+      min-height: 104px;
+      position:relative;
+      overflow:hidden;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
     }
-    .step .num{
+    .step:before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      background: radial-gradient(240px 120px at 12% 0%, rgba(255,59,78,.12), transparent 65%);
+      pointer-events:none;
+      opacity:.9;
+    }
+    .step:hover{ transform: translateY(-2px); border-color: rgba(255,255,255,.14); }
+
+    .num{
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      width: 30px;
-      height: 30px;
-      border-radius: 10px;
+      width: 32px; height: 32px;
+      border-radius: 12px;
       border: 1px solid rgba(255,59,78,.28);
       background: rgba(255,59,78,.10);
       color: rgba(255,255,255,.92);
-      font-weight: 800;
+      font-weight: 900;
       margin-bottom: 8px;
+      position:relative;
+      z-index:1;
     }
-    .step .t{
-      font-weight: 820;
-      margin: 0 0 4px;
+    .step h3{
+      margin:0 0 4px;
       font-size: 13px;
+      font-weight: 900;
+      position:relative;
+      z-index:1;
     }
-    .step .d{
+    .step p{
       margin:0;
       font-size: 13px;
       color: rgba(255,255,255,.68);
-      line-height:1.45;
+      line-height: 1.45;
+      position:relative;
+      z-index:1;
     }
 
+    /* Who it's for (bigger boxes) */
     .who{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
       margin-top: 10px;
     }
-    .card{
+    .whoCard{
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.04);
-      border-radius: 18px;
-      padding: 14px 14px;
-      min-height: 92px;
+      border-radius: 20px;
+      padding: 16px 16px;
+      min-height: 110px;
+      transition: transform .18s ease, border-color .18s ease;
+      position:relative;
+      overflow:hidden;
     }
-    .card h3{
-      margin:0 0 6px;
+    .whoCard:after{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      background:
+        radial-gradient(260px 120px at 90% 10%, rgba(110,160,255,.12), transparent 60%);
+      pointer-events:none;
+      opacity:.85;
+    }
+    .whoCard:hover{ transform: translateY(-2px); border-color: rgba(255,255,255,.14); }
+    .whoCard .k{
+      margin:0 0 8px;
       font-size: 12px;
       letter-spacing:.08em;
       text-transform: uppercase;
       color: rgba(255,255,255,.86);
+      font-weight: 900;
+      position:relative;
+      z-index:1;
     }
-    .card p{
+    .whoCard .d{
       margin:0;
       color: rgba(255,255,255,.68);
       font-size: 13px;
-      line-height:1.45;
+      line-height:1.48;
+      position:relative;
+      z-index:1;
     }
 
-    /* Sticky CTA bar (your “very nice” bar) */
-    .cta-bar{
+    /* Footer line */
+    .footer{
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+      margin-top: 18px;
+      color: rgba(255,255,255,.45);
+      font-size: 12px;
+      padding: 0 4px;
+    }
+    .footer a{
+      color: rgba(255,255,255,.62);
+      text-decoration:none;
+      border-bottom: 1px solid rgba(255,255,255,.18);
+    }
+    .footer a:hover{ border-bottom-color: rgba(255,255,255,.35); }
+
+    /* Sticky CTA bar (the sick one) */
+    .ctaBar{
       position: fixed;
       left: 50%;
       bottom: 14px;
@@ -408,58 +471,41 @@
       justify-content: space-between;
       gap: 12px;
       padding: 12px 14px;
-      z-index: 50;
+      z-index: 60;
       backdrop-filter: blur(10px);
     }
-    .cta-left{
+    .ctaLeft{
       display:flex;
       align-items:center;
       gap: 12px;
       min-width: 0;
     }
-    .cta-right{
+    .ctaRight{
       display:flex;
       align-items:center;
       gap: 10px;
       flex: 0 0 auto;
     }
-    .cta-note{
+    .ctaNote{
       color: rgba(255,255,255,.66);
       font-size: 12px;
       white-space: nowrap;
       overflow:hidden;
       text-overflow: ellipsis;
-      max-width: 420px;
+      max-width: 460px;
     }
-    .cta-label{
+    .ctaLabel{
       color: rgba(255,255,255,.58);
       font-size: 12px;
       margin-right: 6px;
       white-space: nowrap;
     }
-
     .btn.small{
-      padding: 11px 14px;
-      min-height: 42px;
+      padding: 12px 16px;
+      min-height: 44px;
       font-size: 13px;
+      font-weight: 850;
     }
-
-    /* Footer */
-    .footer{
-      display:flex;
-      justify-content: space-between;
-      align-items:center;
-      margin-top: 18px;
-      color: rgba(255,255,255,.45);
-      font-size: 12px;
-      padding: 0 4px;
-    }
-    .footer a{
-      color: rgba(255,255,255,.62);
-      text-decoration:none;
-      border-bottom: 1px solid rgba(255,255,255,.18);
-    }
-    .footer a:hover{ border-bottom-color: rgba(255,255,255,.35); }
 
     /* Lightbox */
     .lightbox{
@@ -474,21 +520,15 @@
       backdrop-filter: blur(6px);
     }
     .lightbox.open{ display:flex; }
-    .lightbox .box{
-      width: min(1100px, 100%);
+    .lbBox{
+      width: min(1120px, 100%);
       border-radius: 18px;
       border: 1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.35);
       box-shadow: 0 24px 90px rgba(0,0,0,.75);
       overflow:hidden;
     }
-    .lightbox img{
-      width:100%;
-      height:auto;
-      display:block;
-      cursor: zoom-out;
-    }
-    .lightbox .top{
+    .lbTop{
       display:flex;
       justify-content:space-between;
       align-items:center;
@@ -497,7 +537,7 @@
       color: rgba(255,255,255,.70);
       font-size: 12px;
     }
-    .x{
+    .lbClose{
       cursor:pointer;
       padding: 6px 10px;
       border-radius: 10px;
@@ -505,176 +545,519 @@
       background: rgba(255,255,255,.06);
       user-select:none;
     }
+    .lbImg{
+      width:100%;
+      height:auto;
+      display:block;
+      cursor: zoom-out;
+    }
+
+    /* ========= TOAST (from your in_game.html, adapted for website) ========= */
+    :root{
+      --valo: #ff4654;
+      --ink:  #111823;
+
+      --toast-bg0: rgba(17, 24, 35, 0.88);
+      --toast-bg1: rgba(10, 11, 14, 0.92);
+
+      --toast-text: rgba(255,255,255,0.96);
+      --toast-muted: rgba(255,255,255,0.74);
+
+      --toast-stroke: rgba(255, 70, 84, 0.22);
+      --toast-glow: rgba(255, 70, 84, 0.18);
+
+      --toast-accentA: rgba(255, 70, 84, 1);
+      --toast-accentB: rgba(255, 70, 84, 0.55);
+
+      --ease-calm: cubic-bezier(.2,.9,.2,1);
+      --ease-film: cubic-bezier(.16,1,.3,1);
+    }
+
+    /* Fixed top-right */
+    .toastDock{
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 80;
+      pointer-events: none; /* so it doesn't block clicks */
+    }
+    .toastWrap{
+      width: 392px;
+      height: 102px;
+      position: relative;
+      overflow: visible;
+    }
+
+    .toastSvg{ position:absolute; width:0; height:0; }
+
+    .toast{
+      pointer-events: none;
+      width:392px;
+      height:auto;
+      padding:10px 12px;
+      border-radius:18px;
+
+      color:var(--toast-text);
+      background:
+        radial-gradient(280px 180px at 84% 18%, rgba(255,70,84,0.10), transparent 62%),
+        linear-gradient(135deg, var(--toast-bg0), var(--toast-bg1));
+      border:1px solid rgba(255,255,255,0.10);
+
+      box-shadow:
+        0 14px 42px rgba(0,0,0,0.58),
+        0 0 0 1px rgba(255,255,255,0.05) inset,
+        0 0 0 1px var(--toast-stroke) inset,
+        0 0 24px var(--toast-glow);
+
+      opacity:0;
+      transform: translateY(-12px) scale(0.992);
+      filter: saturate(1.02);
+
+      display:flex;
+      gap:10px;
+      align-items:stretch;
+
+      position:relative;
+      overflow:hidden;
+
+      transition:
+        opacity 760ms var(--ease-calm),
+        transform 860ms var(--ease-film),
+        filter 900ms var(--ease-calm),
+        box-shadow 900ms var(--ease-calm);
+    }
+
+    .toast::before{
+      content:"";
+      position:absolute;
+      left:0; top:0; bottom:0;
+      width:4px;
+      background: linear-gradient(180deg, rgba(255,70,84,0.95), rgba(255,70,84,0.65));
+      box-shadow: 0 0 16px rgba(255,70,84,0.22);
+    }
+    .toast::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 22px 22px;
+      opacity:0.045;
+      pointer-events:none;
+    }
+
+    .toast.show{
+      opacity:1;
+      transform: translateY(0) scale(1);
+      filter: saturate(1.06);
+      box-shadow:
+        0 16px 46px rgba(0,0,0,0.62),
+        0 0 0 1px rgba(255,255,255,0.06) inset,
+        0 0 0 1px rgba(255,70,84,0.22) inset,
+        0 0 28px rgba(255,70,84,0.20);
+    }
+
+    .sweep{
+      position:absolute;
+      inset:-2px;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.07) 40%, transparent 75%);
+      opacity:0;
+      transform: translateX(-70%);
+      mix-blend-mode: screen;
+      pointer-events:none;
+    }
+    .toast.show .sweep{
+      animation: toastSweep 1400ms var(--ease-calm) 1;
+      animation-delay: 220ms;
+    }
+    @keyframes toastSweep{
+      0%   { opacity:0; transform: translateX(-70%); }
+      20%  { opacity:0.45; }
+      70%  { opacity:0.25; }
+      100% { opacity:0; transform: translateX(70%); }
+    }
+
+    .blob{
+      position:absolute;
+      right:-78px;
+      top:-72px;
+      width:180px;
+      height:180px;
+      border-radius:999px;
+      background: radial-gradient(circle at 35% 35%,
+        rgba(255,70,84,0.18),
+        rgba(17,24,35,0.12) 60%,
+        transparent 76%);
+      filter: url(#goo);
+      opacity:0.85;
+      pointer-events:none;
+      transform: translateZ(0);
+    }
+    .toast.show .blob{
+      animation: toastBlobFloat 12s ease-in-out infinite;
+      animation-delay: 420ms;
+    }
+    @keyframes toastBlobFloat{
+      0%   { transform: translate3d(0,0,0) scale(1); }
+      50%  { transform: translate3d(-5px,6px,0) scale(1.015); }
+      100% { transform: translate3d(0,0,0) scale(1); }
+    }
+
+    .toastAvatar{
+      width:34px;
+      height:34px;
+      border-radius:14px;
+      overflow:hidden;
+      flex:0 0 auto;
+      background: rgba(0,0,0,0.35);
+      border:1px solid rgba(255,255,255,0.10);
+      box-shadow:
+        0 10px 18px rgba(0,0,0,0.45),
+        0 0 0 1px rgba(255,70,84,0.12) inset,
+        0 0 16px rgba(255,70,84,0.10);
+      margin-top:1px;
+      position:relative;
+      z-index:3;
+    }
+    .toastAvatar img{ width:100%; height:100%; display:block; object-fit:cover; }
+
+    .toast.show .toastAvatar{
+      animation: toastLogoPulse 2.4s ease-in-out infinite;
+      animation-delay: 380ms;
+    }
+    @keyframes toastLogoPulse{
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    .toastContent{
+      flex:1 1 auto;
+      min-width:0;
+      position:relative;
+      z-index:2;
+      display:flex;
+      flex-direction:column;
+      padding-bottom:10px;
+    }
+
+    .toastTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding-left:2px;
+    }
+    .toastBrand{
+      font-size:10.5px;
+      font-weight:950;
+      letter-spacing:1.05px;
+      color: rgba(255,255,255,0.90);
+      text-transform: uppercase;
+    }
+    .toastBadge{
+      font-size:9.5px;
+      font-weight:950;
+      padding:3px 8px;
+      border-radius:999px;
+      background: rgba(255,70,84,0.12);
+      border:1px solid rgba(255,70,84,0.22);
+      color: rgba(255,235,240,0.96);
+      text-transform: uppercase;
+      letter-spacing:0.8px;
+      white-space:nowrap;
+    }
+
+    .toastMsgWrap{
+      padding-left:2px;
+      padding-right:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex:1 1 auto;
+      min-height:56px;
+      margin-top:4px;
+    }
+    .toastMsg{
+      font-size:14.5px;
+      line-height:1.38;
+      font-weight:860;
+      letter-spacing:0.2px;
+      color: rgba(255,255,255,0.97);
+      text-shadow: 0 1px 0 rgba(0,0,0,0.30);
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+      text-align:center;
+      max-width:304px;
+
+      opacity:0;
+      transform: translateY(8px);
+      transition: opacity 420ms var(--ease-calm), transform 520ms var(--ease-film);
+      transition-delay: 220ms;
+    }
+    .toast.show .toastMsg{
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    .toastBar{
+      position:absolute;
+      left:2px;
+      right:10px;
+      bottom:0;
+      height:7px;
+      border-radius:999px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.14), rgba(255,255,255,0.09));
+      overflow:hidden;
+      z-index:4;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.08) inset, 0 2px 8px rgba(255,70,84,0.12);
+      transition: box-shadow 900ms var(--ease-calm);
+    }
+    .toast.show .toastBar{
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.10) inset, 0 0 22px rgba(255,70,84,0.22);
+    }
+    .toastBar > div{
+      height:100%;
+      width:100%;
+      background: linear-gradient(90deg, var(--toast-accentA), var(--toast-accentB));
+      transform-origin:left center;
+      transform: scaleX(1);
+      border-radius:999px;
+      filter:saturate(1.15);
+      box-shadow: 0 0 20px rgba(255,70,84,0.22), 0 0 0 1px rgba(0,0,0,0.18) inset;
+      animation:none;
+    }
+    .run .toastBar > div{ animation: toastShrink linear forwards; }
+    @keyframes toastShrink{ from{transform:scaleX(1)} to{transform:scaleX(0)} }
+
+    /* type themes */
+    .t-death .toastBadge{ background: rgba(255, 80, 80, 0.12); border-color: rgba(255,80,80,0.22); }
+    .t-tilt  .toastBadge{ background: rgba(255, 190, 80, 0.12); border-color: rgba(255,190,80,0.22); }
+    .t-focus .toastBadge{ background: rgba(120, 190, 255, 0.10); border-color: rgba(120,190,255,0.18); }
+    .t-run   .toastBadge{ background: rgba(120, 255, 180, 0.10); border-color: rgba(120,255,180,0.18); }
 
     /* Responsive */
     @media (max-width: 980px){
       :root{ --cta-h: 92px; }
       .hero{ grid-template-columns: 1fr; }
-      .shot{ order: -1; }
-      .cta-note{ max-width: 240px; }
       .steps{ grid-template-columns: 1fr; }
       .who{ grid-template-columns: 1fr; }
+      .shot{ order: -1; }
+      .ctaNote{ max-width: 260px; }
     }
     @media (max-width: 520px){
       .wrap{ padding: 22px 14px 18px; }
-      .brand img{ width:38px; height:38px; }
-      .brand-title .name{ font-size: 13px; }
       .panel{ border-radius: 22px; }
-      .cta-bar{
+      .actions .btn{ width: 100%; }
+      body{ padding-bottom: 140px; }
+
+      /* CTA bar stacks */
+      .ctaBar{
         flex-direction: column;
         align-items: stretch;
         height: auto;
         gap: 10px;
       }
-      .cta-left{ justify-content: space-between; }
-      .cta-note{ max-width: 100%; white-space: normal; line-height: 1.35; }
-      body{ padding-bottom: 140px; }
-      .actions .btn{ width: 100%; }
+      .ctaLeft{ justify-content: space-between; }
+      .ctaNote{ max-width: 100%; white-space: normal; line-height: 1.35; }
+
+      /* Toast: move to top-center + scale down */
+      .toastDock{
+        right: 50%;
+        transform: translateX(50%);
+        top: 10px;
+      }
+      .toastWrap{ width: 340px; height: 102px; }
+      .toast{ width: 340px; }
+      .toastMsg{ max-width: 260px; }
     }
 
-    /* Reduced motion */
     @media (prefers-reduced-motion: reduce){
-      .btn, .shot img { transition: none; }
+      .btn, .shot img, .step, .whoCard { transition: none; }
+      .toast, .toastMsg { transition: none; }
     }
   </style>
 </head>
 
-<body class="grain">
+<body>
+  <!-- Toast SVG goo filter -->
+  <svg class="toastSvg" aria-hidden="true">
+    <filter id="goo">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur"></feGaussianBlur>
+      <feColorMatrix in="blur" mode="matrix"
+        values="1 0 0 0 0
+                0 1 0 0 0
+                0 0 1 0 0
+                0 0 0 18 -7" result="goo"></feColorMatrix>
+      <feComposite in="SourceGraphic" in2="goo" operator="atop"></feComposite>
+    </filter>
+  </svg>
+
+  <!-- Top-right in-game style toast (website demo) -->
+  <div class="toastDock" aria-hidden="true">
+    <div class="toastWrap">
+      <div class="toast" id="toast">
+        <div class="blob"></div>
+        <div class="sweep"></div>
+
+        <div class="toastAvatar">
+          <img src="./Icon.png" alt="">
+        </div>
+
+        <div class="toastContent">
+          <div class="toastTop">
+            <div class="toastBrand">TILT BUDDY</div>
+            <div class="toastBadge" id="toastBadge">FOCUS</div>
+          </div>
+
+          <div class="toastMsgWrap">
+            <div class="toastMsg" id="toastMsg">…</div>
+          </div>
+
+          <div class="toastBar">
+            <div id="toastBarFill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="wrap">
     <!-- Brand -->
     <div class="brand">
-      <!-- Use logo.png if you have it, otherwise the favicon -->
       <img src="./logo.png" onerror="this.onerror=null;this.src='./favicon-32x32.png';" alt="Tilt Buddy logo" />
-      <div class="brand-title">
+      <div class="brandTitle">
         <div class="name">TILT BUDDY</div>
         <div class="sub"><b>Mental reset assistant</b> for <span class="valo">VALORANT</span></div>
       </div>
     </div>
 
     <main class="panel">
-      <!-- HERO -->
-      <section class="hero">
-        <div>
-          <div class="kicker" aria-hidden="true">
-            <span class="pill"><span class="dot"></span> Competitive mental reset</span>
-            <span class="pill"><span class="dot"></span> After-death micro prompts</span>
-            <span class="pill"><span class="dot"></span> No coaching</span>
-          </div>
-
-          <h1>Tilt Buddy</h1>
-          <p class="tagline"><b>A lightweight mental reset overlay</b> to prevent tilt and keep you locked in.</p>
-          <p class="lead">
-            Tilt Buddy runs quietly in the background while you play. When the game detects a death, it shows a short,
-            practical reset prompt designed to interrupt emotional reactions, slow your tempo, and help you regain focus
-            before tilt starts to build.
-          </p>
-
-          <div class="actions">
-            <!-- TODO: replace this with your real Overwolf listing URL when you have it -->
-            <a class="btn primary" href="#" target="_blank" rel="noopener">
-              <span class="dot"></span>
-              Download for Overwolf
-            </a>
-
-            <a class="btn" href="https://discord.gg/xXrMAWqKeA" target="_blank" rel="noopener">
-              <span class="dot"></span>
-              Join Discord
-            </a>
-          </div>
-        </div>
-
-        <div class="shot" aria-label="Tilt Buddy preview">
-          <div class="inner">
-            <!-- Use app.png if it exists; otherwise you can rename your screenshot to app.png -->
-            <img id="appShot" src="./app.png" alt="Tilt Buddy overlay preview" />
-          </div>
-          <div class="hint">
-            <span>Click to zoom</span>
-            <span style="color: rgba(255,255,255,.45)">lightweight • non-intrusive</span>
-          </div>
-        </div>
-      </section>
-
-      <div class="grid">
-        <!-- WHY / WHAT IT DOES -->
-        <section class="section">
-          <h2><span class="dot"></span>What Tilt Buddy does</h2>
-
-          <div class="callout">
-            Tilt usually starts as a <b>physical + emotional reaction</b> — not a “thinking” problem.
-            Tilt Buddy gives you a quick, subtle reset right when tilt usually begins: <b>after a death</b>.
-          </div>
-
-          <ul class="list">
-            <li class="li"><span class="dot"></span><span><b>Detects deaths</b> during gameplay and triggers at the exact moment emotions spike.</span></li>
-            <li class="li"><span class="dot"></span><span>Shows a <b>short reset prompt</b> (breathing, posture, eye focus, brief pause) and fades fast.</span></li>
-            <li class="li"><span class="dot"></span><span><b>No coaching</b>, no analysis, no stat tracking — just a mental reset so you stay locked in.</span></li>
-          </ul>
-        </section>
-
-        <!-- HOW IT WORKS -->
-        <section class="section">
-          <h2><span class="dot"></span>How it works</h2>
-
-          <div class="steps">
-            <div class="step">
-              <div class="num">1</div>
-              <p class="t">You play normally</p>
-              <p class="d">Tilt Buddy runs quietly in the background while you focus on the round.</p>
+      <div class="inner">
+        <section class="hero">
+          <div>
+            <div class="chips" aria-hidden="true">
+              <span class="chip"><span class="dot"></span> Overwolf overlay</span>
+              <span class="chip"><span class="dot"></span> Micro-resets after deaths</span>
+              <span class="chip"><span class="dot"></span> No coaching</span>
             </div>
-            <div class="step">
-              <div class="num">2</div>
-              <p class="t">Death → reset cue</p>
-              <p class="d">A short on-screen prompt breaks the tilt loop and re-centers you.</p>
+
+            <h1>Tilt Buddy</h1>
+
+            <p class="tagline">
+              <b>A lightweight mental reset overlay</b> to prevent tilt and keep you locked in.
+            </p>
+
+            <p class="lead">
+              Tilt Buddy runs quietly in the background while you play. When the game detects a death, it shows a short,
+              practical reset prompt designed to interrupt emotional reactions, slow your tempo, and help you regain focus
+              before tilt starts to build.
+            </p>
+
+            <div class="actions">
+              <!-- Replace # with your Overwolf listing URL when ready -->
+              <a class="btn primary" href="#" target="_blank" rel="noopener">
+                <span class="dot"></span>
+                Download for Overwolf
+              </a>
+
+              <a class="btn" href="https://discord.gg/xXrMAWqKeA" target="_blank" rel="noopener">
+                <span class="dot"></span>
+                Join Discord
+              </a>
             </div>
-            <div class="step">
-              <div class="num">3</div>
-              <p class="t">Back to the round</p>
-              <p class="d">Lightweight overlay, minimal distraction — disappears quickly.</p>
+          </div>
+
+          <div class="shot">
+            <div class="frame">
+              <img id="appShot" src="./app.png" alt="Tilt Buddy preview" />
+            </div>
+            <div class="shotHint">
+              <span>Click to zoom</span>
+              <span style="color: rgba(255,255,255,.45)">lightweight • non-intrusive</span>
             </div>
           </div>
         </section>
 
-        <!-- WHO IT'S FOR -->
-        <section class="section">
-          <h2><span class="dot"></span>Who Tilt Buddy is for</h2>
+        <div class="content">
+          <section class="section">
+            <h2 class="sectionTitle"><span class="dot"></span>What Tilt Buddy does</h2>
 
-          <div class="who">
-            <div class="card">
-              <h3>Players who tilt after deaths</h3>
-              <p>Stop the spiral early — reset before frustration snowballs.</p>
+            <div class="callout">
+              Tilt usually starts as a <b>physical + emotional reaction</b> — not a “thinking” problem.
+              Tilt Buddy gives you a quick, subtle reset right when tilt usually begins: <b>after a death</b>.
             </div>
-            <div class="card">
-              <h3>Ranked grinders</h3>
-              <p>Long sessions are where small mental slips compound. Keep control.</p>
+
+            <ul class="bullets">
+              <li><span class="bDot"></span><span><b>Detects deaths</b> during gameplay and triggers at the exact moment emotions spike.</span></li>
+              <li><span class="bDot"></span><span>Shows a <b>short reset prompt</b> (breathing, posture, eye focus, brief pause) and fades fast.</span></li>
+              <li><span class="bDot"></span><span><b>No coaching</b>, no analysis, no stats — just a mental reset so you stay locked in.</span></li>
+            </ul>
+          </section>
+
+          <section class="section">
+            <h2 class="sectionTitle"><span class="dot"></span>How it works</h2>
+
+            <div class="steps">
+              <div class="step">
+                <div class="num">1</div>
+                <h3>Runs quietly</h3>
+                <p>Stays out of the way until it’s needed.</p>
+              </div>
+              <div class="step">
+                <div class="num">2</div>
+                <h3>Death → reset prompt</h3>
+                <p>A short cue breaks the tilt loop and re-centers you.</p>
+              </div>
+              <div class="step">
+                <div class="num">3</div>
+                <h3>Back to the round</h3>
+                <p>Lightweight overlay, minimal distraction, disappears quickly.</p>
+              </div>
             </div>
-            <div class="card">
-              <h3>Competitive players under pressure</h3>
-              <p>Focus + composure matter. Stay stable — without “play better” advice.</p>
+          </section>
+
+          <section class="section">
+            <h2 class="sectionTitle"><span class="dot"></span>Who Tilt Buddy is for</h2>
+
+            <div class="who">
+              <div class="whoCard">
+                <div class="k">Players who tilt after deaths</div>
+                <p class="d">Stop the spiral early — reset before frustration snowballs.</p>
+              </div>
+              <div class="whoCard">
+                <div class="k">Ranked grinders</div>
+                <p class="d">Long sessions are where small mental slips compound. Keep control.</p>
+              </div>
+              <div class="whoCard">
+                <div class="k">Competitive players under pressure</div>
+                <p class="d">Focus + composure matter. Stay stable — without “play better” advice.</p>
+              </div>
             </div>
+          </section>
+
+          <div class="footer">
+            <span>© <span id="year"></span> Tilt Buddy</span>
+            <span><a href="https://discord.gg/xXrMAWqKeA" target="_blank" rel="noopener">Discord</a></span>
           </div>
-        </section>
-
-        <div class="footer">
-          <span>© <span id="year"></span> Tilt Buddy</span>
-          <span><a href="https://discord.gg/xXrMAWqKeA" target="_blank" rel="noopener">Discord</a></span>
         </div>
       </div>
     </main>
   </div>
 
-  <!-- Sticky CTA bar (the one you liked) -->
-  <div class="cta-bar" role="region" aria-label="Quick actions">
-    <div class="cta-left">
+  <!-- Sticky CTA bar -->
+  <div class="ctaBar" role="region" aria-label="Quick actions">
+    <div class="ctaLeft">
       <a class="btn primary small" href="#" target="_blank" rel="noopener">
         <span class="dot"></span>
         Download
       </a>
-      <div class="cta-note">Overwolf overlay — instant micro-resets after deaths.</div>
+      <div class="ctaNote">Overwolf overlay — instant micro-resets after deaths.</div>
     </div>
 
-    <div class="cta-right">
-      <div class="cta-label">Support / Contact</div>
+    <div class="ctaRight">
+      <div class="ctaLabel">Support / Contact</div>
       <a class="btn small" href="https://discord.gg/xXrMAWqKeA" target="_blank" rel="noopener">
         <span class="dot"></span>
         Join Discord
@@ -682,26 +1065,26 @@
     </div>
   </div>
 
-  <!-- Lightbox for screenshot -->
+  <!-- Lightbox -->
   <div class="lightbox" id="lightbox" aria-hidden="true">
-    <div class="box">
-      <div class="top">
+    <div class="lbBox">
+      <div class="lbTop">
         <span>Tilt Buddy preview</span>
-        <span class="x" id="closeLb">Close</span>
+        <span class="lbClose" id="lbClose">Close</span>
       </div>
-      <img id="lbImg" src="" alt="Tilt Buddy preview (zoomed)" />
+      <img class="lbImg" id="lbImg" src="" alt="Tilt Buddy preview (zoomed)" />
     </div>
   </div>
 
   <script>
-    // Year
+    // footer year
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Screenshot zoom (same page, no new tab)
+    // lightbox zoom
     const appShot = document.getElementById("appShot");
     const lb = document.getElementById("lightbox");
     const lbImg = document.getElementById("lbImg");
-    const closeLb = document.getElementById("closeLb");
+    const lbClose = document.getElementById("lbClose");
 
     function openLb(src){
       lbImg.src = src;
@@ -709,7 +1092,7 @@
       lb.setAttribute("aria-hidden","false");
       document.body.style.overflow = "hidden";
     }
-    function hideLb(){
+    function closeLbFn(){
       lb.classList.remove("open");
       lb.setAttribute("aria-hidden","true");
       document.body.style.overflow = "";
@@ -717,14 +1100,77 @@
     }
 
     appShot?.addEventListener("click", () => openLb(appShot.src));
-    closeLb?.addEventListener("click", hideLb);
-    lb?.addEventListener("click", (e) => { if(e.target === lb) hideLb(); });
-    window.addEventListener("keydown", (e) => { if(e.key === "Escape") hideLb(); });
+    lbClose?.addEventListener("click", closeLbFn);
+    lb?.addEventListener("click", (e) => { if(e.target === lb) closeLbFn(); });
+    window.addEventListener("keydown", (e) => { if(e.key === "Escape") closeLbFn(); });
 
-    // If app.png is missing, fail gracefully (optional)
     appShot?.addEventListener("error", () => {
       appShot.alt = "Add your screenshot as app.png in the repo root.";
     });
+
+    // ========= Toast demo (every ~10s) =========
+    const toast = document.getElementById("toast");
+    const toastBadge = document.getElementById("toastBadge");
+    const toastMsg = document.getElementById("toastMsg");
+    const toastBarFill = document.getElementById("toastBarFill");
+
+    function hasWord(hay, needle){
+      hay = String(hay || "").toLowerCase();
+      needle = String(needle || "").toLowerCase();
+      return hay.indexOf(needle) !== -1;
+    }
+
+    function setTypeClass(type){
+      toast.classList.remove("t-death","t-tilt","t-focus","t-run");
+      const t = String(type || "FOCUS").toLowerCase();
+      if (hasWord(t, "death")) toast.classList.add("t-death");
+      else if (hasWord(t, "tilt")) toast.classList.add("t-tilt");
+      else if (hasWord(t, "run")) toast.classList.add("t-run");
+      else toast.classList.add("t-focus");
+    }
+
+    function showToast(text, type, durationMs){
+      toastMsg.textContent = text || "…";
+      toastBadge.textContent = String(type || "FOCUS").toUpperCase();
+      setTypeClass(type);
+
+      toast.classList.remove("run");
+      toastBarFill.style.animation = "none";
+      toastBarFill.offsetHeight; // reflow
+      toastBarFill.style.animation = "";
+
+      const d = Number(durationMs || 6500);
+      toastBarFill.style.animationDuration = (d/1000).toFixed(2) + "s";
+      toast.classList.add("run");
+
+      toast.classList.add("show");
+      window.setTimeout(() => toast.classList.remove("show"), d);
+    }
+
+    // Your rotating message list (first one: RUNNING)
+    const TOASTS = [
+      { type: "RUNNING", text: "Tilt Buddy: RUNNING ✓", durationMs: 5200 },
+      { type: "FOCUS", text: "Long exhale. Shoulders down.", durationMs: 6500 },
+      { type: "FOCUS", text: "Take your hand off the mouse. Relax.", durationMs: 6500 },
+      { type: "FOCUS", text: "Two short inhales. One long exhale.", durationMs: 6500 },
+      { type: "TILT",  text: "Reset tempo. Next round, clean decision.", durationMs: 6500 },
+      { type: "FOCUS", text: "Check posture. Jaw unclench.", durationMs: 6500 },
+      { type: "FOCUS", text: "Look 20 feet away for 20 seconds.", durationMs: 6500 },
+      { type: "FOCUS", text: "Drink water. Reset focus.", durationMs: 6500 },
+      { type: "DEATH", text: "Death → reset: exhale longer than inhale.", durationMs: 6500 }
+    ];
+
+    let idx = 0;
+
+    function cycleToast(){
+      const t = TOASTS[idx % TOASTS.length];
+      showToast(t.text, t.type, t.durationMs);
+      idx++;
+    }
+
+    // start: quick running toast, then every ~10s
+    cycleToast();
+    setInterval(cycleToast, 10000);
   </script>
 </body>
 </html>
