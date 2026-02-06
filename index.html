@@ -34,6 +34,8 @@
       --max: 1240px;
 
       --cta-h: 86px;
+
+      --ease: cubic-bezier(.16,1,.3,1);
     }
 
     *{ box-sizing:border-box; }
@@ -44,9 +46,9 @@
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color: var(--text);
       background:
-        radial-gradient(1100px 620px at 18% 10%, rgba(255,59,78,.14), transparent 62%),
-        radial-gradient(1100px 620px at 82% 16%, rgba(110,160,255,.10), transparent 64%),
-        radial-gradient(900px 500px at 50% 100%, rgba(255,120,140,.06), transparent 60%),
+        radial-gradient(1200px 700px at 18% 12%, rgba(255,59,78,.13), transparent 62%),
+        radial-gradient(1200px 700px at 82% 16%, rgba(110,160,255,.10), transparent 66%),
+        radial-gradient(900px 520px at 50% 100%, rgba(255,120,140,.06), transparent 62%),
         linear-gradient(180deg, var(--bg), var(--bg2));
       overflow-x:hidden;
       padding-bottom: calc(var(--cta-h) + 26px);
@@ -69,7 +71,7 @@
     .wrap{
       max-width: var(--max);
       margin: 0 auto;
-      padding: 22px 22px 28px;
+      padding: 20px 22px 28px;
     }
 
     /* Brand */
@@ -77,10 +79,10 @@
       display:flex;
       align-items:center;
       gap:14px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .brand img{
-      width:44px;height:44px;
+      width:46px;height:46px;
       border-radius: 14px;
       box-shadow: 0 14px 30px rgba(0,0,0,.55);
       border: 1px solid rgba(255,255,255,.10);
@@ -93,7 +95,7 @@
     }
     .brandTitle .name{
       font-weight: 900;
-      letter-spacing:.08em;
+      letter-spacing:.09em;
       text-transform: uppercase;
       font-size: 15px;
     }
@@ -136,12 +138,12 @@
     .hero{
       display:grid;
       grid-template-columns: 1.06fr .94fr;
-      gap: 22px;
-      align-items:center;
-      padding: 8px 6px 6px;
+      gap: 18px;
+      align-items:start;
+      padding: 4px 6px 4px;
     }
 
-    .chips{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom: 12px; }
+    .chips{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom: 8px; }
     .chip{
       display:inline-flex;
       align-items:center;
@@ -149,7 +151,7 @@
       padding: 8px 10px;
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.22);
+      background: rgba(0,0,0,.20);
       color: rgba(255,255,255,.78);
       font-size: 12px;
       letter-spacing:.02em;
@@ -162,21 +164,21 @@
     }
 
     h1{
-      margin: 0 0 8px;
+      margin: 0 0 6px;
       font-size: clamp(44px, 5vw, 62px);
       letter-spacing:-.03em;
       line-height: 1.02;
     }
 
     .tagline{
-      margin: 0 0 12px;
+      margin: 0 0 10px;
       font-size: 15px;
       color: rgba(255,255,255,.84);
       max-width: 66ch;
     }
 
     .lead{
-      margin: 0 0 14px;
+      margin: 0 0 12px;
       font-size: 14px;
       color: rgba(255,255,255,.66);
       line-height: 1.58;
@@ -188,7 +190,7 @@
       flex-wrap:wrap;
       gap: 12px;
       align-items:center;
-      margin-bottom: 10px;
+      margin-bottom: 6px; /* ✅ tighter (moves proof up visually) */
     }
 
     .btn{
@@ -197,16 +199,16 @@
       align-items:center;
       justify-content:center;
       gap:10px;
-      padding: 15px 20px;
+      padding: 16px 22px;   /* ✅ slightly bigger buttons */
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,.11);
       background: rgba(0,0,0,.22);
       color: rgba(255,255,255,.92);
-      font-weight: 820;
+      font-weight: 850;
       letter-spacing:.02em;
       box-shadow: var(--shadow2);
-      transition: transform .18s ease, filter .18s ease, border-color .18s ease;
-      min-height: 48px;
+      transition: transform .18s var(--ease), filter .18s var(--ease), border-color .18s var(--ease);
+      min-height: 50px;
       -webkit-tap-highlight-color: transparent;
       user-select:none;
     }
@@ -231,7 +233,7 @@
     }
     .btn.primary:hover{ filter: brightness(1.06); }
 
-    /* ✅ mini social proof (non-cringe) */
+    /* mini social proof */
     .proof{
       display:flex;
       align-items:center;
@@ -239,6 +241,7 @@
       color: rgba(255,255,255,.60);
       font-size: 12.5px;
       line-height: 1.35;
+      margin-top: 2px; /* ✅ nudged up */
     }
     .proof .pDot{
       width:10px;height:10px;border-radius:50%;
@@ -262,7 +265,6 @@
       box-shadow: 0 26px 88px rgba(0,0,0,.62);
       transform: translateZ(0);
     }
-    /* subtle hover glow ring */
     .shot:before{
       content:"";
       position:absolute;
@@ -273,7 +275,7 @@
         radial-gradient(340px 220px at 85% 15%, rgba(110,160,255,.12), transparent 64%);
       opacity: 0;
       pointer-events:none;
-      transition: opacity .25s ease;
+      transition: opacity .25s var(--ease);
     }
     .shot:hover:before{ opacity: 1; }
 
@@ -284,7 +286,7 @@
       background: rgba(0,0,0,.22);
       transform: translateZ(0);
       box-shadow: 0 12px 34px rgba(0,0,0,.55);
-      transition: border-color .25s ease, box-shadow .25s ease;
+      transition: border-color .25s var(--ease), box-shadow .25s var(--ease);
     }
     .shot:hover .frame{
       border-color: rgba(255,255,255,.12);
@@ -297,7 +299,7 @@
       border-radius: 16px;
       cursor: zoom-in;
       transform: translate3d(var(--px,0), var(--py,0), 0) scale(var(--ps,1));
-      transition: transform .18s ease, filter .25s ease;
+      transition: transform .18s var(--ease), filter .25s var(--ease);
       will-change: transform;
     }
     .shot:hover img{ filter: brightness(1.03); }
@@ -313,14 +315,14 @@
     }
 
     .content{
-      margin-top: 18px;
+      margin-top: 14px;
       display:grid;
-      gap: 16px;
+      gap: 14px;
     }
 
     .section{
       border-top: 1px solid rgba(255,255,255,.08);
-      padding-top: 16px;
+      padding-top: 14px;
     }
 
     .sectionTitle{
@@ -337,13 +339,15 @@
       box-shadow: 0 0 0 6px rgba(255,59,78,.10);
     }
 
-    /* ✅ merged section layout (left text, right key points) */
+    /* ✅ merged section layout (cleaner) */
     .split{
       display:grid;
-      grid-template-columns: 1.05fr .95fr;
+      grid-template-columns: 1.08fr .92fr;
       gap: 14px;
       align-items:start;
     }
+
+    /* left column */
     .copy{
       border: 1px solid rgba(255,255,255,.08);
       background: rgba(0,0,0,.18);
@@ -383,49 +387,69 @@
     }
     .bullets b{ color: rgba(255,255,255,.92); }
 
-    .points{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .point{
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      border-radius: 18px;
+    /* ✅ right column = compact key points (NOT big boxes) */
+    .keypoints{
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.14);
+      border-radius: 20px;
       padding: 12px 12px;
-      min-height: 84px;
+      display:grid;
+      gap: 10px;
+    }
+    .kp{
+      display:flex;
+      gap: 10px;
+      align-items:flex-start;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
       position:relative;
       overflow:hidden;
-      transition: transform .18s ease, border-color .18s ease;
+      transition: transform .18s var(--ease), border-color .18s var(--ease), background .18s var(--ease);
     }
-    .point:before{
+    .kp:before{
       content:"";
       position:absolute;
       inset:-1px;
       background:
-        radial-gradient(220px 120px at 18% 0%, rgba(255,59,78,.10), transparent 68%),
-        radial-gradient(220px 120px at 92% 0%, rgba(110,160,255,.10), transparent 70%);
+        radial-gradient(240px 120px at 16% 0%, rgba(255,59,78,.10), transparent 70%),
+        radial-gradient(240px 120px at 90% 0%, rgba(110,160,255,.10), transparent 72%);
+      opacity:.85;
       pointer-events:none;
-      opacity:.9;
     }
-    .point:hover{ transform: translateY(-2px); border-color: rgba(255,255,255,.14); }
-    .point h3{
-      margin:0 0 6px;
+    .kp:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+    }
+    .kpDot{
+      width:10px;height:10px;border-radius:50%;
+      background: rgba(255,59,78,.72);
+      box-shadow: 0 0 0 7px rgba(255,59,78,.08);
+      margin-top: 5px;
+      flex: 0 0 auto;
+      position:relative;
+      z-index:1;
+    }
+    .kpText{
+      min-width:0;
+      position:relative;
+      z-index:1;
+    }
+    .kpText .k{
       font-size: 12px;
+      font-weight: 900;
       letter-spacing:.08em;
       text-transform: uppercase;
       color: rgba(255,255,255,.86);
-      font-weight: 900;
-      position:relative;
-      z-index:1;
+      margin: 0 0 4px;
     }
-    .point p{
+    .kpText .d{
       margin:0;
       font-size: 13px;
       color: rgba(255,255,255,.68);
-      line-height: 1.45;
-      position:relative;
-      z-index:1;
+      line-height: 1.42;
     }
 
     .who{
@@ -440,7 +464,7 @@
       border-radius: 20px;
       padding: 16px 16px;
       min-height: 110px;
-      transition: transform .18s ease, border-color .18s ease;
+      transition: transform .18s var(--ease), border-color .18s var(--ease);
       position:relative;
       overflow:hidden;
     }
@@ -476,7 +500,7 @@
       display:flex;
       justify-content: space-between;
       align-items:center;
-      margin-top: 18px;
+      margin-top: 16px;
       color: rgba(255,255,255,.45);
       font-size: 12px;
       padding: 0 4px;
@@ -541,7 +565,7 @@
       padding: 12px 16px;
       min-height: 44px;
       font-size: 13px;
-      font-weight: 850;
+      font-weight: 900;
     }
 
     /* Lightbox */
@@ -615,7 +639,6 @@
       position: relative;
       overflow: visible;
     }
-
     .toastSvg{ position:absolute; width:0; height:0; }
 
     .toast{
@@ -836,7 +859,6 @@
       .hero{ grid-template-columns: 1fr; }
       .shot{ order: -1; }
       .split{ grid-template-columns: 1fr; }
-      .points{ grid-template-columns: 1fr; }
       .who{ grid-template-columns: 1fr; }
       .ctaNote{ max-width: 260px; }
     }
@@ -844,6 +866,10 @@
     @media (max-width: 520px){
       .wrap{ padding: 18px 14px 18px; }
       .panel{ border-radius: 22px; }
+
+      h1{ font-size: 44px; }
+      .lead{ font-size: 13.5px; }
+
       .actions .btn{ width: 100%; }
       body{ padding-bottom: 140px; }
 
@@ -867,7 +893,7 @@
     }
 
     @media (prefers-reduced-motion: reduce){
-      .btn, .shot img, .point, .whoCard { transition: none; }
+      .btn, .shot img, .kp, .whoCard { transition: none; }
       .toast, .toastMsg { transition: none; }
     }
   </style>
@@ -977,12 +1003,10 @@
         </section>
 
         <div class="content">
-          <!-- ✅ MERGED SECTION -->
           <section class="section">
             <h2 class="sectionTitle"><span class="dot"></span>What it does + how it works</h2>
 
             <div class="split">
-              <!-- left: text -->
               <div class="copy">
                 <p>
                   Tilt usually starts as a <b>physical + emotional reaction</b> — not a “thinking” problem.
@@ -1000,31 +1024,53 @@
                 </ul>
               </div>
 
-              <!-- right: small key points -->
-              <div class="points" aria-label="Key points">
-                <div class="point">
-                  <h3>Triggers on death</h3>
-                  <p>Interruption at the exact moment tilt usually starts.</p>
+              <div class="keypoints" aria-label="Key points">
+                <div class="kp">
+                  <span class="kpDot"></span>
+                  <div class="kpText">
+                    <p class="k">Triggers on death</p>
+                    <p class="d">Interrupts the tilt loop at the moment it usually starts.</p>
+                  </div>
                 </div>
-                <div class="point">
-                  <h3>Micro-resets</h3>
-                  <p>Breathing, posture, eye focus, short pause — nothing long.</p>
+
+                <div class="kp">
+                  <span class="kpDot"></span>
+                  <div class="kpText">
+                    <p class="k">Micro-resets</p>
+                    <p class="d">Breathing, posture, eye focus, short pause — nothing long.</p>
+                  </div>
                 </div>
-                <div class="point">
-                  <h3>No coaching</h3>
-                  <p>No “play better” tips, no judgement — just re-center.</p>
+
+                <div class="kp">
+                  <span class="kpDot"></span>
+                  <div class="kpText">
+                    <p class="k">No coaching</p>
+                    <p class="d">No “play better” tips, no judgement — just re-center.</p>
+                  </div>
                 </div>
-                <div class="point">
-                  <h3>No stat tracking</h3>
-                  <p>Doesn’t judge decisions or analyze performance.</p>
+
+                <div class="kp">
+                  <span class="kpDot"></span>
+                  <div class="kpText">
+                    <p class="k">No stat tracking</p>
+                    <p class="d">Doesn’t analyze performance or judge decisions.</p>
+                  </div>
                 </div>
-                <div class="point">
-                  <h3>Runs quietly</h3>
-                  <p>Stays out of the way until it’s needed.</p>
+
+                <div class="kp">
+                  <span class="kpDot"></span>
+                  <div class="kpText">
+                    <p class="k">Runs quietly</p>
+                    <p class="d">Stays out of the way until it’s needed.</p>
+                  </div>
                 </div>
-                <div class="point">
-                  <h3>Fades fast</h3>
-                  <p>Non-intrusive overlay that disappears quickly.</p>
+
+                <div class="kp">
+                  <span class="kpDot"></span>
+                  <div class="kpText">
+                    <p class="k">Fades fast</p>
+                    <p class="d">Non-intrusive overlay that disappears quickly.</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1122,16 +1168,15 @@
     const isTouch = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
 
     if (shot && !isTouch){
-      const img = shot.querySelector("img");
       let raf = null;
 
       function onMove(e){
         const r = shot.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width;   // 0..1
-        const y = (e.clientY - r.top) / r.height;  // 0..1
+        const x = (e.clientX - r.left) / r.width;
+        const y = (e.clientY - r.top) / r.height;
 
-        const dx = (x - 0.5) * 10;  // px
-        const dy = (y - 0.5) * 10;  // px
+        const dx = (x - 0.5) * 10;
+        const dy = (y - 0.5) * 10;
         const s = 1.008;
 
         if (raf) cancelAnimationFrame(raf);
@@ -1180,7 +1225,7 @@
 
       toast.classList.remove("run");
       toastBarFill.style.animation = "none";
-      toastBarFill.offsetHeight;
+      toastBarFill.offsetHeight; // reflow
       toastBarFill.style.animation = "";
 
       const d = Number(durationMs || 6500);
