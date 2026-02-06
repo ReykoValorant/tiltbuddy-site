@@ -25,15 +25,12 @@
 
       --accent:#ff3b4e;
       --accent2:#ff6b7a;
-      --blue: rgba(110,160,255,.16);
 
       --shadow: 0 18px 70px rgba(0,0,0,.65);
       --shadow2: 0 12px 40px rgba(0,0,0,.50);
 
       --radius: 22px;
-      --radius2: 16px;
-
-      --max: 1220px;
+      --max: 1240px;
 
       /* sticky cta */
       --cta-h: 86px;
@@ -41,14 +38,16 @@
 
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
+
+    /* ✅ Smoother background: less “red band”, more blended */
     body{
       margin:0;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color: var(--text);
       background:
-        radial-gradient(1200px 650px at 18% 10%, rgba(255,59,78,.22), transparent 55%),
-        radial-gradient(1000px 600px at 82% 14%, rgba(110,160,255,.18), transparent 58%),
-        radial-gradient(900px 520px at 55% 92%, rgba(255,120,140,.10), transparent 60%),
+        radial-gradient(1100px 620px at 18% 10%, rgba(255,59,78,.14), transparent 62%),
+        radial-gradient(1100px 620px at 82% 16%, rgba(110,160,255,.10), transparent 64%),
+        radial-gradient(900px 500px at 50% 100%, rgba(255,120,140,.06), transparent 60%),
         linear-gradient(180deg, var(--bg), var(--bg2));
       overflow-x:hidden;
       padding-bottom: calc(var(--cta-h) + 26px);
@@ -65,22 +64,23 @@
       background-image:
         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E");
       mix-blend-mode: overlay;
-      opacity:.20;
+      opacity:.18;
       transform: translateZ(0);
     }
 
+    /* ✅ Move content up: less top padding */
     .wrap{
       max-width: var(--max);
       margin: 0 auto;
-      padding: 34px 22px 28px;
+      padding: 22px 22px 28px;
     }
 
-    /* Brand (more impact) */
+    /* Brand */
     .brand{
       display:flex;
       align-items:center;
       gap:14px;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
     .brand img{
       width:44px;height:44px;
@@ -110,14 +110,14 @@
     .brandTitle .sub b{ color: rgba(255,255,255,.86); font-weight:800;}
     .brandTitle .sub .valo{ color: var(--accent2); font-weight:900;}
 
-    /* Main panel (looks like a site, not an app window) */
+    /* Panel */
     .panel{
       position:relative;
       border-radius: 30px;
       border: 1px solid rgba(255,255,255,.09);
+      /* ✅ smoother panel background, less left/right “stripe” */
       background:
-        radial-gradient(1200px 520px at 22% 0%, rgba(255,59,78,.16), transparent 62%),
-        radial-gradient(1100px 520px at 86% 12%, rgba(110,160,255,.14), transparent 64%),
+        radial-gradient(900px 420px at 50% -8%, rgba(255,255,255,.08), transparent 62%),
         rgba(255,255,255,.03);
       box-shadow: var(--shadow);
       overflow:hidden;
@@ -126,24 +126,24 @@
       content:"";
       position:absolute;
       inset:-2px;
-      background: radial-gradient(900px 260px at 50% -5%, rgba(255,255,255,.10), transparent 60%);
+      background: radial-gradient(900px 320px at 50% -12%, rgba(255,255,255,.10), transparent 60%);
       pointer-events:none;
-      opacity:.9;
+      opacity:.85;
     }
 
+    /* ✅ reduce inner padding so hero sits higher */
     .inner{
       position:relative;
       z-index:1;
-      padding: clamp(18px, 2.2vw, 28px);
+      padding: clamp(16px, 2vw, 24px);
     }
 
-    /* Hero layout */
     .hero{
       display:grid;
       grid-template-columns: 1.08fr .92fr;
       gap: 22px;
       align-items:center;
-      padding: 14px 6px 6px;
+      padding: 8px 6px 6px;
     }
 
     .chips{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom: 12px; }
@@ -168,17 +168,16 @@
 
     h1{
       margin: 0 0 8px;
-      font-size: clamp(42px, 5.2vw, 62px);
+      font-size: clamp(44px, 5vw, 62px);
       letter-spacing:-.03em;
       line-height: 1.02;
     }
 
-    /* This is the text you requested: smaller than old headline */
     .tagline{
       margin: 0 0 12px;
       font-size: 15px;
-      color: rgba(255,255,255,.82);
-      max-width: 62ch;
+      color: rgba(255,255,255,.84);
+      max-width: 66ch;
     }
 
     .lead{
@@ -186,7 +185,7 @@
       font-size: 14px;
       color: rgba(255,255,255,.66);
       line-height: 1.58;
-      max-width: 70ch;
+      max-width: 74ch;
     }
 
     .actions{
@@ -202,7 +201,7 @@
       align-items:center;
       justify-content:center;
       gap:10px;
-      padding: 14px 18px; /* bigger buttons */
+      padding: 15px 20px;
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,.11);
       background: rgba(0,0,0,.22);
@@ -211,7 +210,7 @@
       letter-spacing:.02em;
       box-shadow: var(--shadow2);
       transition: transform .18s ease, filter .18s ease, border-color .18s ease;
-      min-height: 46px;
+      min-height: 48px;
       -webkit-tap-highlight-color: transparent;
       user-select:none;
     }
@@ -236,7 +235,6 @@
     }
     .btn.primary:hover{ filter: brightness(1.06); }
 
-    /* Screenshot card (click to zoom) */
     .shot{
       position:relative;
       border-radius: 22px;
@@ -271,7 +269,6 @@
       padding: 0 4px 2px;
     }
 
-    /* Content blocks (make center area less "boring") */
     .content{
       margin-top: 18px;
       display:grid;
@@ -296,19 +293,17 @@
       box-shadow: 0 0 0 6px rgba(255,59,78,.10);
     }
 
-    /* "What it does" - single nice block + bullets */
-    .callout{
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      border-radius: 16px;
-      padding: 14px 14px;
-      line-height: 1.58;
-      color: rgba(255,255,255,.80);
+    /* ✅ Removed the “callout big box” entirely */
+    .introLine{
+      margin: 0 0 10px;
+      color: rgba(255,255,255,.74);
+      line-height: 1.55;
+      font-size: 14px;
     }
-    .callout b{ color: rgba(255,255,255,.94); }
+    .introLine b{ color: rgba(255,255,255,.92); }
 
     .bullets{
-      margin: 10px 0 0;
+      margin: 0;
       padding: 0;
       list-style:none;
       display:grid;
@@ -331,7 +326,6 @@
     }
     .bullets b{ color: rgba(255,255,255,.92); }
 
-    /* Steps (more visual) */
     .steps{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
@@ -352,7 +346,7 @@
       content:"";
       position:absolute;
       inset:-1px;
-      background: radial-gradient(240px 120px at 12% 0%, rgba(255,59,78,.12), transparent 65%);
+      background: radial-gradient(240px 120px at 18% 0%, rgba(255,59,78,.10), transparent 68%);
       pointer-events:none;
       opacity:.9;
     }
@@ -388,7 +382,6 @@
       z-index:1;
     }
 
-    /* Who it's for (bigger boxes) */
     .who{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
@@ -409,8 +402,7 @@
       content:"";
       position:absolute;
       inset:-1px;
-      background:
-        radial-gradient(260px 120px at 90% 10%, rgba(110,160,255,.12), transparent 60%);
+      background: radial-gradient(260px 120px at 90% 10%, rgba(110,160,255,.10), transparent 64%);
       pointer-events:none;
       opacity:.85;
     }
@@ -434,7 +426,6 @@
       z-index:1;
     }
 
-    /* Footer line */
     .footer{
       display:flex;
       justify-content: space-between;
@@ -451,7 +442,7 @@
     }
     .footer a:hover{ border-bottom-color: rgba(255,255,255,.35); }
 
-    /* Sticky CTA bar (the sick one) */
+    /* Sticky CTA bar */
     .ctaBar{
       position: fixed;
       left: 50%;
@@ -462,8 +453,8 @@
       border-radius: 22px;
       border: 1px solid rgba(255,255,255,.10);
       background:
-        radial-gradient(700px 180px at 14% 50%, rgba(255,59,78,.18), transparent 62%),
-        radial-gradient(700px 180px at 86% 50%, rgba(110,160,255,.12), transparent 64%),
+        radial-gradient(700px 180px at 14% 50%, rgba(255,59,78,.16), transparent 64%),
+        radial-gradient(700px 180px at 86% 50%, rgba(110,160,255,.10), transparent 66%),
         rgba(0,0,0,.30);
       box-shadow: 0 24px 80px rgba(0,0,0,.62);
       display:flex;
@@ -492,7 +483,7 @@
       white-space: nowrap;
       overflow:hidden;
       text-overflow: ellipsis;
-      max-width: 460px;
+      max-width: 520px;
     }
     .ctaLabel{
       color: rgba(255,255,255,.58);
@@ -552,16 +543,12 @@
       cursor: zoom-out;
     }
 
-    /* ========= TOAST (from your in_game.html, adapted for website) ========= */
+    /* ========= TOAST (in_game-like demo) ========= */
     :root{
-      --valo: #ff4654;
-      --ink:  #111823;
-
       --toast-bg0: rgba(17, 24, 35, 0.88);
       --toast-bg1: rgba(10, 11, 14, 0.92);
 
       --toast-text: rgba(255,255,255,0.96);
-      --toast-muted: rgba(255,255,255,0.74);
 
       --toast-stroke: rgba(255, 70, 84, 0.22);
       --toast-glow: rgba(255, 70, 84, 0.18);
@@ -573,13 +560,12 @@
       --ease-film: cubic-bezier(.16,1,.3,1);
     }
 
-    /* Fixed top-right */
     .toastDock{
       position: fixed;
       top: 16px;
       right: 16px;
       z-index: 80;
-      pointer-events: none; /* so it doesn't block clicks */
+      pointer-events: none;
     }
     .toastWrap{
       width: 392px;
@@ -593,7 +579,6 @@
     .toast{
       pointer-events: none;
       width:392px;
-      height:auto;
       padding:10px 12px;
       border-radius:18px;
 
@@ -615,7 +600,6 @@
 
       display:flex;
       gap:10px;
-      align-items:stretch;
 
       position:relative;
       overflow:hidden;
@@ -634,15 +618,6 @@
       width:4px;
       background: linear-gradient(180deg, rgba(255,70,84,0.95), rgba(255,70,84,0.65));
       box-shadow: 0 0 16px rgba(255,70,84,0.22);
-    }
-    .toast::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
-      background-size: 22px 22px;
-      opacity:0.045;
-      pointer-events:none;
     }
 
     .toast.show{
@@ -692,10 +667,7 @@
       pointer-events:none;
       transform: translateZ(0);
     }
-    .toast.show .blob{
-      animation: toastBlobFloat 12s ease-in-out infinite;
-      animation-delay: 420ms;
-    }
+    .toast.show .blob{ animation: toastBlobFloat 12s ease-in-out infinite; animation-delay: 420ms; }
     @keyframes toastBlobFloat{
       0%   { transform: translate3d(0,0,0) scale(1); }
       50%  { transform: translate3d(-5px,6px,0) scale(1.015); }
@@ -703,8 +675,7 @@
     }
 
     .toastAvatar{
-      width:34px;
-      height:34px;
+      width:34px;height:34px;
       border-radius:14px;
       overflow:hidden;
       flex:0 0 auto;
@@ -720,16 +691,6 @@
     }
     .toastAvatar img{ width:100%; height:100%; display:block; object-fit:cover; }
 
-    .toast.show .toastAvatar{
-      animation: toastLogoPulse 2.4s ease-in-out infinite;
-      animation-delay: 380ms;
-    }
-    @keyframes toastLogoPulse{
-      0%   { transform: scale(1); }
-      50%  { transform: scale(1.03); }
-      100% { transform: scale(1); }
-    }
-
     .toastContent{
       flex:1 1 auto;
       min-width:0;
@@ -739,7 +700,6 @@
       flex-direction:column;
       padding-bottom:10px;
     }
-
     .toastTop{
       display:flex;
       align-items:center;
@@ -796,10 +756,7 @@
       transition: opacity 420ms var(--ease-calm), transform 520ms var(--ease-film);
       transition-delay: 220ms;
     }
-    .toast.show .toastMsg{
-      opacity:1;
-      transform: translateY(0);
-    }
+    .toast.show .toastMsg{ opacity:1; transform: translateY(0); }
 
     .toastBar{
       position:absolute;
@@ -812,10 +769,6 @@
       overflow:hidden;
       z-index:4;
       box-shadow: 0 0 0 1px rgba(255,255,255,0.08) inset, 0 2px 8px rgba(255,70,84,0.12);
-      transition: box-shadow 900ms var(--ease-calm);
-    }
-    .toast.show .toastBar{
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.10) inset, 0 0 22px rgba(255,70,84,0.22);
     }
     .toastBar > div{
       height:100%;
@@ -831,13 +784,11 @@
     .run .toastBar > div{ animation: toastShrink linear forwards; }
     @keyframes toastShrink{ from{transform:scaleX(1)} to{transform:scaleX(0)} }
 
-    /* type themes */
     .t-death .toastBadge{ background: rgba(255, 80, 80, 0.12); border-color: rgba(255,80,80,0.22); }
     .t-tilt  .toastBadge{ background: rgba(255, 190, 80, 0.12); border-color: rgba(255,190,80,0.22); }
     .t-focus .toastBadge{ background: rgba(120, 190, 255, 0.10); border-color: rgba(120,190,255,0.18); }
     .t-run   .toastBadge{ background: rgba(120, 255, 180, 0.10); border-color: rgba(120,255,180,0.18); }
 
-    /* Responsive */
     @media (max-width: 980px){
       :root{ --cta-h: 92px; }
       .hero{ grid-template-columns: 1fr; }
@@ -846,13 +797,13 @@
       .shot{ order: -1; }
       .ctaNote{ max-width: 260px; }
     }
+
     @media (max-width: 520px){
-      .wrap{ padding: 22px 14px 18px; }
+      .wrap{ padding: 18px 14px 18px; }
       .panel{ border-radius: 22px; }
       .actions .btn{ width: 100%; }
       body{ padding-bottom: 140px; }
 
-      /* CTA bar stacks */
       .ctaBar{
         flex-direction: column;
         align-items: stretch;
@@ -862,7 +813,6 @@
       .ctaLeft{ justify-content: space-between; }
       .ctaNote{ max-width: 100%; white-space: normal; line-height: 1.35; }
 
-      /* Toast: move to top-center + scale down */
       .toastDock{
         right: 50%;
         transform: translateX(50%);
@@ -881,7 +831,6 @@
 </head>
 
 <body>
-  <!-- Toast SVG goo filter -->
   <svg class="toastSvg" aria-hidden="true">
     <filter id="goo">
       <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur"></feGaussianBlur>
@@ -924,7 +873,6 @@
   </div>
 
   <div class="wrap">
-    <!-- Brand -->
     <div class="brand">
       <img src="./logo.png" onerror="this.onerror=null;this.src='./favicon-32x32.png';" alt="Tilt Buddy logo" />
       <div class="brandTitle">
@@ -984,10 +932,10 @@
           <section class="section">
             <h2 class="sectionTitle"><span class="dot"></span>What Tilt Buddy does</h2>
 
-            <div class="callout">
+            <p class="introLine">
               Tilt usually starts as a <b>physical + emotional reaction</b> — not a “thinking” problem.
               Tilt Buddy gives you a quick, subtle reset right when tilt usually begins: <b>after a death</b>.
-            </div>
+            </p>
 
             <ul class="bullets">
               <li><span class="bDot"></span><span><b>Detects deaths</b> during gameplay and triggers at the exact moment emotions spike.</span></li>
@@ -1046,7 +994,6 @@
     </main>
   </div>
 
-  <!-- Sticky CTA bar -->
   <div class="ctaBar" role="region" aria-label="Quick actions">
     <div class="ctaLeft">
       <a class="btn primary small" href="#" target="_blank" rel="noopener">
@@ -1065,7 +1012,6 @@
     </div>
   </div>
 
-  <!-- Lightbox -->
   <div class="lightbox" id="lightbox" aria-hidden="true">
     <div class="lbBox">
       <div class="lbTop">
@@ -1077,7 +1023,6 @@
   </div>
 
   <script>
-    // footer year
     document.getElementById("year").textContent = new Date().getFullYear();
 
     // lightbox zoom
@@ -1108,7 +1053,7 @@
       appShot.alt = "Add your screenshot as app.png in the repo root.";
     });
 
-    // ========= Toast demo (every ~10s) =========
+    // Toast demo (every ~10s)
     const toast = document.getElementById("toast");
     const toastBadge = document.getElementById("toastBadge");
     const toastMsg = document.getElementById("toastMsg");
@@ -1136,7 +1081,7 @@
 
       toast.classList.remove("run");
       toastBarFill.style.animation = "none";
-      toastBarFill.offsetHeight; // reflow
+      toastBarFill.offsetHeight;
       toastBarFill.style.animation = "";
 
       const d = Number(durationMs || 6500);
@@ -1147,7 +1092,6 @@
       window.setTimeout(() => toast.classList.remove("show"), d);
     }
 
-    // Your rotating message list (first one: RUNNING)
     const TOASTS = [
       { type: "RUNNING", text: "Tilt Buddy: RUNNING ✓", durationMs: 5200 },
       { type: "FOCUS", text: "Long exhale. Shoulders down.", durationMs: 6500 },
@@ -1161,14 +1105,12 @@
     ];
 
     let idx = 0;
-
     function cycleToast(){
       const t = TOASTS[idx % TOASTS.length];
       showToast(t.text, t.type, t.durationMs);
       idx++;
     }
 
-    // start: quick running toast, then every ~10s
     cycleToast();
     setInterval(cycleToast, 10000);
   </script>
